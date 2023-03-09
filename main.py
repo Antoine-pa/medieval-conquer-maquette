@@ -1,18 +1,26 @@
 import pygame
 import time
 
+pygame.init()
+screen_info = pygame.display.Info()
+screen = pygame.display.set_mode((screen_info.current_w,screen_info.current_h))
+size_x = screen_info.current_w
+size_y = screen_info.current_h
+
+
 BLACK = (0, 0, 0)
 RED = (150, 0, 0)
 WHITE = (255, 255, 255)
 GREY_WHITE = (200, 200, 200)
 GREY = (100, 100, 100)
 SENSIBILITY = 0.4
+MENU_EDIT_POS = (5*size_x//6, size_y//2, size_x//6, size_y//2)
+LONG_COL_MENU_EDIT = MENU_EDIT_POS[2] // 3
+LONG_BLOCK_MENU_EDIT = 2*LONG_COL_MENU_EDIT//3
+GAP_BLOCK_COL_MENU_EDIT = LONG_COL_MENU_EDIT//6
+LIST_BAT_MENU_EDIT = ["Caserne1", "Caserne1", "Caserne1"]
+ZOOM = 1
 
-pygame.init()
-screen_info = pygame.display.Info()
-screen = pygame.display.set_mode((screen_info.current_w,screen_info.current_h))
-size_x = screen_info.current_w
-size_y = screen_info.current_h
 
 def load_img(name, x, y):
     img = pygame.image.load(name)
@@ -38,17 +46,30 @@ class Map:
 
 class Menu:
     def __init__(self):
-        self.action = None
-    
+        self.action = "map"
+        self.mem_tamp = None
+
     def click(self, act):
         if self.action != act:
+            if act == "edit":
+                self.mem_tamp = [None, None]
+            else:
+                self.mem_tamp = None
             self.action = act
         else:
-            self.action = None
-    
+            self.action = "map"
+            self.mem_tamp = None
+
+
     def display(self, screen, ressources):
-        if self.action is None:
-            return
+        if self.action == "map":
+            pass
+        elif self.action == "edit":
+            pygame.draw.rect(screen, GREY_WHITE, pygame.Rect(*MENU_EDIT_POS), 0)
+            for i in range(len(LIST_BAT_MENU_EDIT)):
+                img = load_img(LIST_BAT_MENU_EDIT[i]+".png", LONG_BLOCK_MENU_EDIT, LONG_BLOCK_MENU_EDIT)
+                pygame.draw.line(screen, BLACK, (MENU_EDIT_POS[0] + (i+1)*LONG_COL_MENU_EDIT, MENU_EDIT_POS[1]), (MENU_EDIT_POS[0]+ (i+1)*LONG_COL_MENU_EDIT, size_y))
+                screen.blit(img, (MENU_EDIT_POS[0] + i*LONG_COL_MENU_EDIT + GAP_BLOCK_COL_MENU_EDIT, MENU_EDIT_POS[1] + GAP_BLOCK_COL_MENU_EDIT))
         elif self.action == "settings":
             self.display_settings(screen)
         elif self.action == "ressources":
@@ -69,7 +90,7 @@ class Menu:
     def display_settings(self, screen):
         screen.fill(BLACK)
         pygame.draw.rect(screen, GREY_WHITE, pygame.Rect(size_x//4, size_y//4, size_x//2, size_y//2), 0)
- 
+
 def barre(pos : tuple, size : tuple, ratio : float, color : tuple):
     pygame.draw.rect(screen, color, pygame.Rect(pos[0], pos[1], size[0]*ratio, size[1]), 0)
     pygame.draw.rect(screen, BLACK, pygame.Rect(pos[0], pos[1], size[0], size[1]), 1)
@@ -119,12 +140,11 @@ class Game:
         self._map = Map()
         self._menu = Menu()
         self.ressources = {"bois" : (100, 75), "fer" : (200, 60), "eau" : (100, 60), "feu" : (60, 40), "acier" : (200, 30), "or" : (60, 12), "charbon" : (120, 79)}
-    
+
     def display(self, screen):
-        if self._menu.action is None:
+        if self._menu.action in ("map", "edit"):
             self._map.display()
-        else:
-            self._menu.display(screen, self.ressources)
+        self._menu.display(screen, self.ressources)
         pygame.display.update()
 
     def deplacement(self, x, y):
@@ -142,8 +162,10 @@ while continuer:
                 game._menu.click("settings")
             if k[pygame.K_r]:
                 game._menu.click("ressources")
+            if k[pygame.K_e]:
+                game._menu.click("edit")
 
-            if game._menu.action is None:
+            if game._menu.action in ("map", "edit"):
                 """
                 if k[pygame.K_z] and k[pygame.K_d]:
                     coord_sous_fenetre[0] -= int((2**0.5*SENSIBILITY)/2)
@@ -166,6 +188,16 @@ while continuer:
                     game._map.pos[1] -= SENSIBILITY
                 elif k[pygame.K_q]:
                     game._map.pos[0] -= SENSIBILITY
+        if event.type == pygame.MOUSEBUTTONDOWN:
+            if game._menu.action == "edit":
+                pos = list(pygame.mouse.get_pos())
+                if MENU_EDIT_POS[0] < pos[0] and MENU_EDIT_POS[1] < pos[1]:
+                    pos[0], pos[1] = pos[0] - MENU_EDIT_POS[0], pos[1] - MENU_EDIT_POS[1]
+                    coord_case = (int(pos[0]/MENU_EDIT_POS[2]*3), 0)
+                    index = 3*coord_case[1] + coord_case[0]
+                    bat = LIST_BAT_MENU_EDIT[index]
+                    print(bat, index)
+
 
 
 

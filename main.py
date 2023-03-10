@@ -151,6 +151,7 @@ class Game:
         self._map.pos[0] += x
         self._map.pos[1] += y
 
+
 game = Game()
 continuer = True
 while continuer:

@@ -67,7 +67,7 @@ class Menu:
         elif self.action == "edit":
             pygame.draw.rect(screen, GREY_WHITE, pygame.Rect(*MENU_EDIT_POS), 0)
             for i in range(len(LIST_BAT_MENU_EDIT)):
-                img = load_img(LIST_BAT_MENU_EDIT[i]+".png", LONG_BLOCK_MENU_EDIT, LONG_BLOCK_MENU_EDIT)
+                img = load_img("./assets/buildings/"+LIST_BAT_MENU_EDIT[i]+".png", LONG_BLOCK_MENU_EDIT, LONG_BLOCK_MENU_EDIT)
                 pygame.draw.line(screen, BLACK, (MENU_EDIT_POS[0] + (i+1)*LONG_COL_MENU_EDIT, MENU_EDIT_POS[1]), (MENU_EDIT_POS[0]+ (i+1)*LONG_COL_MENU_EDIT, size_y))
                 screen.blit(img, (MENU_EDIT_POS[0] + i*LONG_COL_MENU_EDIT + GAP_BLOCK_COL_MENU_EDIT, MENU_EDIT_POS[1] + GAP_BLOCK_COL_MENU_EDIT))
         elif self.action == "settings":
@@ -100,7 +100,7 @@ def Text(text, color, pos: tuple, size):
     """
     fonction pour afficher du text
     """
-    FONT = pygame.font.Font("Melon Honey.ttf", size)
+    FONT = pygame.font.Font("./assets/fonts/Melon Honey.ttf", size)
     screen.blit(FONT.render(text, True, color), pos)
     del FONT
 
@@ -125,7 +125,7 @@ class Caserne:
         self.list_unit = []
         self.max = 5
         self.pos = [x, y]
-        self.img = load_img("Caserne1.png", 100, 100)
+        self.img = load_img("./assets/buildings/Caserne1.png", 100, 100)
 
     def former(self):
         pass

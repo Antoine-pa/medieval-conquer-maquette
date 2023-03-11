@@ -20,6 +20,8 @@ LONG_BLOCK_MENU_EDIT = 2*LONG_COL_MENU_EDIT//3
 GAP_BLOCK_COL_MENU_EDIT = LONG_COL_MENU_EDIT//6
 LIST_BAT_MENU_EDIT = ["Caserne1", "Caserne1", "Caserne1"]
 ZOOM = 1
+SIZE_CASE_INIT = 50
+SIZE_CASE = SIZE_CASE_INIT
 
 
 def load_img(name, x, y):
@@ -33,16 +35,36 @@ class Map:
         self.x = 1000
         self.y = 1000
         self.pos = [self.x/2, self.y/2]
-        self.list_bat = [Caserne(503, 506)]
+        self.list_build = []
+        self.cases = []
+        self.add_build(Caserne(503, 506))
+        
 
     def display(self):
         screen.fill(WHITE)
-        for x in range(0, size_x+50, 50):
-            pygame.draw.line(screen, BLACK, (x-self.pos[0]%1*50, 0), (x-self.pos[0]%1*50, size_y))
-            for y in range(0, size_y+50, 50):
-                pygame.draw.line(screen, BLACK, (0, y-self.pos[1]%1*50), (size_x, y-self.pos[1]%1*50))
-        for b in self.list_bat:
+        for x in range(0, size_x+int(SIZE_CASE), int(SIZE_CASE)):
+            pygame.draw.line(screen, BLACK, (x-self.pos[0]%1*int(SIZE_CASE), 0), (x-self.pos[0]%1*int(SIZE_CASE), size_y))
+            for y in range(0, size_y+int(SIZE_CASE), int(SIZE_CASE)):
+                pygame.draw.line(screen, BLACK, (0, y-self.pos[1]%1*int(SIZE_CASE)), (size_x, y-self.pos[1]%1*int(SIZE_CASE)))
+        for b in self.list_build:
             b.display(*self.pos)
+    
+    def add_build(self, build):
+        self.list_build.append(build)
+        for x in range(build.pos[0], build.pos[0]+build.size[0]):
+            for y in range(build.pos[1], build.pos[1]+build.size[1]):
+                self.cases.append((x, y))
+    
+    def check_pos(self, build):
+        for x in range(build.pos[0], build.pos[0]+build.size[0]):
+            for y in range(build.pos[1], build.pos[1]+build.size[1]):
+                if (x, y) in self.cases:
+                    return False
+        return True
+    
+    def reload_images(self):
+        for b in self.list_build:
+            b.load()
 
 class Menu:
     def __init__(self):
@@ -52,7 +74,7 @@ class Menu:
     def click(self, act):
         if self.action != act:
             if act == "edit":
-                self.mem_tamp = [None, None]
+                self.mem_tamp = [None, None, None]
             else:
                 self.mem_tamp = None
             self.action = act
@@ -85,7 +107,7 @@ class Menu:
             ratio = res[1][1] / res[1][0]
             barre((size_x/2-size_x/16, size_y*(3*len(ressources)+2+6*i)/(12*len(ressources))), (size_x/8, size_y/(6*len(ressources))), ratio, RED)
             Text(res[0], BLACK, (size_x/4+size_x/16, size_y/4+size_y/(6*len(ressources))+i*size_y/(2*len(ressources))), int(size_y/(6*len(ressources))))
-            Text(str(res[1][0])+"/"+str(res[1][1])+" ("+str(round(ratio*100, 2))+"%)", BLACK, (size_x/2+size_x/8, size_y/4+size_y/(6*len(ressources))+i*size_y/(2*len(ressources))), int(size_y/(6*len(ressources))))
+            Text(str(res[1][1])+"/"+str(res[1][0])+" ("+str(round(ratio*100, 2))+"%)", BLACK, (size_x/2+size_x/8, size_y/4+size_y/(6*len(ressources))+i*size_y/(2*len(ressources))), int(size_y/(6*len(ressources))))
 
     def display_settings(self, screen):
         screen.fill(BLACK)
@@ -113,7 +135,17 @@ class UsineCanon:
 
     def construire(self):
         pass
-
+class Building:
+    def __init__(self, name, size):
+        self.name = ""
+        self.img = None
+        self.size = size
+    
+    def display(self, x, y):
+        pass
+    
+    def load(self):
+        self.img = load_img(f"./assets/buildings/{self.name}.png", int(SIZE_CASE)*self.size[0] , int(SIZE_CASE)*self.size[1]) 
 class Canon:
     def __init__(self):
         self.type = ""
@@ -125,14 +157,19 @@ class Caserne:
         self.list_unit = []
         self.max = 5
         self.pos = [x, y]
-        self.img = load_img("./assets/buildings/Caserne1.png", 100, 100)
+        self.size = (2, 2)
+        self.img = None
+        self.load()
+    
+    def load(self):
+        self.img = load_img("./assets/buildings/Caserne1.png", int(SIZE_CASE)*self.size[0] , int(SIZE_CASE)*self.size[1]) 
 
     def former(self):
         pass
 
     def display(self, x, y):
-        if x-2 <=self.pos[0] <= size_x/50+x and y-2 <=self.pos[1] <= size_y/50+y:
-            screen.blit(self.img, ((self.pos[0]-x)*50, (self.pos[1]-y)*50))
+        if x-2 <=self.pos[0] <= size_x/int(SIZE_CASE)+x and y-2 <=self.pos[1] <= size_y/int(SIZE_CASE)+y:
+            screen.blit(self.img, ((self.pos[0]-x)*int(SIZE_CASE), (self.pos[1]-y)*int(SIZE_CASE)))
 
 
 class Game:
@@ -150,7 +187,9 @@ class Game:
     def deplacement(self, x, y):
         self._map.pos[0] += x
         self._map.pos[1] += y
-
+    
+    def reload_images(self):
+        self._map.reload_images()
 
 game = Game()
 continuer = True
@@ -197,8 +236,24 @@ while continuer:
                     coord_case = (int(pos[0]/MENU_EDIT_POS[2]*3), 0)
                     index = 3*coord_case[1] + coord_case[0]
                     bat = LIST_BAT_MENU_EDIT[index]
-                    print(bat, index)
-
+                    game._menu.mem_tamp[0] = bat
+        if event.type == pygame.MOUSEBUTTONUP:
+            pos = list(pygame.mouse.get_pos())
+            if game._menu.action == "edit" and game._menu.mem_tamp is not None and game._menu.mem_tamp[0] is not None and (not MENU_EDIT_POS[0] < pos[0] or not MENU_EDIT_POS[1] < pos[1]):
+                place_x = int((pos[0]+game._map.pos[0]*int(SIZE_CASE))//int(SIZE_CASE))
+                place_y = int((pos[1]+game._map.pos[1]*int(SIZE_CASE))//int(SIZE_CASE))
+                if game._menu.mem_tamp[0] == "Caserne1":
+                    cas = Caserne(place_x, place_y)
+                    if game._map.check_pos(cas):
+                        game._map.add_build(cas)
+        if event.type == pygame.MOUSEWHEEL:
+            event.y = -event.y
+            if event.y < 0 and ZOOM >= 1.1 or event.y > 0 and ZOOM <= 1.9:
+                old_zoom = ZOOM
+                ZOOM = round(ZOOM + event.y/10, 1)
+                SIZE_CASE = 1/ZOOM*SIZE_CASE/(1/old_zoom)
+                game.reload_images()
+                
 
 
 

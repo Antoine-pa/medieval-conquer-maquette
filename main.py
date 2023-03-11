@@ -135,6 +135,7 @@ class UsineCanon:
 
     def construire(self):
         pass
+
 class Building:
     def __init__(self, name, size):
         self.name = ""
@@ -146,11 +147,11 @@ class Building:
     
     def load(self):
         self.img = load_img(f"./assets/buildings/{self.name}.png", int(SIZE_CASE)*self.size[0] , int(SIZE_CASE)*self.size[1]) 
+
 class Canon:
     def __init__(self):
         self.type = ""
         self.deg = 0
-
 
 class Caserne:
     def __init__(self, x, y):

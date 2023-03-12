@@ -455,7 +455,6 @@ while continuer:
                         game._menu.set_action("edit-add")
                     if button[0] == "edit_destruction":
                         game._menu.set_action("edit-sup")
-
         elif event.type == pygame.KEYUP: #lors de l'appui d'une touche
             if k[pygame.K_F1]:
                 game._menu.set_action("settings")

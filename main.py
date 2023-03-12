@@ -47,6 +47,9 @@ class Building:
         self.load()
         self.life = life
 
+    def __repr__(self):
+        return f"{self.name} : (position : {self.pos}; taille : {self.size}; vie : {self.life})"
+
     def display(self, x, y):
         """
         calcul si le bâtiment est affiché ou non et l'affiche
@@ -119,6 +122,9 @@ class Map:
         self.cases = [] #liste des coordonnées des cases occupées
         self.add_build(Caserne(503, 506)) #ajout d'une caserne
 
+    def __repr__(self):
+        return f"Map :\n - taille : {self.x}x{self.y}\n - position : {self.pos}\n - bâtiments : {self.list_build}"
+
     def display(self):
         """
         affichage de la map
@@ -140,15 +146,24 @@ class Map:
             for y in range(build.pos[1], build.pos[1]+build.size[1]):
                 self.cases.append((x, y))
     
-    def check_pos(self, build):
+    def sup_build(self, build):
+        self.list_build.remove(build)
+        for x in range(build.pos[0], build.pos[0]+build.size[0]):
+            for y in range(build.pos[1], build.pos[1]+build.size[1]):
+                self.cases.remove((x, y))
+        del build
+    
+    def check_pos(self, build, cases_mem_tamp) -> int: #0 = libre, 1 = un batiment construit donc pas libre, 2 = un batiment posé, en memoire tampon donc pas libre
         """
         vérifie que la case est libre pour le bâtiment build
         """
         for x in range(build.pos[0], build.pos[0]+build.size[0]):
             for y in range(build.pos[1], build.pos[1]+build.size[1]):
                 if (x, y) in self.cases:
-                    return False
-        return True
+                    return 1
+                elif (x, y) in cases_mem_tamp:
+                    return 2
+        return 0
     
     def reload_images(self):
         """
@@ -167,7 +182,7 @@ class Button:
         self.text = text
         self.thickness = thickness
     
-    def __str__(self):
+    def __repr__(self):
         return f"coords : {self.coords}, text : {self.text}, thickness : {self.thickness}"
 
     def collidepoint(self, pos) -> bool:
@@ -202,32 +217,39 @@ class Menu:
         self.action = "map"
         self.mem_tamp = None #variable de mémoire temporaire
         self.buttons = {} #liste des bouttons affichés
+    
+    def __repr__(self):
+        return f"Menu :\n - action : {self.action}\n - memoire tampon : {self.mem_tamp}\n - boutons : {self.buttons}"
 
-    def click(self, act : str):
+    def set_action(self, act : str):
         """
         fonction permettant de changer de section du menu
         """
         if self.action != act:
-            if act == "edit":
-                self.buttons["edit_validation"] = Button((MENU_EDIT_POS[0]+POS_BUTTONS_MENU_EDIT[0], POS_BUTTONS_MENU_EDIT[1], MENU_EDIT_POS[0]+POS_BUTTONS_MENU_EDIT[0]+LONG_BUTTON_MENU_EDIT, POS_BUTTONS_MENU_EDIT[1]+LONG_BUTTON_MENU_EDIT), "yes", 1)
-                self.mem_tamp = [None, [], {}]
-            else:
-                self.mem_tamp = None
-                self.buttons = {}
             self.action = act
         else:
             self.action = "map"
-            self.mem_tamp = None
-            self.buttons = {}
+        self.update_mem_tamp()
+        self.update_buttons()
 
-    def mouse_clicked(self, pos):
-        """
-        fonction permettant d'effectuer les actions sur les bouttons du menu
-        """
-        for button in self.buttons.items():
-            if button[1].collidepoint(pos):
-                if button[0] == "edit_validation":
-                    print("ok")
+    def update_buttons(self):
+        self.buttons = {}
+        if self.action in ("edit-add", "edit-sup"):
+            self.buttons["edit_validation"] = Button((MENU_EDIT_POS[0]+POS_BUTTONS_MENU_EDIT[0], POS_BUTTONS_MENU_EDIT[1], MENU_EDIT_POS[0]+POS_BUTTONS_MENU_EDIT[0]+LONG_BUTTON_MENU_EDIT, POS_BUTTONS_MENU_EDIT[1]+LONG_BUTTON_MENU_EDIT), "yes", 1)
+            self.buttons["edit_annulation"] = Button((MENU_EDIT_POS[0]+POS_BUTTONS_MENU_EDIT[0]+LONG_COL_MENU_EDIT, POS_BUTTONS_MENU_EDIT[1], MENU_EDIT_POS[0]+POS_BUTTONS_MENU_EDIT[0]+LONG_BUTTON_MENU_EDIT+LONG_COL_MENU_EDIT, POS_BUTTONS_MENU_EDIT[1]+LONG_BUTTON_MENU_EDIT), "no", 1)
+        elif self.action == "edit":
+            self.buttons["edit_construction"] = Button((MENU_EDIT_POS[0]+POS_BUTTONS_MENU_EDIT[0], POS_BUTTONS_MENU_EDIT[1], MENU_EDIT_POS[0]+POS_BUTTONS_MENU_EDIT[0]+LONG_BUTTON_MENU_EDIT, POS_BUTTONS_MENU_EDIT[1]+LONG_BUTTON_MENU_EDIT), "con", 1)
+            self.buttons["edit_destruction"] = Button((MENU_EDIT_POS[0]+POS_BUTTONS_MENU_EDIT[0]+LONG_COL_MENU_EDIT, POS_BUTTONS_MENU_EDIT[1], MENU_EDIT_POS[0]+POS_BUTTONS_MENU_EDIT[0]+LONG_BUTTON_MENU_EDIT+LONG_COL_MENU_EDIT, POS_BUTTONS_MENU_EDIT[1]+LONG_BUTTON_MENU_EDIT), "des", 1)
+            self.buttons["edit_validation"] = Button((MENU_EDIT_POS[0]+POS_BUTTONS_MENU_EDIT[0]+2*LONG_COL_MENU_EDIT, POS_BUTTONS_MENU_EDIT[1], MENU_EDIT_POS[0]+POS_BUTTONS_MENU_EDIT[0]+LONG_BUTTON_MENU_EDIT+2*LONG_COL_MENU_EDIT, POS_BUTTONS_MENU_EDIT[1]+LONG_BUTTON_MENU_EDIT), "yes", 1)
+
+
+    def update_mem_tamp(self):
+        if self.action.startswith("edit"):
+            if self.mem_tamp is None:
+                self.mem_tamp = {"bat" : None, "list_bat" : {"add" : {"pos" : [], "bat" : []}, "sup" : []}, "ress" : {}}
+        else:
+            self.mem_tamp = None
+
 
     def display(self, screen, ressources : dict, pos_map: list):
         """
@@ -235,7 +257,7 @@ class Menu:
         """
         if self.action == "map":
             pass
-        elif self.action == "edit":
+        elif self.action.startswith("edit"):
             self.display_edit(screen, pos_map)
         elif self.action == "settings":
             self.display_settings(screen)
@@ -254,7 +276,7 @@ class Menu:
             pygame.draw.line(screen, BLACK, (MENU_EDIT_POS[0] + (i+1)*LONG_COL_MENU_EDIT, MENU_EDIT_POS[1]), (MENU_EDIT_POS[0]+ (i+1)*LONG_COL_MENU_EDIT, POS_Y_BOTTOM_MENU_EDIT))
             screen.blit(img, (MENU_EDIT_POS[0] + i*LONG_COL_MENU_EDIT + GAP_BLOCK_COL_MENU_EDIT, MENU_EDIT_POS[1] + GAP_BLOCK_COL_MENU_EDIT))
         pygame.draw.line(screen, BLACK, (MENU_EDIT_POS[0], POS_Y_BOTTOM_MENU_EDIT), (size_x, POS_Y_BOTTOM_MENU_EDIT))
-        for b in self.mem_tamp[1]:
+        for b in self.mem_tamp["list_bat"]["add"]["bat"]:#+self.mem_tamp["list_bat"]["sup"]:
             b.display(*pos_map)
 
     def display_ressources(self, screen, ressources : dict): #à faire : créer les constantes au début pour éviter les calculs
@@ -310,11 +332,14 @@ class Game:
         self._menu = Menu()
         self.ressources = {"bois" : (100, 75), "fer" : (200, 60), "eau" : (100, 60), "feu" : (60, 40), "acier" : (200, 30), "or" : (60, 12), "charbon" : (120, 79)}
 
+    def __repr__(self):
+        return f"Game :\n - {self._map}\n\n - {self._menu}\n\n - ressources : {self.ressources}"
+
     def display(self, screen):
         """
         gère l'affichage du jeu
         """
-        if self._menu.action in ("map", "edit"):
+        if self._menu.action == "map" or self._menu.action.startswith("edit"):
             self._map.display()
         self._menu.display(screen, self.ressources, self._map.pos)
         pygame.display.update()
@@ -331,6 +356,9 @@ class Game:
         lance le rechargement des images
         """
         self._map.reload_images()
+        if self._menu.mem_tamp is not None:
+            for b in self.mem_tamp["list_bat"]["add"]["bat"]:
+                b.load()
     
     def get_case(self, pos):
         """
@@ -346,10 +374,12 @@ DICT_BUILDINGS = {"Caserne" : Caserne, "Champs" : Champs, "Grenier" : Grenier}
 while continuer:
     game.display(screen) #on affiche le jeu
     for event in pygame.event.get():
-        pos = list(pygame.mouse.get_pos())
+        try:
+            pos = list(pygame.mouse.get_pos())
+        except : pass
         if event.type == pygame.KEYDOWN: #à l'appui d'une touche
             k = pygame.key.get_pressed()
-            if game._menu.action in ("map", "edit"):
+            if game._menu.action == "map" or game._menu.action.startswith("edit"):
                 # dépacement sur la map
                 if k[pygame.K_d]:
                     game._map.pos[0] += SENSIBILITY
@@ -368,27 +398,71 @@ while continuer:
                 SIZE_CASE = 1/ZOOM*SIZE_CASE/(1/old_zoom)
                 game.reload_images()
         elif event.type == pygame.MOUSEBUTTONUP and event.__dict__["button"] == 1: #lors d'un clic gauche
-            game._menu.mouse_clicked(pos)
-            if game._menu.action == "edit": #si un edit est en cours
-                if game._menu.mem_tamp is not None and game._menu.mem_tamp[0] is not None and (not MENU_EDIT_POS[0] < pos[0] or not MENU_EDIT_POS[1] < pos[1]): #si le clic est sur la map et qu'un bâtiment à construire est séléctionné
+            if game._menu.action.startswith("edit"): #si un edit est en cours
+                if game._menu.mem_tamp is not None and (not MENU_EDIT_POS[0] < pos[0] or not MENU_EDIT_POS[1] < pos[1]): #si le clic est sur la map
                     place_x, place_y = game.get_case(pos) #récupération des cases
-                    build = DICT_BUILDINGS[game._menu.mem_tamp[0]](place_x, place_y) #on instancie le bâtiment
-                    if game._map.check_pos(build): #on vérifie que la place est libre
-                        game._menu.mem_tamp[1].append(build) #on ajoute le bâtiment dans la mémoire tampon
-                    else:
-                        del build
+                    if game._menu.action == "edit-add" and game._menu.mem_tamp["bat"] is not None: #si un bâtiment à construire est séléctionné
+                        #construction bâtiment
+                        build = DICT_BUILDINGS[game._menu.mem_tamp["bat"]](place_x, place_y) #on instancie le bâtiment
+                        place = game._map.check_pos(build, game._menu.mem_tamp["list_bat"]["add"]["pos"])
+                        if place == 0: #on vérifie que la place est libre
+                            game._menu.mem_tamp["list_bat"]["add"]["bat"].append(build) #on ajoute le bâtiment dans la mémoire tampon
+                            for x in range(build.pos[0], build.pos[0]+build.size[0]):
+                                for y in range(build.pos[1], build.pos[1]+build.size[1]):
+                                    game._menu.mem_tamp["list_bat"]["add"]["pos"].append((x, y))
+                        elif place == 2: #annuler la construction d'un batiment
+                            for b in game._menu.mem_tamp["list_bat"]["add"]["bat"]:
+                                for x in range(b.pos[0], b.pos[0]+b.size[0]):
+                                    for y in range(b.pos[1], b.pos[1]+b.size[1]):
+                                        if (place_x, place_y) == (x, y):
+                                            build = b
+                            for x in range(build.pos[0], build.pos[0]+build.size[0]):
+                                for y in range(build.pos[1], build.pos[1]+build.size[1]):
+                                    game._menu.mem_tamp["list_bat"]["add"]["pos"].remove((x, y))
+                            game._menu.mem_tamp["list_bat"]["add"]["bat"].remove(build)
+                        else:
+                            del build
+                    elif game._menu.action == "edit-sup":
+                        #destruction d'un bâtiment
+                        build = None
+                        for b in game._map.list_build:
+                            for x in range(b.pos[0], b.pos[0]+b.size[0]):
+                                for y in range(b.pos[1], b.pos[1]+b.size[1]):
+                                    if (place_x, place_y) == (x, y):
+                                        build = b
+                        if build is not None:
+                            game._menu.mem_tamp["list_bat"]["sup"].append(build)
+                #sélection bâtiment
                 elif MENU_EDIT_POS[0] < pos[0] and MENU_EDIT_POS[1] < pos[1] < POS_Y_BOTTOM_MENU_EDIT : #si le clic est dans le menu d'edition
-                    pos[0], pos[1] = pos[0] - MENU_EDIT_POS[0], pos[1] - MENU_EDIT_POS[1]
-                    coord_case = (int(pos[0]/MENU_EDIT_POS[2]*3), 0) #on calcul les coordonnées de la case
-                    index = 3*coord_case[1] + coord_case[0] #on calcul l'index de la case dans la liste des bâtiments
-                    game._menu.mem_tamp[0] = LIST_BAT_MENU_EDIT[index] #on ajoute le bâtiment à la mémoire tampon dans la section réservé au bâtiment séléctinné pour de la construction
+                    if game._menu.action == "edit-add":
+                        pos[0], pos[1] = pos[0] - MENU_EDIT_POS[0], pos[1] - MENU_EDIT_POS[1]
+                        coord_case = (int(pos[0]/MENU_EDIT_POS[2]*3), 0) #on calcul les coordonnées de la case
+                        index = 3*coord_case[1] + coord_case[0] #on calcul l'index de la case dans la liste des bâtiments
+                        game._menu.mem_tamp["bat"] = LIST_BAT_MENU_EDIT[index] #on ajoute le bâtiment à la mémoire tampon dans la section réservé au bâtiment séléctinné pour de la construction
+            for button in game._menu.buttons.items():
+                if button[1].collidepoint(pos):
+                    if button[0] == "edit_validation":
+                        if game._menu.action == "edit":
+                            for b in game._menu.mem_tamp["list_bat"]["add"]["bat"]:
+                                game._map.add_build(b)
+                            for b in game._menu.mem_tamp["list_bat"]["sup"]:
+                                game._map.sup_build(b)
+                        game._menu.set_action("edit")
+                    if button[0] == "edit_annulation":
+                        game._menu.mem_tamp = None
+                        game._menu.set_action("edit")
+                    if button[0] == "edit_construction":
+                        game._menu.set_action("edit-add")
+                    if button[0] == "edit_destruction":
+                        game._menu.set_action("edit-sup")
+
         elif event.type == pygame.KEYUP: #lors de l'appui d'une touche
             if k[pygame.K_F1]:
-                game._menu.click("settings")
+                game._menu.set_action("settings")
             if k[pygame.K_r]:
-                game._menu.click("ressources")
+                game._menu.set_action("ressources")
             if k[pygame.K_e]:
-                game._menu.click("edit")
+                game._menu.set_action("edit")
             if event.key == pygame.K_ESCAPE:
                 pygame.quit()
                 continuer = False

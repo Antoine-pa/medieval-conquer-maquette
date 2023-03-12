@@ -210,7 +210,7 @@ class Menu:
         if self.action != act:
             if act == "edit":
                 self.buttons["edit_validation"] = Button((MENU_EDIT_POS[0]+POS_BUTTONS_MENU_EDIT[0], POS_BUTTONS_MENU_EDIT[1], MENU_EDIT_POS[0]+POS_BUTTONS_MENU_EDIT[0]+LONG_BUTTON_MENU_EDIT, POS_BUTTONS_MENU_EDIT[1]+LONG_BUTTON_MENU_EDIT), "yes", 1)
-                self.mem_tamp = [None, None, None]
+                self.mem_tamp = [None, [], {}]
             else:
                 self.mem_tamp = None
                 self.buttons = {}
@@ -229,14 +229,14 @@ class Menu:
                 if button[0] == "edit_validation":
                     print("ok")
 
-    def display(self, screen, ressources : dict):
+    def display(self, screen, ressources : dict, pos_map: list):
         """
         fonction permettant d'afficher les zones des sections du menu
         """
         if self.action == "map":
             pass
         elif self.action == "edit":
-            self.display_edit(screen)
+            self.display_edit(screen, pos_map)
         elif self.action == "settings":
             self.display_settings(screen)
         elif self.action == "ressources":
@@ -244,7 +244,7 @@ class Menu:
         for button in self.buttons.items():
             button[1].display(screen)
     
-    def display_edit(self, screen):
+    def display_edit(self, screen, pos_map: list):
         """
         fonction permettant d'afficher le menu d'edition de la map
         """
@@ -254,6 +254,8 @@ class Menu:
             pygame.draw.line(screen, BLACK, (MENU_EDIT_POS[0] + (i+1)*LONG_COL_MENU_EDIT, MENU_EDIT_POS[1]), (MENU_EDIT_POS[0]+ (i+1)*LONG_COL_MENU_EDIT, POS_Y_BOTTOM_MENU_EDIT))
             screen.blit(img, (MENU_EDIT_POS[0] + i*LONG_COL_MENU_EDIT + GAP_BLOCK_COL_MENU_EDIT, MENU_EDIT_POS[1] + GAP_BLOCK_COL_MENU_EDIT))
         pygame.draw.line(screen, BLACK, (MENU_EDIT_POS[0], POS_Y_BOTTOM_MENU_EDIT), (size_x, POS_Y_BOTTOM_MENU_EDIT))
+        for b in self.mem_tamp[1]:
+            b.display(*pos_map)
 
     def display_ressources(self, screen, ressources : dict): #à faire : créer les constantes au début pour éviter les calculs
         """
@@ -314,7 +316,7 @@ class Game:
         """
         if self._menu.action in ("map", "edit"):
             self._map.display()
-        self._menu.display(screen, self.ressources)
+        self._menu.display(screen, self.ressources, self._map.pos)
         pygame.display.update()
 
     def deplacement(self, x, y):
@@ -372,7 +374,7 @@ while continuer:
                     place_x, place_y = game.get_case(pos) #récupération des cases
                     build = DICT_BUILDINGS[game._menu.mem_tamp[0]](place_x, place_y) #on instancie le bâtiment
                     if game._map.check_pos(build): #on vérifie que la place est libre
-                        game._map.add_build(build) #on construit le bâtiment
+                        game._menu.mem_tamp[1].append(build) #on ajoute le bâtiment dans la mémoire tampon
                     else:
                         del build
                 elif MENU_EDIT_POS[0] < pos[0] and MENU_EDIT_POS[1] < pos[1] < POS_Y_BOTTOM_MENU_EDIT : #si le clic est dans le menu d'edition

@@ -18,7 +18,7 @@ MENU_EDIT_POS = (5*size_x//6, size_y//2, size_x//6, size_y//2)
 LONG_COL_MENU_EDIT = MENU_EDIT_POS[2] // 3
 LONG_BLOCK_MENU_EDIT = 2*LONG_COL_MENU_EDIT//3
 GAP_BLOCK_COL_MENU_EDIT = LONG_COL_MENU_EDIT//6
-LIST_BAT_MENU_EDIT = ["Caserne1", "Caserne1", "Caserne1"]
+LIST_BAT_MENU_EDIT = ["Caserne", "Champs", "Grenier"]
 ZOOM = 1
 SIZE_CASE_INIT = 50
 SIZE_CASE = SIZE_CASE_INIT
@@ -126,52 +126,72 @@ def Text(text, color, pos: tuple, size):
     screen.blit(FONT.render(text, True, color), pos)
     del FONT
 
-
-class UsineCanon:
-    def __init__(self):
-        self.list_bat = []
-        self.max = 2
-        self.file = ""
-
-    def construire(self):
-        pass
-
 class Building:
-    def __init__(self, name, size):
-        self.name = ""
+    def __init__(self, name, size, pos, life):
+        self.name = name
         self.img = None
         self.size = size
-    
-    def display(self, x, y):
-        pass
-    
-    def load(self):
-        self.img = load_img(f"./assets/buildings/{self.name}.png", int(SIZE_CASE)*self.size[0] , int(SIZE_CASE)*self.size[1]) 
-
-class Canon:
-    def __init__(self):
-        self.type = ""
-        self.deg = 0
-
-class Caserne:
-    def __init__(self, x, y):
-        self.list_unit = []
-        self.max = 5
-        self.pos = [x, y]
-        self.size = (2, 2)
-        self.img = None
+        self.pos = pos
         self.load()
-    
-    def load(self):
-        self.img = load_img("./assets/buildings/Caserne1.png", int(SIZE_CASE)*self.size[0] , int(SIZE_CASE)*self.size[1]) 
-
-    def former(self):
-        pass
+        self.life = life
 
     def display(self, x, y):
         if x-2 <=self.pos[0] <= size_x/int(SIZE_CASE)+x and y-2 <=self.pos[1] <= size_y/int(SIZE_CASE)+y:
             screen.blit(self.img, ((self.pos[0]-x)*int(SIZE_CASE), (self.pos[1]-y)*int(SIZE_CASE)))
 
+    def load(self):
+        self.img = load_img(f"./assets/buildings/{self.name}.png", int(SIZE_CASE)*self.size[0] , int(SIZE_CASE)*self.size[1]) 
+
+
+
+class UsineArmeSiege(Building):
+    def __init__(self, x, y):
+        super().__init__("UsineArmeSiege", (2, 2), [x, y], 100)
+        self.list_bat = []
+        self.max = 2
+
+    def construire(self):
+        pass
+
+class Canon(Building):
+    def __init__(self, x, y):
+        super().__init__("Canon", (3, 3), [x, y], 100)
+        self.type = ""
+        self.deg = 0
+
+class Grenier(Building):
+    def __init__(self, x, y):
+        super().__init__("Grenier", (3, 3), [x, y], 100)
+        self.ress = {}
+
+class Reserve(Building):
+    def __init__(self, x, y):
+        super().__init__("Reserve", (3, 3), [x, y], 100)
+        self.ress = {}
+
+class Muraille(Building):
+    def __init__(self, x, y):
+        super().__init__("Muraille", (1, 1), [x, y], 400)
+        self.ress = {}
+
+class Tour(Building):
+    def __init__(self, x, y):
+        super().__init__("Tour", (3, 3), [x, y], 100)
+        self.ress = {}
+
+class Champs(Building):
+    def __init__(self, x, y):
+        super().__init__("Champs", (2, 2), [x, y], 100)
+        self.ress = {}
+
+class Caserne(Building):
+    def __init__(self, x, y):
+        super().__init__("Caserne", (2, 2), [x, y], 100)
+        self.list_unit = []
+        self.max = 5
+
+    def former(self):
+        pass
 
 class Game:
     def __init__(self):
@@ -194,6 +214,7 @@ class Game:
 
 game = Game()
 continuer = True
+DICT_BUILDINGS = {"Caserne" : Caserne, "Champs" : Champs, "Grenier" : Grenier}
 while continuer:
     game.display(screen)
     for event in pygame.event.get():
@@ -205,22 +226,7 @@ while continuer:
                 game._menu.click("ressources")
             if k[pygame.K_e]:
                 game._menu.click("edit")
-
             if game._menu.action in ("map", "edit"):
-                """
-                if k[pygame.K_z] and k[pygame.K_d]:
-                    coord_sous_fenetre[0] -= int((2**0.5*SENSIBILITY)/2)
-                    coord_sous_fenetre[1] += int((2**0.5*SENSIBILITY)/2)
-                elif k[pygame.K_z] and k[pygame.K_q]:
-                    coord_sous_fenetre[0] -= int((2**0.5*SENSIBILITY)/2)
-                    coord_sous_fenetre[1] -= int((2**0.5*SENSIBILITY)/2)
-                elif k[pygame.K_q] and k[pygame.K_s]:
-                    coord_sous_fenetre[0] += int((2**0.5*SENSIBILITY)/2)
-                    coord_sous_fenetre[1] -= int((2**0.5*SENSIBILITY)/2)
-                elif k[pygame.K_s] and k[pygame.K_d]:
-                    coord_sous_fenetre[0] += int((2**0.5*SENSIBILITY)/2)
-                    coord_sous_fenetre[1] += int((2**0.5*SENSIBILITY)/2)
-                """
                 if k[pygame.K_d]:
                     game._map.pos[0] += SENSIBILITY
                 elif k[pygame.K_s]:
@@ -229,7 +235,14 @@ while continuer:
                     game._map.pos[1] -= SENSIBILITY
                 elif k[pygame.K_q]:
                     game._map.pos[0] -= SENSIBILITY
-        if event.type == pygame.MOUSEBUTTONDOWN:
+        elif event.type == pygame.MOUSEWHEEL:
+            event.y = -event.y
+            if event.y < 0 and ZOOM >= 1.1 or event.y > 0 and ZOOM <= 1.9:
+                old_zoom = ZOOM
+                ZOOM = round(ZOOM + event.y/10, 1)
+                SIZE_CASE = 1/ZOOM*SIZE_CASE/(1/old_zoom)
+                game.reload_images()
+        elif event.type == pygame.MOUSEBUTTONDOWN and event.__dict__["button"] == 1:
             if game._menu.action == "edit":
                 pos = list(pygame.mouse.get_pos())
                 if MENU_EDIT_POS[0] < pos[0] and MENU_EDIT_POS[1] < pos[1]:
@@ -238,30 +251,18 @@ while continuer:
                     index = 3*coord_case[1] + coord_case[0]
                     bat = LIST_BAT_MENU_EDIT[index]
                     game._menu.mem_tamp[0] = bat
-        if event.type == pygame.MOUSEBUTTONUP:
+        elif event.type == pygame.MOUSEBUTTONUP and event.__dict__["button"] == 1:
             pos = list(pygame.mouse.get_pos())
             if game._menu.action == "edit" and game._menu.mem_tamp is not None and game._menu.mem_tamp[0] is not None and (not MENU_EDIT_POS[0] < pos[0] or not MENU_EDIT_POS[1] < pos[1]):
                 place_x = int((pos[0]+game._map.pos[0]*int(SIZE_CASE))//int(SIZE_CASE))
                 place_y = int((pos[1]+game._map.pos[1]*int(SIZE_CASE))//int(SIZE_CASE))
-                if game._menu.mem_tamp[0] == "Caserne1":
-                    cas = Caserne(place_x, place_y)
-                    if game._map.check_pos(cas):
-                        game._map.add_build(cas)
-        if event.type == pygame.MOUSEWHEEL:
-            event.y = -event.y
-            if event.y < 0 and ZOOM >= 1.1 or event.y > 0 and ZOOM <= 1.9:
-                old_zoom = ZOOM
-                ZOOM = round(ZOOM + event.y/10, 1)
-                SIZE_CASE = 1/ZOOM*SIZE_CASE/(1/old_zoom)
-                game.reload_images()
-                
-
-
-
-        if event.type == pygame.KEYUP:
+                build = DICT_BUILDINGS[game._menu.mem_tamp[0]](place_x, place_y)
+                if game._map.check_pos(build):
+                    game._map.add_build(build)
+        elif event.type == pygame.KEYUP:
             if event.key == pygame.K_ESCAPE:
                 pygame.quit()
                 continuer = False
-        if event.type == pygame.QUIT:
+        elif event.type == pygame.QUIT:
             pygame.quit()
             continuer = False

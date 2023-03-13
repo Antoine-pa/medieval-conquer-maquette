@@ -21,7 +21,7 @@ GAP_BLOCK_COL_MENU_EDIT = LONG_COL_MENU_EDIT//6
 POS_Y_BOTTOM_MENU_EDIT = MENU_EDIT_POS[1]+7*(size_y-MENU_EDIT_POS[1])//8
 LONG_BUTTON_MENU_EDIT = 3*(size_y-POS_Y_BOTTOM_MENU_EDIT)//4
 POS_BUTTONS_MENU_EDIT = ((LONG_COL_MENU_EDIT-LONG_BUTTON_MENU_EDIT)//2, POS_Y_BOTTOM_MENU_EDIT+(size_y-POS_Y_BOTTOM_MENU_EDIT)//2-LONG_BUTTON_MENU_EDIT//2)
-LIST_BAT_MENU_EDIT = ["Caserne", "Champs", "Grenier"]
+LIST_BAT_MENU_EDIT = ["Caserne", "Champs", "Grenier", "Tour", "Muraille", "Reserve"]
 ZOOM = 1
 SIZE_CASE_INIT = 50
 SIZE_CASE = SIZE_CASE_INIT
@@ -44,8 +44,9 @@ class Building:
         self.img = None
         self.size = size
         self.pos = pos
-        self.load()
+        self.angle = 0
         self.life = life
+        self.load()
 
     def __repr__(self):
         return f"{self.name} : (position : {self.pos}; taille : {self.size}; vie : {self.life})"
@@ -61,7 +62,13 @@ class Building:
         """
         charge l'image du bâtiment
         """
-        self.img = load_img(f"./assets/buildings/{self.name}.png", int(SIZE_CASE)*self.size[0] , int(SIZE_CASE)*self.size[1]) 
+        self.img = load_img(f"./assets/buildings/{self.name}.png", int(SIZE_CASE)*self.size[0] , int(SIZE_CASE)*self.size[1])
+        self.img = pygame.transform.rotate(self.img, self.angle)
+    
+    def rotate(self, angle):
+        self.angle += angle
+        self.angle %= 360
+        self.load()
 
 
 class UsineArmeSiege(Building):
@@ -157,12 +164,12 @@ class Map:
         """
         vérifie que la case est libre pour le bâtiment build
         """
+        if tuple(build.pos) in cases_mem_tamp:
+            return 2
         for x in range(build.pos[0], build.pos[0]+build.size[0]):
             for y in range(build.pos[1], build.pos[1]+build.size[1]):
-                if (x, y) in self.cases:
+                if (x, y) in self.cases+cases_mem_tamp:
                     return 1
-                elif (x, y) in cases_mem_tamp:
-                    return 2
         return 0
     
     def reload_images(self):
@@ -271,12 +278,13 @@ class Menu:
         fonction permettant d'afficher le menu d'edition de la map
         """
         pygame.draw.rect(screen, GREY_WHITE, pygame.Rect(*MENU_EDIT_POS), 0)
-        for i in range(len(LIST_BAT_MENU_EDIT)):
-            img = load_img("./assets/buildings/"+LIST_BAT_MENU_EDIT[i]+".png", LONG_BLOCK_MENU_EDIT, LONG_BLOCK_MENU_EDIT)
-            pygame.draw.line(screen, BLACK, (MENU_EDIT_POS[0] + (i+1)*LONG_COL_MENU_EDIT, MENU_EDIT_POS[1]), (MENU_EDIT_POS[0]+ (i+1)*LONG_COL_MENU_EDIT, POS_Y_BOTTOM_MENU_EDIT))
-            screen.blit(img, (MENU_EDIT_POS[0] + i*LONG_COL_MENU_EDIT + GAP_BLOCK_COL_MENU_EDIT, MENU_EDIT_POS[1] + GAP_BLOCK_COL_MENU_EDIT))
+        for i in range(len(LIST_BAT_MENU_EDIT)//3):
+            for j in range(3):
+                img = load_img("./assets/buildings/"+LIST_BAT_MENU_EDIT[3*i+j]+".png", LONG_BLOCK_MENU_EDIT, LONG_BLOCK_MENU_EDIT)
+                pygame.draw.line(screen, BLACK, (MENU_EDIT_POS[0] + (i+1)*LONG_COL_MENU_EDIT, MENU_EDIT_POS[1]), (MENU_EDIT_POS[0]+ (i+1)*LONG_COL_MENU_EDIT, POS_Y_BOTTOM_MENU_EDIT))
+                screen.blit(img, (MENU_EDIT_POS[0] + j*LONG_COL_MENU_EDIT + GAP_BLOCK_COL_MENU_EDIT, MENU_EDIT_POS[1] + i*LONG_COL_MENU_EDIT + GAP_BLOCK_COL_MENU_EDIT))
         pygame.draw.line(screen, BLACK, (MENU_EDIT_POS[0], POS_Y_BOTTOM_MENU_EDIT), (size_x, POS_Y_BOTTOM_MENU_EDIT))
-        for b in self.mem_tamp["list_bat"]["add"]["bat"]:#+self.mem_tamp["list_bat"]["sup"]:
+        for b in self.mem_tamp["list_bat"]["add"]["bat"]:
             b.display(*pos_map)
 
     def display_ressources(self, screen, ressources : dict): #à faire : créer les constantes au début pour éviter les calculs
@@ -370,7 +378,7 @@ class Game:
 
 game = Game()
 continuer = True
-DICT_BUILDINGS = {"Caserne" : Caserne, "Champs" : Champs, "Grenier" : Grenier}
+DICT_BUILDINGS = {"Caserne" : Caserne, "Champs" : Champs, "Grenier" : Grenier, "Tour" : Tour, "Muraille" : Muraille, "Reserve" : Reserve}
 while continuer:
     game.display(screen) #on affiche le jeu
     for event in pygame.event.get():
@@ -403,7 +411,8 @@ while continuer:
                     place_x, place_y = game.get_case(pos) #récupération des cases
                     if game._menu.action == "edit-add" and game._menu.mem_tamp["bat"] is not None: #si un bâtiment à construire est séléctionné
                         #construction bâtiment
-                        build = DICT_BUILDINGS[game._menu.mem_tamp["bat"]](place_x, place_y) #on instancie le bâtiment
+                        build = DICT_BUILDINGS[game._menu.mem_tamp["bat"]["bat"]](place_x, place_y) #on instancie le bâtiment
+                        build.rotate(game._menu.mem_tamp["bat"]["angle"])
                         place = game._map.check_pos(build, game._menu.mem_tamp["list_bat"]["add"]["pos"])
                         if place == 0: #on vérifie que la place est libre
                             game._menu.mem_tamp["list_bat"]["add"]["bat"].append(build) #on ajoute le bâtiment dans la mémoire tampon
@@ -436,9 +445,9 @@ while continuer:
                 elif MENU_EDIT_POS[0] < pos[0] and MENU_EDIT_POS[1] < pos[1] < POS_Y_BOTTOM_MENU_EDIT : #si le clic est dans le menu d'edition
                     if game._menu.action == "edit-add":
                         pos[0], pos[1] = pos[0] - MENU_EDIT_POS[0], pos[1] - MENU_EDIT_POS[1]
-                        coord_case = (int(pos[0]/MENU_EDIT_POS[2]*3), 0) #on calcul les coordonnées de la case
+                        coord_case = (int(pos[0]/LONG_COL_MENU_EDIT), int(pos[1]/LONG_COL_MENU_EDIT)) #on calcul les coordonnées de la case
                         index = 3*coord_case[1] + coord_case[0] #on calcul l'index de la case dans la liste des bâtiments
-                        game._menu.mem_tamp["bat"] = LIST_BAT_MENU_EDIT[index] #on ajoute le bâtiment à la mémoire tampon dans la section réservé au bâtiment séléctinné pour de la construction
+                        game._menu.mem_tamp["bat"] = {"bat" : LIST_BAT_MENU_EDIT[index], "angle" : 0} #on ajoute le bâtiment à la mémoire tampon dans la section réservé au bâtiment séléctinné pour de la construction
             for button in game._menu.buttons.items():
                 if button[1].collidepoint(pos):
                     if button[0] == "edit_validation":
@@ -462,6 +471,15 @@ while continuer:
                 game._menu.set_action("ressources")
             if k[pygame.K_e]:
                 game._menu.set_action("edit")
+            if game._menu.mem_tamp is not None and game._menu.mem_tamp["bat"] is not None:
+                if k[pygame.K_UP]:
+                    game._menu.mem_tamp["bat"]["angle"] = 90
+                if k[pygame.K_RIGHT]:
+                    game._menu.mem_tamp["bat"]["angle"] = 0
+                if k[pygame.K_DOWN]:
+                    game._menu.mem_tamp["bat"]["angle"] = 270
+                if k[pygame.K_LEFT]:
+                    game._menu.mem_tamp["bat"]["angle"] = 180
             if event.key == pygame.K_ESCAPE:
                 pygame.quit()
                 continuer = False

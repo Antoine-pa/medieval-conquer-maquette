@@ -1,5 +1,11 @@
 import pygame
 import time
+import json
+from buildings import *
+from tools import t
+
+def cst(name):
+    return t.cst(name)
 
 pygame.init()
 screen_info = pygame.display.Info()
@@ -7,118 +13,28 @@ screen = pygame.display.set_mode((screen_info.current_w-100,screen_info.current_
 size_x = screen_info.current_w-100
 size_y = screen_info.current_h-100
 
+def set_all_const(size_x, size_y):
+    t.set_const("size_x", size_x)
+    t.set_const("size_y", size_y)
+    t.set_const("BLACK", (0, 0, 0))
+    t.set_const("RED", (150, 0, 0))
+    t.set_const("WHITE", (255, 255, 255))
+    t.set_const("GREY_WHITE", (200, 200, 200))
+    t.set_const("GREY", (100, 100, 100))
+    t.set_const("SENSIBILITY", 0.4)
+    t.set_const("MENU_EDIT_POS", (5*size_x//6, size_y//2, size_x//6, size_y//2))
+    t.set_const("LONG_COL_MENU_EDIT", cst("MENU_EDIT_POS")[2] // 3)
+    t.set_const("LONG_BLOCK_MENU_EDIT", 2*cst("LONG_COL_MENU_EDIT")//3)
+    t.set_const("GAP_BLOCK_COL_MENU_EDIT", cst("LONG_COL_MENU_EDIT")//6)
+    t.set_const("POS_Y_BOTTOM_MENU_EDIT", cst("MENU_EDIT_POS")[1]+7*(size_y-cst("MENU_EDIT_POS")[1])//8)
+    t.set_const("LONG_BUTTON_MENU_EDIT", 3*(size_y-cst("POS_Y_BOTTOM_MENU_EDIT"))//4)
+    t.set_const("POS_BUTTONS_MENU_EDIT", ((cst("LONG_COL_MENU_EDIT")-cst("LONG_BUTTON_MENU_EDIT"))//2, cst("POS_Y_BOTTOM_MENU_EDIT")+(size_y-cst("POS_Y_BOTTOM_MENU_EDIT"))//2-cst("LONG_BUTTON_MENU_EDIT")//2))
+    t.set_const("LIST_BAT_MENU_EDIT", ["Caserne", "Champs", "Grenier", "Tour", "Muraille", "Reserve"])
+    t.set_const("ZOOM", 1)
+    t.set_const("SIZE_CASE", 50)
+    t.set_const("SIZE_TEXT", 30)
 
-BLACK = (0, 0, 0)
-RED = (150, 0, 0)
-WHITE = (255, 255, 255)
-GREY_WHITE = (200, 200, 200)
-GREY = (100, 100, 100)
-SENSIBILITY = 0.4
-MENU_EDIT_POS = (5*size_x//6, size_y//2, size_x//6, size_y//2)
-LONG_COL_MENU_EDIT = MENU_EDIT_POS[2] // 3
-LONG_BLOCK_MENU_EDIT = 2*LONG_COL_MENU_EDIT//3
-GAP_BLOCK_COL_MENU_EDIT = LONG_COL_MENU_EDIT//6
-POS_Y_BOTTOM_MENU_EDIT = MENU_EDIT_POS[1]+7*(size_y-MENU_EDIT_POS[1])//8
-LONG_BUTTON_MENU_EDIT = 3*(size_y-POS_Y_BOTTOM_MENU_EDIT)//4
-POS_BUTTONS_MENU_EDIT = ((LONG_COL_MENU_EDIT-LONG_BUTTON_MENU_EDIT)//2, POS_Y_BOTTOM_MENU_EDIT+(size_y-POS_Y_BOTTOM_MENU_EDIT)//2-LONG_BUTTON_MENU_EDIT//2)
-LIST_BAT_MENU_EDIT = ["Caserne", "Champs", "Grenier", "Tour", "Muraille", "Reserve"]
-ZOOM = 1
-SIZE_CASE_INIT = 50
-SIZE_CASE = SIZE_CASE_INIT
-SIZE_TEXT = 30
-
-
-def load_img(name, x, y):
-    img = pygame.image.load(name)
-    img = pygame.transform.scale(img,(x, y))
-    return img
-
-
-class Building:
-    """
-    class Building:
-        class de base de tout les bâtiments
-    """
-    def __init__(self, name, size, pos, life):
-        self.name = name
-        self.img = None
-        self.size = size
-        self.pos = pos
-        self.angle = 0
-        self.life = life
-        self.load()
-
-    def __repr__(self):
-        return f"{self.name} : (position : {self.pos}; taille : {self.size}; vie : {self.life})"
-
-    def display(self, x, y):
-        """
-        calcul si le bâtiment est affiché ou non et l'affiche
-        """
-        if x-2 <=self.pos[0] <= size_x/int(SIZE_CASE)+x and y-2 <=self.pos[1] <= size_y/int(SIZE_CASE)+y:
-            screen.blit(self.img, ((self.pos[0]-x)*int(SIZE_CASE), (self.pos[1]-y)*int(SIZE_CASE)))
-
-    def load(self):
-        """
-        charge l'image du bâtiment
-        """
-        self.img = load_img(f"./assets/buildings/{self.name}.png", int(SIZE_CASE)*self.size[0] , int(SIZE_CASE)*self.size[1])
-        self.img = pygame.transform.rotate(self.img, self.angle)
-    
-    def rotate(self, angle):
-        self.angle += angle
-        self.angle %= 360
-        self.load()
-
-
-class UsineArmeSiege(Building):
-    def __init__(self, x, y):
-        super().__init__("UsineArmeSiege", (2, 2), [x, y], 100)
-        self.list_bat = []
-        self.max = 2
-
-    def construire(self):
-        pass
-
-class Canon(Building):
-    def __init__(self, x, y):
-        super().__init__("Canon", (3, 3), [x, y], 100)
-        self.type = ""
-        self.deg = 0
-
-class Grenier(Building):
-    def __init__(self, x, y):
-        super().__init__("Grenier", (3, 3), [x, y], 100)
-        self.ress = {}
-
-class Reserve(Building):
-    def __init__(self, x, y):
-        super().__init__("Reserve", (3, 3), [x, y], 100)
-        self.ress = {}
-
-class Muraille(Building):
-    def __init__(self, x, y):
-        super().__init__("Muraille", (1, 1), [x, y], 400)
-        self.ress = {}
-
-class Tour(Building):
-    def __init__(self, x, y):
-        super().__init__("Tour", (3, 3), [x, y], 100)
-        self.ress = {}
-
-class Champs(Building):
-    def __init__(self, x, y):
-        super().__init__("Champs", (2, 2), [x, y], 100)
-        self.ress = {}
-
-class Caserne(Building):
-    def __init__(self, x, y):
-        super().__init__("Caserne", (2, 2), [x, y], 100)
-        self.list_unit = []
-        self.max = 5
-
-    def former(self):
-        pass
+set_all_const(size_x, size_y)
 
 class Map:
     def __init__(self):
@@ -136,13 +52,13 @@ class Map:
         """
         affichage de la map
         """
-        screen.fill(WHITE)
-        for x in range(0, size_x+int(SIZE_CASE), int(SIZE_CASE)):
-            pygame.draw.line(screen, BLACK, (x-self.pos[0]%1*int(SIZE_CASE), 0), (x-self.pos[0]%1*int(SIZE_CASE), size_y))
-            for y in range(0, size_y+int(SIZE_CASE), int(SIZE_CASE)):
-                pygame.draw.line(screen, BLACK, (0, y-self.pos[1]%1*int(SIZE_CASE)), (size_x, y-self.pos[1]%1*int(SIZE_CASE)))
+        screen.fill(cst("WHITE"))
+        for x in range(0, size_x+int(cst("SIZE_CASE")), int(cst("SIZE_CASE"))):
+            pygame.draw.line(screen, cst("BLACK"), (x-self.pos[0]%1*int(cst("SIZE_CASE")), 0), (x-self.pos[0]%1*int(cst("SIZE_CASE")), size_y))
+            for y in range(0, size_y+int(cst("SIZE_CASE")), int(cst("SIZE_CASE"))):
+                pygame.draw.line(screen, cst("BLACK"), (0, y-self.pos[1]%1*int(cst("SIZE_CASE"))), (size_x, y-self.pos[1]%1*int(cst("SIZE_CASE"))))
         for b in self.list_build:
-            b.display(*self.pos)
+            b.display(screen, *self.pos)
     
     def add_build(self, build):
         """
@@ -202,14 +118,14 @@ class Button:
         """
         retourne la position du texte à afficher
         """
-        return (self.coords[0]+self.thickness+3, self.coords[3]-self.thickness-1.25*SIZE_TEXT)
+        return (self.coords[0]+self.thickness+3, self.coords[3]-self.thickness-1.25*cst("SIZE_TEXT"))
     
     def display(self, screen):
         """
         affiche le boutton
         """
-        pygame.draw.rect(screen, BLACK, (self.coords[0], self.coords[1], self.coords[2] - self.coords[0], self.coords[3] - self.coords[1]), self.thickness)
-        Text(self.text, BLACK, self.pos_text(), SIZE_TEXT)
+        pygame.draw.rect(screen, cst("BLACK"), (self.coords[0], self.coords[1], self.coords[2] - self.coords[0], self.coords[3] - self.coords[1]), self.thickness)
+        Text(self.text, cst("BLACK"), self.pos_text(), cst("SIZE_TEXT"))
         
 class Menu:
     """
@@ -242,12 +158,12 @@ class Menu:
     def update_buttons(self):
         self.buttons = {}
         if self.action in ("edit-add", "edit-sup"):
-            self.buttons["edit_validation"] = Button((MENU_EDIT_POS[0]+POS_BUTTONS_MENU_EDIT[0], POS_BUTTONS_MENU_EDIT[1], MENU_EDIT_POS[0]+POS_BUTTONS_MENU_EDIT[0]+LONG_BUTTON_MENU_EDIT, POS_BUTTONS_MENU_EDIT[1]+LONG_BUTTON_MENU_EDIT), "yes", 1)
-            self.buttons["edit_annulation"] = Button((MENU_EDIT_POS[0]+POS_BUTTONS_MENU_EDIT[0]+LONG_COL_MENU_EDIT, POS_BUTTONS_MENU_EDIT[1], MENU_EDIT_POS[0]+POS_BUTTONS_MENU_EDIT[0]+LONG_BUTTON_MENU_EDIT+LONG_COL_MENU_EDIT, POS_BUTTONS_MENU_EDIT[1]+LONG_BUTTON_MENU_EDIT), "no", 1)
+            self.buttons["edit_validation"] = Button((cst("MENU_EDIT_POS")[0]+cst("POS_BUTTONS_MENU_EDIT")[0], cst("POS_BUTTONS_MENU_EDIT")[1], cst("MENU_EDIT_POS")[0]+cst("POS_BUTTONS_MENU_EDIT")[0]+cst("LONG_BUTTON_MENU_EDIT"), cst("POS_BUTTONS_MENU_EDIT")[1]+cst("LONG_BUTTON_MENU_EDIT")), "yes", 1)
+            self.buttons["edit_annulation"] = Button((cst("MENU_EDIT_POS")[0]+cst("POS_BUTTONS_MENU_EDIT")[0]+cst("LONG_COL_MENU_EDIT"), cst("POS_BUTTONS_MENU_EDIT")[1], cst("MENU_EDIT_POS")[0]+cst("POS_BUTTONS_MENU_EDIT")[0]+cst("LONG_BUTTON_MENU_EDIT")+cst("LONG_COL_MENU_EDIT"), cst("POS_BUTTONS_MENU_EDIT")[1]+cst("LONG_BUTTON_MENU_EDIT")), "no", 1)
         elif self.action == "edit":
-            self.buttons["edit_construction"] = Button((MENU_EDIT_POS[0]+POS_BUTTONS_MENU_EDIT[0], POS_BUTTONS_MENU_EDIT[1], MENU_EDIT_POS[0]+POS_BUTTONS_MENU_EDIT[0]+LONG_BUTTON_MENU_EDIT, POS_BUTTONS_MENU_EDIT[1]+LONG_BUTTON_MENU_EDIT), "con", 1)
-            self.buttons["edit_destruction"] = Button((MENU_EDIT_POS[0]+POS_BUTTONS_MENU_EDIT[0]+LONG_COL_MENU_EDIT, POS_BUTTONS_MENU_EDIT[1], MENU_EDIT_POS[0]+POS_BUTTONS_MENU_EDIT[0]+LONG_BUTTON_MENU_EDIT+LONG_COL_MENU_EDIT, POS_BUTTONS_MENU_EDIT[1]+LONG_BUTTON_MENU_EDIT), "des", 1)
-            self.buttons["edit_validation"] = Button((MENU_EDIT_POS[0]+POS_BUTTONS_MENU_EDIT[0]+2*LONG_COL_MENU_EDIT, POS_BUTTONS_MENU_EDIT[1], MENU_EDIT_POS[0]+POS_BUTTONS_MENU_EDIT[0]+LONG_BUTTON_MENU_EDIT+2*LONG_COL_MENU_EDIT, POS_BUTTONS_MENU_EDIT[1]+LONG_BUTTON_MENU_EDIT), "yes", 1)
+            self.buttons["edit_construction"] = Button((cst("MENU_EDIT_POS")[0]+cst("POS_BUTTONS_MENU_EDIT")[0], cst("POS_BUTTONS_MENU_EDIT")[1], cst("MENU_EDIT_POS")[0]+cst("POS_BUTTONS_MENU_EDIT")[0]+cst("LONG_BUTTON_MENU_EDIT"), cst("POS_BUTTONS_MENU_EDIT")[1]+cst("LONG_BUTTON_MENU_EDIT")), "con", 1)
+            self.buttons["edit_destruction"] = Button((cst("MENU_EDIT_POS")[0]+cst("POS_BUTTONS_MENU_EDIT")[0]+cst("LONG_COL_MENU_EDIT"), cst("POS_BUTTONS_MENU_EDIT")[1], cst("MENU_EDIT_POS")[0]+cst("POS_BUTTONS_MENU_EDIT")[0]+cst("LONG_BUTTON_MENU_EDIT")+cst("LONG_COL_MENU_EDIT"), cst("POS_BUTTONS_MENU_EDIT")[1]+cst("LONG_BUTTON_MENU_EDIT")), "des", 1)
+            self.buttons["edit_validation"] = Button((cst("MENU_EDIT_POS")[0]+cst("POS_BUTTONS_MENU_EDIT")[0]+2*cst("LONG_COL_MENU_EDIT"), cst("POS_BUTTONS_MENU_EDIT")[1], cst("MENU_EDIT_POS")[0]+cst("POS_BUTTONS_MENU_EDIT")[0]+cst("LONG_BUTTON_MENU_EDIT")+2*cst("LONG_COL_MENU_EDIT"), cst("POS_BUTTONS_MENU_EDIT")[1]+cst("LONG_BUTTON_MENU_EDIT")), "yes", 1)
 
 
     def update_mem_tamp(self):
@@ -277,36 +193,36 @@ class Menu:
         """
         fonction permettant d'afficher le menu d'edition de la map
         """
-        pygame.draw.rect(screen, GREY_WHITE, pygame.Rect(*MENU_EDIT_POS), 0)
-        for i in range(len(LIST_BAT_MENU_EDIT)//3):
+        pygame.draw.rect(screen, cst("GREY_WHITE"), pygame.Rect(*cst("MENU_EDIT_POS")), 0)
+        for i in range(len(cst("LIST_BAT_MENU_EDIT"))//3):
             for j in range(3):
-                img = load_img("./assets/buildings/"+LIST_BAT_MENU_EDIT[3*i+j]+".png", LONG_BLOCK_MENU_EDIT, LONG_BLOCK_MENU_EDIT)
-                pygame.draw.line(screen, BLACK, (MENU_EDIT_POS[0] + (i+1)*LONG_COL_MENU_EDIT, MENU_EDIT_POS[1]), (MENU_EDIT_POS[0]+ (i+1)*LONG_COL_MENU_EDIT, POS_Y_BOTTOM_MENU_EDIT))
-                screen.blit(img, (MENU_EDIT_POS[0] + j*LONG_COL_MENU_EDIT + GAP_BLOCK_COL_MENU_EDIT, MENU_EDIT_POS[1] + i*LONG_COL_MENU_EDIT + GAP_BLOCK_COL_MENU_EDIT))
-        pygame.draw.line(screen, BLACK, (MENU_EDIT_POS[0], POS_Y_BOTTOM_MENU_EDIT), (size_x, POS_Y_BOTTOM_MENU_EDIT))
+                img = t.load_img("./assets/buildings/"+cst("LIST_BAT_MENU_EDIT")[3*i+j]+".png", cst("LONG_BLOCK_MENU_EDIT"), cst("LONG_BLOCK_MENU_EDIT"))
+                pygame.draw.line(screen, cst("BLACK"), (cst("MENU_EDIT_POS")[0] + (i+1)*cst("LONG_COL_MENU_EDIT"), cst("MENU_EDIT_POS")[1]), (cst("MENU_EDIT_POS")[0]+ (i+1)*cst("LONG_COL_MENU_EDIT"), cst("POS_Y_BOTTOM_MENU_EDIT")))
+                screen.blit(img, (cst("MENU_EDIT_POS")[0] + j*cst("LONG_COL_MENU_EDIT") + cst("GAP_BLOCK_COL_MENU_EDIT"), cst("MENU_EDIT_POS")[1] + i*cst("LONG_COL_MENU_EDIT") + cst("GAP_BLOCK_COL_MENU_EDIT")))
+        pygame.draw.line(screen, cst("BLACK"), (cst("MENU_EDIT_POS")[0], cst("POS_Y_BOTTOM_MENU_EDIT")), (size_x, cst("POS_Y_BOTTOM_MENU_EDIT")))
         for b in self.mem_tamp["list_bat"]["add"]["bat"]:
-            b.display(*pos_map)
+            b.display(screen, *pos_map)
 
     def display_ressources(self, screen, ressources : dict): #à faire : créer les constantes au début pour éviter les calculs
         """
         fonction permettant d'afficher les ressources
         """
-        screen.fill(BLACK)
-        pygame.draw.rect(screen, GREY_WHITE, pygame.Rect(size_x//4, size_y//4, size_x//2, size_y//2), 0)
+        screen.fill(cst("BLACK"))
+        pygame.draw.rect(screen, cst("GREY_WHITE"), pygame.Rect(size_x//4, size_y//4, size_x//2, size_y//2), 0)
         ressources = list(ressources.items())
         for i in range(len(ressources)):
             res = ressources[i]
             ratio = res[1][1] / res[1][0]
-            barre((size_x/2-size_x/16, size_y*(3*len(ressources)+2+6*i)/(12*len(ressources))), (size_x/8, size_y/(6*len(ressources))), ratio, RED)
-            Text(res[0], BLACK, (size_x/4+size_x/16, size_y/4+size_y/(6*len(ressources))+i*size_y/(2*len(ressources))), int(size_y/(6*len(ressources))))
-            Text(str(res[1][1])+"/"+str(res[1][0])+" ("+str(round(ratio*100, 2))+"%)", BLACK, (size_x/2+size_x/8, size_y/4+size_y/(6*len(ressources))+i*size_y/(2*len(ressources))), int(size_y/(6*len(ressources))))
+            barre((size_x/2-size_x/16, size_y*(3*len(ressources)+2+6*i)/(12*len(ressources))), (size_x/8, size_y/(6*len(ressources))), ratio, cst("RED"))
+            Text(res[0], cst("BLACK"), (size_x/4+size_x/16, size_y/4+size_y/(6*len(ressources))+i*size_y/(2*len(ressources))), int(size_y/(6*len(ressources))))
+            Text(str(res[1][1])+"/"+str(res[1][0])+" ("+str(round(ratio*100, 2))+"%)", cst("BLACK"), (size_x/2+size_x/8, size_y/4+size_y/(6*len(ressources))+i*size_y/(2*len(ressources))), int(size_y/(6*len(ressources))))
 
     def display_settings(self, screen):
         """
         fonction permettant d'afficher les paramètres du jeu
         """
-        screen.fill(BLACK)
-        pygame.draw.rect(screen, GREY_WHITE, pygame.Rect(size_x//4, size_y//4, size_x//2, size_y//2), 0)
+        screen.fill(cst("BLACK"))
+        pygame.draw.rect(screen, cst("GREY_WHITE"), pygame.Rect(size_x//4, size_y//4, size_x//2, size_y//2), 0)
 
 
 
@@ -316,7 +232,7 @@ def barre(pos : tuple, size : tuple, ratio : float, color : tuple):
     fonction permettant d'afficher une barre de progression (ex : menu d'affichage des ressources)
     """
     pygame.draw.rect(screen, color, pygame.Rect(pos[0], pos[1], size[0]*ratio, size[1]), 0)
-    pygame.draw.rect(screen, BLACK, pygame.Rect(pos[0], pos[1], size[0], size[1]), 1)
+    pygame.draw.rect(screen, cst("BLACK"), pygame.Rect(pos[0], pos[1], size[0], size[1]), 1)
 
 def Text(text, color, pos: tuple, size):
     """
@@ -325,10 +241,6 @@ def Text(text, color, pos: tuple, size):
     FONT = pygame.font.Font("./assets/fonts/Melon Honey.ttf", size)
     screen.blit(FONT.render(text, True, color), pos)
     del FONT
-
-
-
-
 
 class Game:
     """
@@ -365,15 +277,15 @@ class Game:
         """
         self._map.reload_images()
         if self._menu.mem_tamp is not None:
-            for b in self.mem_tamp["list_bat"]["add"]["bat"]:
+            for b in self._menu.mem_tamp["list_bat"]["add"]["bat"]:
                 b.load()
     
     def get_case(self, pos):
         """
         calcul de la case sur laquelle la souris est
         """
-        place_x = int((pos[0]+self._map.pos[0]*int(SIZE_CASE))//int(SIZE_CASE))
-        place_y = int((pos[1]+self._map.pos[1]*int(SIZE_CASE))//int(SIZE_CASE))
+        place_x = int((pos[0]+self._map.pos[0]*int(cst("SIZE_CASE")))//int(cst("SIZE_CASE")))
+        place_y = int((pos[1]+self._map.pos[1]*int(cst("SIZE_CASE")))//int(cst("SIZE_CASE")))
         return (place_x, place_y)
 
 game = Game()
@@ -390,24 +302,24 @@ while continuer:
             if game._menu.action == "map" or game._menu.action.startswith("edit"):
                 # dépacement sur la map
                 if k[pygame.K_d]:
-                    game._map.pos[0] += SENSIBILITY
+                    game._map.pos[0] += cst("SENSIBILITY")
                 elif k[pygame.K_s]:
-                    game._map.pos[1] += SENSIBILITY
+                    game._map.pos[1] += cst("SENSIBILITY")
                 elif k[pygame.K_z]:
-                    game._map.pos[1] -= SENSIBILITY
+                    game._map.pos[1] -= cst("SENSIBILITY")
                 elif k[pygame.K_q]:
-                    game._map.pos[0] -= SENSIBILITY
+                    game._map.pos[0] -= cst("SENSIBILITY")
         elif event.type == pygame.MOUSEWHEEL:
             #scroll pour le zoom
             event.y = -event.y
-            if event.y < 0 and ZOOM >= 1.1 or event.y > 0 and ZOOM <= 1.9:
-                old_zoom = ZOOM
-                ZOOM = round(ZOOM + event.y/10, 1)
-                SIZE_CASE = 1/ZOOM*SIZE_CASE/(1/old_zoom)
+            if event.y < 0 and cst("ZOOM") >= 1.1 or event.y > 0 and cst("ZOOM") <= 1.9:
+                old_zoom = cst("ZOOM")
+                t.set_const("ZOOM", round(cst("ZOOM") + event.y/10, 1))
+                t.set_const("SIZE_CASE", 1/cst("ZOOM")*cst("SIZE_CASE")/(1/old_zoom))
                 game.reload_images()
         elif event.type == pygame.MOUSEBUTTONUP and event.__dict__["button"] == 1: #lors d'un clic gauche
             if game._menu.action.startswith("edit"): #si un edit est en cours
-                if game._menu.mem_tamp is not None and (not MENU_EDIT_POS[0] < pos[0] or not MENU_EDIT_POS[1] < pos[1]): #si le clic est sur la map
+                if game._menu.mem_tamp is not None and (not cst("MENU_EDIT_POS")[0] < pos[0] or not cst("MENU_EDIT_POS")[1] < pos[1]): #si le clic est sur la map
                     place_x, place_y = game.get_case(pos) #récupération des cases
                     if game._menu.action == "edit-add" and game._menu.mem_tamp["bat"] is not None: #si un bâtiment à construire est séléctionné
                         #construction bâtiment
@@ -442,12 +354,12 @@ while continuer:
                         if build is not None:
                             game._menu.mem_tamp["list_bat"]["sup"].append(build)
                 #sélection bâtiment
-                elif MENU_EDIT_POS[0] < pos[0] and MENU_EDIT_POS[1] < pos[1] < POS_Y_BOTTOM_MENU_EDIT : #si le clic est dans le menu d'edition
+                elif cst("MENU_EDIT_POS")[0] < pos[0] and cst("MENU_EDIT_POS")[1] < pos[1] < cst("POS_Y_BOTTOM_MENU_EDIT") : #si le clic est dans le menu d'edition
                     if game._menu.action == "edit-add":
-                        pos[0], pos[1] = pos[0] - MENU_EDIT_POS[0], pos[1] - MENU_EDIT_POS[1]
-                        coord_case = (int(pos[0]/LONG_COL_MENU_EDIT), int(pos[1]/LONG_COL_MENU_EDIT)) #on calcul les coordonnées de la case
+                        pos[0], pos[1] = pos[0] - cst("MENU_EDIT_POS")[0], pos[1] - cst("MENU_EDIT_POS")[1]
+                        coord_case = (int(pos[0]/cst("LONG_COL_MENU_EDIT")), int(pos[1]/cst("LONG_COL_MENU_EDIT"))) #on calcul les coordonnées de la case
                         index = 3*coord_case[1] + coord_case[0] #on calcul l'index de la case dans la liste des bâtiments
-                        game._menu.mem_tamp["bat"] = {"bat" : LIST_BAT_MENU_EDIT[index], "angle" : 0} #on ajoute le bâtiment à la mémoire tampon dans la section réservé au bâtiment séléctinné pour de la construction
+                        game._menu.mem_tamp["bat"] = {"bat" : cst("LIST_BAT_MENU_EDIT")[index], "angle" : 0} #on ajoute le bâtiment à la mémoire tampon dans la section réservé au bâtiment séléctinné pour de la construction
             for button in game._menu.buttons.items():
                 if button[1].collidepoint(pos):
                     if button[0] == "edit_validation":

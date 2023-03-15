@@ -48,8 +48,8 @@
         "Muraille",
         "Reserve"
     ],
-    "ZOOM": 1,
-    "SIZE_CASE": 50,
+    "ZOOM": 1.4,
+    "SIZE_CASE": 35.714285714285715,
     "SIZE_TEXT": 30,
     "size_x": 1820,
     "size_y": 980

@@ -86,3 +86,4 @@ class Caserne(Building):
 
     def former(self):
         pass
+DICT_BUILDINGS = {"Caserne" : Caserne, "Champs" : Champs, "Grenier" : Grenier, "Tour" : Tour, "Muraille" : Muraille, "Reserve" : Reserve}

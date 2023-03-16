@@ -19,7 +19,7 @@ class Tools:
         
     @lru_cache
     def const(self, name):
-        r = self.data.get(name, None)
+        r = self.data[name]
         return r
     
     def set_const(self, name, val):
@@ -37,15 +37,14 @@ class Tools:
         self.set_const("RED", (150, 0, 0))
         self.set_const("WHITE", (255, 255, 255))
         self.set_const("GREY_WHITE", (200, 200, 200))
+        self.set_const("GREY_YELLOW", (232, 222, 100))
+        self.set_const("RED_ORANGE", (235, 50, 30))
         self.set_const("GREY", (100, 100, 100))
-        self.set_const("SENSIBILITY", 0.4)
-        self.set_const("MENU_EDIT_POS", (5*size_x//6, size_y//2, size_x//6, size_y//2))
-        self.set_const("LONG_COL_MENU_EDIT", self.cst("MENU_EDIT_POS")[2] // 3)
-        self.set_const("LONG_BLOCK_MENU_EDIT", 2*self.cst("LONG_COL_MENU_EDIT")//3)
-        self.set_const("GAP_BLOCK_COL_MENU_EDIT", self.cst("LONG_COL_MENU_EDIT")//6)
-        self.set_const("POS_Y_BOTTOM_MENU_EDIT", self.cst("MENU_EDIT_POS")[1]+7*(size_y-self.cst("MENU_EDIT_POS")[1])//8)
-        self.set_const("LONG_BUTTON_MENU_EDIT", 3*(size_y-self.cst("POS_Y_BOTTOM_MENU_EDIT"))//4)
-        self.set_const("POS_BUTTONS_MENU_EDIT", ((self.cst("LONG_COL_MENU_EDIT")-self.cst("LONG_BUTTON_MENU_EDIT"))//2, self.cst("POS_Y_BOTTOM_MENU_EDIT")+(size_y-self.cst("POS_Y_BOTTOM_MENU_EDIT"))//2-self.cst("LONG_BUTTON_MENU_EDIT")//2))
+        self.set_const("SENSIBILITY", 0.4) #sensibilité d'un déplacement (en case de la map)
+        self.set_const("MENU_EDIT_POS", (size_x-3*size_y//16, 15*size_y//16, 3*size_y//16, size_y//16)) #position du menu d'edit, MENU_EDIT_POS[3] correspond aussi à la longueur d'une case
+        self.set_const("LONG_BLOCK_MENU_EDIT", 3*self.cst("MENU_EDIT_POS")[3]//4) #longueur du contenu d'une case du menu d'edit
+        self.set_const("GAP_BLOCK_COL_MENU_EDIT", self.cst("MENU_EDIT_POS")[3]//8) #espace entre le contenu et le bord d'une case du menu d'eedit
+        self.set_const("POS_BUTTONS_MENU_EDIT", (((self.cst("MENU_EDIT_POS")[3])-self.cst("LONG_BLOCK_MENU_EDIT"))//2, (self.cst("MENU_EDIT_POS")[1])+(size_y-(self.cst("MENU_EDIT_POS"))[1])//2-self.cst("LONG_BLOCK_MENU_EDIT")//2)) #
         self.set_const("LIST_BAT_MENU_EDIT", ["Caserne", "Champs", "Grenier", "Tour", "Muraille", "Reserve"])
         self.set_const("ZOOM", 1)
         self.set_const("SIZE_CASE", 50)

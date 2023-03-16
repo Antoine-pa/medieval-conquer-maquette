@@ -62,10 +62,10 @@ class App:
                             self.game._menu.mem_tamp["bat"]["angle"] = 180
                     if event.key == pygame.K_ESCAPE:
                         pygame.quit()
-                        continuer = False
+                        self.process = False
                 elif event.type == pygame.QUIT:
                     pygame.quit()
-                    continuer = False
+                    self.process = False
 
 app = App()
 app.main()

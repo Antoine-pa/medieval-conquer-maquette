@@ -26,19 +26,16 @@
     ],
     "SENSIBILITY": 0.4,
     "MENU_EDIT_POS": [
-        1516,
-        490,
-        303,
-        490
+        1637,
+        918,
+        183,
+        61
     ],
-    "LONG_COL_MENU_EDIT": 101,
-    "LONG_BLOCK_MENU_EDIT": 67,
-    "GAP_BLOCK_COL_MENU_EDIT": 16,
-    "POS_Y_BOTTOM_MENU_EDIT": 918,
-    "LONG_BUTTON_MENU_EDIT": 46,
+    "LONG_BLOCK_MENU_EDIT": 45,
+    "GAP_BLOCK_COL_MENU_EDIT": 7,
     "POS_BUTTONS_MENU_EDIT": [
-        27,
-        926
+        8,
+        927
     ],
     "LIST_BAT_MENU_EDIT": [
         "Caserne",
@@ -48,9 +45,19 @@
         "Muraille",
         "Reserve"
     ],
-    "ZOOM": 1.4,
-    "SIZE_CASE": 35.714285714285715,
+    "ZOOM": 1,
+    "SIZE_CASE": 50,
     "SIZE_TEXT": 30,
     "size_x": 1820,
-    "size_y": 980
+    "size_y": 980,
+    "GREY_YELLOW": [
+        232,
+        222,
+        100
+    ],
+    "RED_ORANGE": [
+        235,
+        50,
+        30
+    ]
 }

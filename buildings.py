@@ -17,13 +17,18 @@ class Building:
 
     def __repr__(self):
         return f"{self.name} : (position : {self.pos}; taille : {self.size}; vie : {self.life})"
+    
+    def in_windows(self, x, y):
+        return x-2 <=self.pos[0] <= cst("size_x")/int(cst("SIZE_CASE"))+x and y-2 <=self.pos[1] <= cst("size_y")/int(cst("SIZE_CASE"))+y
 
     def display(self, screen, x, y):
         """
         calcul si le bâtiment est affiché ou non et l'affiche
         """
-        if x-2 <=self.pos[0] <= cst("size_x")/int(cst("SIZE_CASE"))+x and y-2 <=self.pos[1] <= cst("size_y")/int(cst("SIZE_CASE"))+y:
+        if self.in_windows(x, y):
             screen.blit(self.img, ((self.pos[0]-x)*int(cst("SIZE_CASE")), (self.pos[1]-y)*int(cst("SIZE_CASE"))))
+            return True
+        return False
 
     def load(self):
         """

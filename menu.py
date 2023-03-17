@@ -87,6 +87,7 @@ class Menu:
             pygame.draw.line(screen, cst("BLACK"), (cst("MENU_EDIT_POS")[:2]), (cst("MENU_EDIT_POS")[0], cst("size_y")), 3) #ligne entre les bouttons et les bâtiments
             ress = self.mem_tamp["ress"]
             pos_menu = (cst("size_x") - 4*cst("MENU_EDIT_POS")[3], cst("size_y") - (len(ress)+1)*cst("MENU_EDIT_POS")[3], 4*cst("MENU_EDIT_POS")[3], len(ress)*cst("MENU_EDIT_POS")[3])
+            check = None
             for i in range(len(cst("LIST_BAT_MENU_EDIT"))):
                 build = cst("LIST_BAT_MENU_EDIT")[i]
                 if self.mem_tamp["bat"]["bat"] == build:
@@ -95,9 +96,14 @@ class Menu:
                     pygame.draw.rect(screen, cst("GREY_WHITE"), pygame.Rect(pos_menu[0] - pos_menu[2], cst("MENU_EDIT_POS")[1] - len(cost) * (cst("MENU_EDIT_POS")[3]), pos_menu[2], len(cost) * (cst("MENU_EDIT_POS")[3])))
                     cost = list(cost.items())
                     pygame.draw.line(screen, cst("BLACK"), (pos_menu[0]-1, cst("MENU_EDIT_POS")[1] - len(cost) * (cst("MENU_EDIT_POS")[3])), (pos_menu[0]-1, cst("MENU_EDIT_POS")[1]), 1)
+                    check = t.check_res(t.cost(build, 1), self.mem_tamp["ress"])
                     for j in range(len(cost)):
                         res = cost[j]
-                        t.text(screen, res[0] + " : " + str(res[1]), cst("BLACK"), (pos_menu[0] - pos_menu[2] + cst("MENU_EDIT_POS")[3] // 4, cst("MENU_EDIT_POS")[1] - len(cost) * (cst("MENU_EDIT_POS")[3]) + j * cst("MENU_EDIT_POS")[3] + cst("MENU_EDIT_POS")[3] // 4), 20)
+                        if check == res[0]:
+                            color = cst("RED")
+                        else:
+                            color = cst("BLACK")
+                        t.text(screen, res[0] + " : " + str(res[1]), color, (pos_menu[0] - pos_menu[2] + cst("MENU_EDIT_POS")[3] // 4, cst("MENU_EDIT_POS")[1] - len(cost) * (cst("MENU_EDIT_POS")[3]) + j * cst("MENU_EDIT_POS")[3] + cst("MENU_EDIT_POS")[3] // 4), 20)
                 img = t.load_img("./assets/buildings/"+build+".png", cst("LONG_BLOCK_MENU_EDIT"), cst("LONG_BLOCK_MENU_EDIT")) #on charge l'image
                 pygame.draw.line(screen, cst("BLACK"), (cst("MENU_EDIT_POS")[0] - (i+1)*cst("MENU_EDIT_POS")[3], cst("MENU_EDIT_POS")[1]), (cst("MENU_EDIT_POS")[0] - (i+1)*cst("MENU_EDIT_POS")[3], cst("size_y"))) #on met une ligne entre les bâtiments
                 screen.blit(img, (cst("MENU_EDIT_POS")[0] - (i+1)*cst("MENU_EDIT_POS")[3] + cst("GAP_BLOCK_COL_MENU_EDIT"), cst("MENU_EDIT_POS")[1] + cst("GAP_BLOCK_COL_MENU_EDIT"))) #on affiche l'image
@@ -107,7 +113,11 @@ class Menu:
                 ress = list(ress.items())
                 for i in range(len(ress)):
                     res = ress[i]
-                    t.text(screen, res[0]+" : "+str(res[1])+"/"+str(t.res(res[0])["stock"]), cst("BLACK"), (pos_menu[0]+cst("MENU_EDIT_POS")[3]//4, pos_menu[1]+i*cst("MENU_EDIT_POS")[3]+cst("MENU_EDIT_POS")[3]//4), 20) #on ajoute la ligne de ressource
+                    if check is not None and check == res[0]:
+                        color = cst("RED")
+                    else:
+                        color = cst("BLACK")
+                    t.text(screen, res[0]+" : "+str(res[1])+"/"+str(t.res(res[0])["stock"]), color, (pos_menu[0]+cst("MENU_EDIT_POS")[3]//4, pos_menu[1]+i*cst("MENU_EDIT_POS")[3]+cst("MENU_EDIT_POS")[3]//4), 20) #on ajoute la ligne de ressource
 
 
     def display_ressources(self, screen): #à faire : créer les constantes au début pour éviter les calculs
@@ -152,8 +162,7 @@ class Menu:
                     build = DICT_BUILDINGS[self.mem_tamp["bat"]["bat"]](place_x, place_y) #on instancie le bâtiment
                     build.rotate(self.mem_tamp["bat"]["angle"])
                     place = _map.check_pos(build, self.mem_tamp["list_bat"]["add"]["pos"])
-
-                    if place == 0 and t.check_res(t.cost(build.name, 1), self.mem_tamp["ress"]): #on vérifie que la place est libre et que les ressources sont suffisantes
+                    if place == 0 and t.check_res(t.cost(build.name, 1), self.mem_tamp["ress"]) == True: #on vérifie que la place est libre et que les ressources sont suffisantes
                         self.mem_tamp["list_bat"]["add"]["bat"].append(build) #on ajoute le bâtiment dans la mémoire tampon
                         for x in range(build.pos[0], build.pos[0]+build.size[0]):
                             for y in range(build.pos[1], build.pos[1]+build.size[1]):

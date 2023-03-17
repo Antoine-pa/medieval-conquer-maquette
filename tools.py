@@ -14,10 +14,10 @@ class Tools:
         img = pygame.transform.scale(img,(x, y))
         return img
     
-    def check_res(self, resources : dict, resources2 : dict = {}) -> bool:
+    def check_res(self, resources : dict, resources2 : dict = {}):
         for r in resources.items():
             if r[1]+resources2.get(r[0], 0) > self.res(r[0])["stock"]:
-                return False
+                return r[0]
         return True
 
     def load_cost(self):

@@ -1,11 +1,11 @@
 {
     "bois": {
         "max": 100,
-        "stock": 45
+        "stock": 75
     },
     "fer": {
         "max": 200,
-        "stock": 45
+        "stock": 60
     },
     "eau": {
         "max": 100,

@@ -15,7 +15,6 @@ class Menu:
         self.action = "map"
         self.mem_tamp = None #variable de mémoire temporaire
         self.buttons = {} #liste des bouttons affichés
-        print("ok")
 
     def __repr__(self):
         return f"Menu :\n - action : {self.action}\n - memoire tampon : {self.mem_tamp}\n - boutons : {self.buttons}"
@@ -48,27 +47,27 @@ class Menu:
 
     def update_mem_tamp(self):
         if self.action.startswith("edit"):
-            self.mem_tamp = {"bat" : {"bat" : None, "angle" : 0}, "list_bat" : {"add" : {"pos" : [], "bat" : []}, "sup" : []}, "ress" : {"bois" : 2, "fer" : 6}}
+            self.mem_tamp = {"bat" : {"bat" : None, "angle" : 0}, "list_bat" : {"add" : {"pos" : [], "bat" : []}, "sup" : []}, "ress" : {}}
         else:
             self.mem_tamp = None
 
 
-    def display(self, screen, ressources : dict, pos_map: list):
+    def display(self, screen, pos_map: list):
         """
         fonction permettant d'afficher les zones des sections du menu
         """
         if self.action == "map":
             pass
         elif self.action.startswith("edit"):
-            self.display_edit(screen, pos_map, ressources)
+            self.display_edit(screen, pos_map)
         elif self.action == "settings":
             self.display_settings(screen)
         elif self.action == "ressources":
-            self.display_ressources(screen, ressources)
+            self.display_ressources(screen)
         for button in self.buttons.items():
             button[1].display(screen)
 
-    def display_edit(self, screen, pos_map: list, ressources):
+    def display_edit(self, screen, pos_map: list):
         """
         fonction permettant d'afficher le menu d'edition de la map
         """
@@ -108,22 +107,23 @@ class Menu:
                 ress = list(ress.items())
                 for i in range(len(ress)):
                     res = ress[i]
-                    t.text(screen, res[0]+" : "+str(res[1])+"/"+str(ressources[res[0]][0]), cst("BLACK"), (pos_menu[0]+cst("MENU_EDIT_POS")[3]//4, pos_menu[1]+i*cst("MENU_EDIT_POS")[3]+cst("MENU_EDIT_POS")[3]//4), 20) #on ajoute la ligne de ressource
+                    t.text(screen, res[0]+" : "+str(res[1])+"/"+str(t.res(res[0])["stock"]), cst("BLACK"), (pos_menu[0]+cst("MENU_EDIT_POS")[3]//4, pos_menu[1]+i*cst("MENU_EDIT_POS")[3]+cst("MENU_EDIT_POS")[3]//4), 20) #on ajoute la ligne de ressource
 
 
-    def display_ressources(self, screen, ressources : dict): #à faire : créer les constantes au début pour éviter les calculs
+    def display_ressources(self, screen): #à faire : créer les constantes au début pour éviter les calculs
         """
         fonction permettant d'afficher les ressources
         """
+        resources = t.data_res
         screen.fill(cst("BLACK"))
         pygame.draw.rect(screen, cst("GREY_WHITE"), pygame.Rect(cst("size_x")//4, cst("size_y")//4, cst("size_x")//2, cst("size_y")//2), 0)
-        ressources = list(ressources.items())
-        for i in range(len(ressources)):
-            res = ressources[i]
-            ratio = res[1][1] / res[1][0]
-            t.barre(screen, (cst("size_x")/2-cst("size_x")/16, cst("size_y")*(3*len(ressources)+2+6*i)/(12*len(ressources))), (cst("size_x")/8, cst("size_y")/(6*len(ressources))), ratio, cst("RED"))
-            t.text(screen, res[0], cst("BLACK"), (cst("size_x")/4+cst("size_x")/16, cst("size_y")/4+cst("size_y")/(6*len(ressources))+i*cst("size_y")/(2*len(ressources))), int(cst("size_y")/(6*len(ressources))))
-            t.text(screen, str(res[1][1])+"/"+str(res[1][0])+" ("+str(round(ratio*100, 2))+"%)", cst("BLACK"), (cst("size_x")/2+cst("size_x")/8, cst("size_y")/4+cst("size_y")/(6*len(ressources))+i*cst("size_y")/(2*len(ressources))), int(cst("size_y")/(6*len(ressources))))
+        resources = list(resources.items())
+        for i in range(len(resources)):
+            res = resources[i]
+            ratio = res[1]["stock"] / res[1]["max"]
+            t.barre(screen, (cst("size_x")/2-cst("size_x")/16, cst("size_y")*(3*len(resources)+2+6*i)/(12*len(resources))), (cst("size_x")/8, cst("size_y")/(6*len(resources))), ratio, cst("RED"))
+            t.text(screen, res[0], cst("BLACK"), (cst("size_x")/4+cst("size_x")/16, cst("size_y")/4+cst("size_y")/(6*len(resources))+i*cst("size_y")/(2*len(resources))), int(cst("size_y")/(6*len(resources))))
+            t.text(screen, str(res[1]["stock"])+"/"+str(res[1]["max"])+" ("+str(round(ratio*100, 2))+"%)", cst("BLACK"), (cst("size_x")/2+cst("size_x")/8, cst("size_y")/4+cst("size_y")/(6*len(resources))+i*cst("size_y")/(2*len(resources))), int(cst("size_y")/(6*len(resources))))
 
     def display_settings(self, screen):
         """
@@ -152,11 +152,16 @@ class Menu:
                     build = DICT_BUILDINGS[self.mem_tamp["bat"]["bat"]](place_x, place_y) #on instancie le bâtiment
                     build.rotate(self.mem_tamp["bat"]["angle"])
                     place = _map.check_pos(build, self.mem_tamp["list_bat"]["add"]["pos"])
-                    if place == 0: #on vérifie que la place est libre
+
+                    if place == 0 and t.check_res(t.cost(build.name, 1), self.mem_tamp["ress"]): #on vérifie que la place est libre et que les ressources sont suffisantes
                         self.mem_tamp["list_bat"]["add"]["bat"].append(build) #on ajoute le bâtiment dans la mémoire tampon
                         for x in range(build.pos[0], build.pos[0]+build.size[0]):
                             for y in range(build.pos[1], build.pos[1]+build.size[1]):
                                 self.mem_tamp["list_bat"]["add"]["pos"].append((x, y))
+                        for ress in t.cost(build.name, 1).items():
+                            if ress[0] not in self.mem_tamp["ress"]:
+                                self.mem_tamp["ress"][ress[0]] = 0
+                            self.mem_tamp["ress"][ress[0]] += ress[1]
                     elif place == 2: #annuler la construction d'un batiment
                         for b in self.mem_tamp["list_bat"]["add"]["bat"]:
                             for x in range(b.pos[0], b.pos[0]+b.size[0]):
@@ -164,6 +169,10 @@ class Menu:
                                     if (place_x, place_y) == (x, y):
                                         del build
                                         build = b
+                        for ress in t.cost(build.name, 1).items():
+                            self.mem_tamp["ress"][ress[0]] -= ress[1]
+                            if self.mem_tamp["ress"][ress[0]] == 0:
+                                del self.mem_tamp["ress"][ress[0]]
                         for x in range(build.pos[0], build.pos[0]+build.size[0]):
                             for y in range(build.pos[1], build.pos[1]+build.size[1]):
                                 self.mem_tamp["list_bat"]["add"]["pos"].remove((x, y))
@@ -193,6 +202,8 @@ class Menu:
                             _map.add_build(b)
                         for b in self.mem_tamp["list_bat"]["sup"]:
                             _map.sup_build(b)
+                        for r in self.mem_tamp["ress"].items():
+                            t.set_res(r[0], t.res(r[0])["stock"] - r[1])
                     self.set_action("edit")
                 if button[0] == "edit_annulation":
                     self.mem_tamp = None

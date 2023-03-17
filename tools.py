@@ -1,20 +1,32 @@
 import json
 import pygame
 from functools import lru_cache
-
+init_res = {"bois" : {"max" : 100,"stock" : 75},"fer" : {"max" : 200,"stock" : 60},"eau" : {"max" : 100,"stock" : 60},"acier" : {"max" : 200,"stock" : 30},"or" : {"max" : 60,"stock" : 12},"charbon" : {"max" : 120,"stock" : 79}}
 class Tools:
     def __init__(self):
         self.data = self.reload_data()
         self.data_cost = self.load_cost()
+        self.data_res = self.load_res()
         self.cst = self.const
 
     def load_img(self, name, x, y):
         img = pygame.image.load(name)
         img = pygame.transform.scale(img,(x, y))
         return img
+    
+    def check_res(self, resources : dict, resources2 : dict = {}) -> bool:
+        for r in resources.items():
+            if r[1]+resources2.get(r[0], 0) > self.res(r[0])["stock"]:
+                return False
+        return True
 
     def load_cost(self):
         with open("cost.json", "r") as f:
+            data = json.load(f)
+        return data
+    
+    def load_res(self):
+        with open("resources.json", "r") as f:
             data = json.load(f)
         return data
 
@@ -29,9 +41,20 @@ class Tools:
         return r
 
     @lru_cache(maxsize=None)
+    def res(self, name):
+        r = self.data_res[name]
+        return r
+
+    @lru_cache(maxsize=None)
     def const(self, name):
         r = self.data[name]
         return r
+
+    def set_res(self, name, val):
+        self.res.cache_clear()
+        self.data_res[name]["stock"] = val
+        with open("resources.json", "w") as f:
+            f.write(json.dumps(self.data_res, indent=4))
 
     def set_const(self, name, val):
         self.const.cache_clear()
@@ -40,6 +63,12 @@ class Tools:
         self.data[name] = val
         with open("const.json", "w") as f:
             f.write(json.dumps(self.data, indent=4))
+
+    def add_new_res(self, name, m, val):
+        self.res.cache_clear()
+        self.data_res[name] = {"max" : m, "stock" : val}
+        with open("resources.json", "w") as f:
+            f.write(json.dumps(self.data_res, indent=4))
 
     def set_all_const(self, size_x, size_y):
         self.set_const("size_x", size_x)
@@ -85,6 +114,7 @@ class Tools:
         return (place_x, place_y)
 
 t = Tools()
-
+for r in init_res.items():
+    t.add_new_res(r[0], r[1]["max"], r[1]["stock"])
 def cst(name):
     return t.cst(name)

@@ -26,16 +26,16 @@
     ],
     "SENSIBILITY": 0.4,
     "MENU_EDIT_POS": [
-        1350,
-        750,
-        150,
-        50
+        1637,
+        918,
+        183,
+        61
     ],
-    "LONG_BLOCK_MENU_EDIT": 37,
-    "GAP_BLOCK_COL_MENU_EDIT": 6,
+    "LONG_BLOCK_MENU_EDIT": 45,
+    "GAP_BLOCK_COL_MENU_EDIT": 7,
     "POS_BUTTONS_MENU_EDIT": [
-        6,
-        757
+        8,
+        927
     ],
     "LIST_BAT_MENU_EDIT": [
         "Caserne",
@@ -48,8 +48,8 @@
     "ZOOM": 1,
     "SIZE_CASE": 50,
     "SIZE_TEXT": 30,
-    "size_x": 1500,
-    "size_y": 800,
+    "size_x": 1820,
+    "size_y": 980,
     "GREY_YELLOW": [
         232,
         222,

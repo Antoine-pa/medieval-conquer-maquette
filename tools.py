@@ -5,6 +5,7 @@ from functools import lru_cache
 class Tools:
     def __init__(self):
         self.data = self.reload_data()
+        self.data_cost = self.load_cost()
         self.cst = self.const
 
     def load_img(self, name, x, y):
@@ -12,16 +13,26 @@ class Tools:
         img = pygame.transform.scale(img,(x, y))
         return img
 
+    def load_cost(self):
+        with open("cost.json", "r") as f:
+            data = json.load(f)
+        return data
+
     def reload_data(self):
         with open("const.json", "r") as f:
             data = json.load(f)
         return data
-        
-    @lru_cache
+
+    @lru_cache(maxsize=None)
+    def cost(self, name, lvl):
+        r = self.data_cost[name][str(lvl)]
+        return r
+
+    @lru_cache(maxsize=None)
     def const(self, name):
         r = self.data[name]
         return r
-    
+
     def set_const(self, name, val):
         self.const.cache_clear()
         if isinstance(val, tuple):

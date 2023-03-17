@@ -15,7 +15,8 @@ class Menu:
         self.action = "map"
         self.mem_tamp = None #variable de mémoire temporaire
         self.buttons = {} #liste des bouttons affichés
-    
+        print("ok")
+
     def __repr__(self):
         return f"Menu :\n - action : {self.action}\n - memoire tampon : {self.mem_tamp}\n - boutons : {self.buttons}"
 
@@ -47,7 +48,7 @@ class Menu:
 
     def update_mem_tamp(self):
         if self.action.startswith("edit"):
-            self.mem_tamp = {"bat" : {"bat" : None, "angle" : 0}, "list_bat" : {"add" : {"pos" : [], "bat" : []}, "sup" : []}, "ress" : {}}
+            self.mem_tamp = {"bat" : {"bat" : None, "angle" : 0}, "list_bat" : {"add" : {"pos" : [], "bat" : []}, "sup" : []}, "ress" : {"bois" : 2, "fer" : 6}}
         else:
             self.mem_tamp = None
 
@@ -59,29 +60,18 @@ class Menu:
         if self.action == "map":
             pass
         elif self.action.startswith("edit"):
-            self.display_edit(screen, pos_map)
+            self.display_edit(screen, pos_map, ressources)
         elif self.action == "settings":
             self.display_settings(screen)
         elif self.action == "ressources":
             self.display_ressources(screen, ressources)
         for button in self.buttons.items():
             button[1].display(screen)
-    
-    def display_edit(self, screen, pos_map: list):
+
+    def display_edit(self, screen, pos_map: list, ressources):
         """
         fonction permettant d'afficher le menu d'edition de la map
         """
-        pygame.draw.rect(screen, cst("GREY_WHITE"), pygame.Rect(*cst("MENU_EDIT_POS")), 0)
-        if self.action == "edit-add":
-            pygame.draw.rect(screen, cst("GREY_WHITE"), pygame.Rect(max(0, cst("MENU_EDIT_POS")[0] - len(cst("LIST_BAT_MENU_EDIT"))*cst("MENU_EDIT_POS")[3]), cst("MENU_EDIT_POS")[1], cst("size_x")-cst("MENU_EDIT_POS")[2], cst("MENU_EDIT_POS")[3]))
-            pygame.draw.line(screen, cst("BLACK"), (cst("MENU_EDIT_POS")[:2]), (cst("MENU_EDIT_POS")[0], cst("size_y")), 3)
-            for i in range(len(cst("LIST_BAT_MENU_EDIT"))):
-                build = cst("LIST_BAT_MENU_EDIT")[i]
-                if self.mem_tamp["bat"]["bat"] == build:
-                    pygame.draw.rect(screen, cst("GREY_YELLOW"), pygame.Rect((cst("MENU_EDIT_POS")[0] - (i+1)*(cst("MENU_EDIT_POS")[3]), cst("MENU_EDIT_POS")[1]), (cst("MENU_EDIT_POS")[3], cst("MENU_EDIT_POS")[3])))
-                img = t.load_img("./assets/buildings/"+build+".png", cst("LONG_BLOCK_MENU_EDIT"), cst("LONG_BLOCK_MENU_EDIT"))
-                pygame.draw.line(screen, cst("BLACK"), (cst("MENU_EDIT_POS")[0] - i*cst("MENU_EDIT_POS")[3], cst("MENU_EDIT_POS")[1]), (cst("MENU_EDIT_POS")[0] - i*cst("MENU_EDIT_POS")[3], cst("size_y")))
-                screen.blit(img, (cst("MENU_EDIT_POS")[0] - (i+1)*cst("MENU_EDIT_POS")[3] + cst("GAP_BLOCK_COL_MENU_EDIT"), cst("MENU_EDIT_POS")[1] + cst("GAP_BLOCK_COL_MENU_EDIT")))
         #display all buildings in mem tamp
         for b in self.mem_tamp["list_bat"]["add"]["bat"]:
             d = b.display(screen, *pos_map)
@@ -91,6 +81,35 @@ class Menu:
         for b in self.mem_tamp["list_bat"]["sup"]:
             if b.in_windows(*pos_map):
                 pygame.draw.rect(screen, cst("RED_ORANGE"), pygame.Rect((b.pos[0] - pos_map[0])*cst("SIZE_CASE"), (b.pos[1] - pos_map[1])*cst("SIZE_CASE"), cst("SIZE_CASE")*b.size[0], cst("SIZE_CASE")*b.size[1]), 3)
+
+        pygame.draw.rect(screen, cst("GREY_WHITE"), pygame.Rect(*cst("MENU_EDIT_POS")), 0)
+        if self.action == "edit-add":
+            pygame.draw.rect(screen, cst("GREY_WHITE"), pygame.Rect(max(0, cst("MENU_EDIT_POS")[0] - len(cst("LIST_BAT_MENU_EDIT"))*cst("MENU_EDIT_POS")[3]), cst("MENU_EDIT_POS")[1], cst("size_x")-cst("MENU_EDIT_POS")[2], cst("MENU_EDIT_POS")[3])) #rectangle des bâtiments suplémentaires
+            pygame.draw.line(screen, cst("BLACK"), (cst("MENU_EDIT_POS")[:2]), (cst("MENU_EDIT_POS")[0], cst("size_y")), 3) #ligne entre les bouttons et les bâtiments
+            ress = self.mem_tamp["ress"]
+            pos_menu = (cst("size_x") - 4*cst("MENU_EDIT_POS")[3], cst("size_y") - (len(ress)+1)*cst("MENU_EDIT_POS")[3], 4*cst("MENU_EDIT_POS")[3], len(ress)*cst("MENU_EDIT_POS")[3])
+            for i in range(len(cst("LIST_BAT_MENU_EDIT"))):
+                build = cst("LIST_BAT_MENU_EDIT")[i]
+                if self.mem_tamp["bat"]["bat"] == build:
+                    pygame.draw.rect(screen, cst("GREY_YELLOW"), pygame.Rect((cst("MENU_EDIT_POS")[0] - (i+1)*(cst("MENU_EDIT_POS")[3]), cst("MENU_EDIT_POS")[1]), (cst("MENU_EDIT_POS")[3], cst("MENU_EDIT_POS")[3]))) #si le bâtiment est sélectionné, on color en jaune en dessous
+                    cost = t.cost(build, 1)
+                    pygame.draw.rect(screen, cst("GREY_WHITE"), pygame.Rect(pos_menu[0] - pos_menu[2], cst("MENU_EDIT_POS")[1] - len(cost) * (cst("MENU_EDIT_POS")[3]), pos_menu[2], len(cost) * (cst("MENU_EDIT_POS")[3])))
+                    cost = list(cost.items())
+                    pygame.draw.line(screen, cst("BLACK"), (pos_menu[0]-1, cst("MENU_EDIT_POS")[1] - len(cost) * (cst("MENU_EDIT_POS")[3])), (pos_menu[0]-1, cst("MENU_EDIT_POS")[1]), 1)
+                    for j in range(len(cost)):
+                        res = cost[j]
+                        t.text(screen, res[0] + " : " + str(res[1]), cst("BLACK"), (pos_menu[0] - pos_menu[2] + cst("MENU_EDIT_POS")[3] // 4, cst("MENU_EDIT_POS")[1] - len(cost) * (cst("MENU_EDIT_POS")[3]) + j * cst("MENU_EDIT_POS")[3] + cst("MENU_EDIT_POS")[3] // 4), 20)
+                img = t.load_img("./assets/buildings/"+build+".png", cst("LONG_BLOCK_MENU_EDIT"), cst("LONG_BLOCK_MENU_EDIT")) #on charge l'image
+                pygame.draw.line(screen, cst("BLACK"), (cst("MENU_EDIT_POS")[0] - (i+1)*cst("MENU_EDIT_POS")[3], cst("MENU_EDIT_POS")[1]), (cst("MENU_EDIT_POS")[0] - (i+1)*cst("MENU_EDIT_POS")[3], cst("size_y"))) #on met une ligne entre les bâtiments
+                screen.blit(img, (cst("MENU_EDIT_POS")[0] - (i+1)*cst("MENU_EDIT_POS")[3] + cst("GAP_BLOCK_COL_MENU_EDIT"), cst("MENU_EDIT_POS")[1] + cst("GAP_BLOCK_COL_MENU_EDIT"))) #on affiche l'image
+            pygame.draw.line(screen, cst("BLACK"), (cst("MENU_EDIT_POS")[0] - (i + 1) * (cst("MENU_EDIT_POS")[3]), cst("size_y") - cst("MENU_EDIT_POS")[3]), (cst("size_x"), cst("size_y") - cst("MENU_EDIT_POS")[3])) #on rajoute une ligne au dessus
+            if pos_menu[3] != 0: #si des ressources sont utilisées
+                pygame.draw.rect(screen, cst("GREY_WHITE"), pygame.Rect(*pos_menu), 0)  # on ajoute le rectangle supérieur
+                ress = list(ress.items())
+                for i in range(len(ress)):
+                    res = ress[i]
+                    t.text(screen, res[0]+" : "+str(res[1])+"/"+str(ressources[res[0]][0]), cst("BLACK"), (pos_menu[0]+cst("MENU_EDIT_POS")[3]//4, pos_menu[1]+i*cst("MENU_EDIT_POS")[3]+cst("MENU_EDIT_POS")[3]//4), 20) #on ajoute la ligne de ressource
+
 
     def display_ressources(self, screen, ressources : dict): #à faire : créer les constantes au début pour éviter les calculs
         """
@@ -112,7 +131,7 @@ class Menu:
         """
         screen.fill(cst("BLACK"))
         pygame.draw.rect(screen, cst("GREY_WHITE"), pygame.Rect(cst("size_x")//4, cst("size_y")//4, cst("size_x")//2, cst("size_y")//2), 0)
-    
+
     def click(self, pos, _map):
         if self.action == "edit-add": #si il ajoute des bâtiments
             pos_menu = (max(0, cst("MENU_EDIT_POS")[0] - len(cst("LIST_BAT_MENU_EDIT"))*cst("MENU_EDIT_POS")[3]), cst("MENU_EDIT_POS")[1])

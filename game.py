@@ -11,7 +11,7 @@ class Game:
     def __init__(self):
         self._map = Map()
         self._menu = Menu()
-        self.ressources = {"bois" : (100, 75), "fer" : (200, 60), "eau" : (100, 60), "feu" : (60, 40), "acier" : (200, 30), "or" : (60, 12), "charbon" : (120, 79)}
+        self.ressources = {"bois" : (100, 56), "fer" : (200, 60), "eau" : (100, 60), "feu" : (60, 40), "acier" : (200, 30), "or" : (60, 12), "charbon" : (120, 79)}
 
     def __repr__(self):
         return f"Game :\n - {self._map}\n\n - {self._menu}\n\n - ressources : {self.ressources}"

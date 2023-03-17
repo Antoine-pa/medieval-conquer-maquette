@@ -24,11 +24,12 @@ class App:
             for event in pygame.event.get():
                 try:
                     pos = list(pygame.mouse.get_pos())
-                except : pass
+                except:
+                    pass
                 if event.type == pygame.KEYDOWN: #à l'appui d'une touche
                     k = pygame.key.get_pressed()
                     if self.game._menu.action == "map" or self.game._menu.action.startswith("edit"):
-                        # dépacement sur la map
+                        # déplacement sur la map
                         if k[pygame.K_d]:
                             self.game._map.pos[0] += cst("SENSIBILITY")
                         elif k[pygame.K_s]:
@@ -67,5 +68,4 @@ class App:
                     pygame.quit()
                     self.process = False
 
-app = App()
-app.main()
+App().main()

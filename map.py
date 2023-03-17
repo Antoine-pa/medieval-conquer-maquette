@@ -63,3 +63,5 @@ class Map:
             old_zoom = cst("ZOOM")
             t.set_const("ZOOM", round(cst("ZOOM") + z/10, 1))
             t.set_const("SIZE_CASE", 1/cst("ZOOM")*cst("SIZE_CASE")/(1/old_zoom))
+            return True
+        return False

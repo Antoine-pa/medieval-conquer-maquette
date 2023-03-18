@@ -7,6 +7,7 @@ class Tools:
         self.data = self.reload_data()
         self.data_cost = self.load_cost()
         self.data_res = self.load_res()
+        self.data_prod = self.load_production()
         self.cst = self.const
 
     def load_img(self, name, x, y):
@@ -34,6 +35,16 @@ class Tools:
         with open("const.json", "r") as f:
             data = json.load(f)
         return data
+
+    def load_production(self):
+        with open("production.json", "r") as f:
+            data = json.load(f)
+        return data
+
+    @lru_cache(maxsize=None)
+    def prod(self, name, lvl):
+        r = self.data_prod[name][str(lvl)]
+        return r
 
     @lru_cache(maxsize=None)
     def cost(self, name, lvl):
@@ -75,6 +86,7 @@ class Tools:
         self.set_const("size_y", size_y)
         self.set_const("BLACK", (0, 0, 0))
         self.set_const("RED", (150, 0, 0))
+        self.set_const("GREEN", (0, 150, 0))
         self.set_const("WHITE", (255, 255, 255))
         self.set_const("GREY_WHITE", (200, 200, 200))
         self.set_const("GREY_YELLOW", (232, 222, 100))
@@ -85,7 +97,7 @@ class Tools:
         self.set_const("LONG_BLOCK_MENU_EDIT", 3*self.cst("MENU_EDIT_POS")[3]//4) #longueur du contenu d'une case du menu d'edit
         self.set_const("GAP_BLOCK_COL_MENU_EDIT", self.cst("MENU_EDIT_POS")[3]//8) #espace entre le contenu et le bord d'une case du menu d'eedit
         self.set_const("POS_BUTTONS_MENU_EDIT", (((self.cst("MENU_EDIT_POS")[3])-self.cst("LONG_BLOCK_MENU_EDIT"))//2, (self.cst("MENU_EDIT_POS")[1])+(size_y-(self.cst("MENU_EDIT_POS"))[1])//2-self.cst("LONG_BLOCK_MENU_EDIT")//2)) #
-        self.set_const("LIST_BAT_MENU_EDIT", ["Caserne", "Champs", "Grenier", "Tour", "Muraille", "Reserve"])
+        self.set_const("LIST_BAT_MENU_EDIT", ["Caserne", "Fields", "Grenier", "Tour", "Muraille", "Reserve"])
         self.set_const("ZOOM", 1)
         self.set_const("SIZE_CASE", 50)
         self.set_const("SIZE_TEXT", 30)
@@ -112,6 +124,13 @@ class Tools:
         place_x = int((pos[0]+_map.pos[0]*int(cst("SIZE_CASE")))//int(cst("SIZE_CASE")))
         place_y = int((pos[1]+_map.pos[1]*int(cst("SIZE_CASE")))//int(cst("SIZE_CASE")))
         return (place_x, place_y)
+
+    def check_product(self, build) -> bool:
+        res = self.prod(build.name, build.lvl)
+        for r in res["max"].items():
+            if r[1] < build.res[r[0]] + res["prod"][r[0]]:
+                return False
+        return True
 
 t = Tools()
 for r in init_res.items():

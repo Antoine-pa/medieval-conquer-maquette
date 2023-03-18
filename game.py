@@ -24,6 +24,11 @@ class Game:
             self._map.display(screen)
         self._menu.display(screen, self._map.pos)
         pygame.display.update()
+    
+    def update_production(self):
+        for build in self._map.list_build:
+            if build.kind == "production":
+                build.update()
 
     def deplacement(self, x, y):
         """

@@ -9,6 +9,11 @@
         0,
         0
     ],
+    "GREEN": [
+        0,
+        150,
+        0
+    ],
     "WHITE": [
         255,
         255,
@@ -39,7 +44,7 @@
     ],
     "LIST_BAT_MENU_EDIT": [
         "Caserne",
-        "Champs",
+        "Fields",
         "Grenier",
         "Tour",
         "Muraille",

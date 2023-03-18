@@ -21,6 +21,7 @@ class App:
     def main(self):
         while self.process:
             self.game.display(self.screen)
+            self.game.update_production()
             for event in pygame.event.get():
                 try:
                     pos = list(pygame.mouse.get_pos())

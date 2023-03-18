@@ -1,18 +1,21 @@
 import pygame
 from tools import t, cst
+from time import time
 
 class Building:
     """
     class Building:
         class de base de tout les bâtiments
     """
-    def __init__(self, name, size, pos, life):
+    def __init__(self, name, size, pos, lvl, life, kind):
         self.name = name
         self.img = None
         self.size = size
         self.pos = pos
+        self.lvl = lvl
         self.angle = 0
         self.life = life
+        self.kind = kind
         self.load()
 
     def __repr__(self):
@@ -43,52 +46,62 @@ class Building:
         self.load()
 
 
+class Canon(Building):
+    def __init__(self, x, y):
+        super().__init__("Canon", (3, 3), [x, y], 1, 100, "defense")
+        self.type = ""
+        self.deg = 0
+
+class Grenier(Building):
+    def __init__(self, x, y):
+        super().__init__("Grenier", (3, 3), [x, y], 1, 100, "stockage")
+        self.res = {}
+
+class Reserve(Building):
+    def __init__(self, x, y):
+        super().__init__("Reserve", (3, 3), [x, y], 1, 100, "stockage")
+        self.res = {}
+
+class Muraille(Building):
+    def __init__(self, x, y):
+        super().__init__("Muraille", (1, 1), [x, y], 1, 400, "defense")
+
+class Tour(Building):
+    def __init__(self, x, y):
+        super().__init__("Tour", (3, 3), [x, y], 1, 100, "defense")
+
+class Fields(Building):
+    def __init__(self, x, y):
+        super().__init__("Fields", (2, 2), [x, y], 1, 100, "production")
+        self.res = {"cereals" : 0}
+        self.start_production = False
+        self.t = time()
+    
+    def update(self):
+        prod = t.prod(self.name, self.lvl)
+        if self.start_production and time() - self.t >= prod["time"] and t.check_product(self):
+            self.res["cereals"] += prod["prod"]["cereals"]
+            self.t = time()
+            print(self.res)
+
+
+
 class UsineArmeSiege(Building):
     def __init__(self, x, y):
-        super().__init__("UsineArmeSiege", (2, 2), [x, y], 100)
+        super().__init__("UsineArmeSiege", (2, 2), [x, y], 1, 100, "formation")
         self.list_bat = []
         self.max = 2
 
     def construire(self):
         pass
 
-class Canon(Building):
-    def __init__(self, x, y):
-        super().__init__("Canon", (3, 3), [x, y], 100)
-        self.type = ""
-        self.deg = 0
-
-class Grenier(Building):
-    def __init__(self, x, y):
-        super().__init__("Grenier", (3, 3), [x, y], 100)
-        self.ress = {}
-
-class Reserve(Building):
-    def __init__(self, x, y):
-        super().__init__("Reserve", (3, 3), [x, y], 100)
-        self.ress = {}
-
-class Muraille(Building):
-    def __init__(self, x, y):
-        super().__init__("Muraille", (1, 1), [x, y], 400)
-        self.ress = {}
-
-class Tour(Building):
-    def __init__(self, x, y):
-        super().__init__("Tour", (3, 3), [x, y], 100)
-        self.ress = {}
-
-class Champs(Building):
-    def __init__(self, x, y):
-        super().__init__("Champs", (2, 2), [x, y], 100)
-        self.ress = {}
 
 class Caserne(Building):
     def __init__(self, x, y):
-        super().__init__("Caserne", (2, 2), [x, y], 100)
+        super().__init__("Caserne", (2, 2), [x, y], 1, 100, "formation")
         self.list_unit = []
         self.max = 5
 
     def former(self):
         pass
-DICT_BUILDINGS = {"Caserne" : Caserne, "Champs" : Champs, "Grenier" : Grenier, "Tour" : Tour, "Muraille" : Muraille, "Reserve" : Reserve}
+DICT_BUILDINGS = {"Caserne" : Caserne, "Fields" : Fields, "Grenier" : Grenier, "Tour" : Tour, "Muraille" : Muraille, "Reserve" : Reserve}

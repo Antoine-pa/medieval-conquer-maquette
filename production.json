@@ -1,0 +1,9 @@
+{
+    "Fields" : {
+        "1" : {
+            "time" : 2,
+            "prod" : {"cereals" : 10},
+            "max" : {"cereals" : 100}
+        }
+    }
+}

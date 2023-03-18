@@ -21,8 +21,14 @@ class Map:
             for y in range(0, cst("size_y")+int(cst("SIZE_CASE")), int(cst("SIZE_CASE"))):
                 pygame.draw.line(screen, cst("BLACK"), (0, y-self.pos[1]%1*int(cst("SIZE_CASE"))), (cst("size_x"), y-self.pos[1]%1*int(cst("SIZE_CASE"))))
         for b in self.list_build:
-            b.display(screen, *self.pos)
-    
+            d = b.display(screen, *self.pos)
+            if d and b.kind == "production" and b.start_production:
+                if t.check_product(b):
+                    color = cst("GREEN")
+                else:
+                    color = cst("RED")
+                pygame.draw.rect(screen, color, pygame.Rect((b.pos[0]-self.pos[0])*int(cst("SIZE_CASE"))+cst("SIZE_CASE")//6, (b.pos[1]-self.pos[1])*int(cst("SIZE_CASE"))+cst("SIZE_CASE")//6, cst("SIZE_CASE")//6, cst("SIZE_CASE")//6), 0)
+                
     def add_build(self, build):
         """
         ajout d'un bâtiment dans la liste des batiments et dans les cases occupées
@@ -31,6 +37,8 @@ class Map:
         for x in range(build.pos[0], build.pos[0]+build.size[0]):
             for y in range(build.pos[1], build.pos[1]+build.size[1]):
                 self.cases.append((x, y))
+        if build.kind == "production":
+            build.start_production = True
     
     def sup_build(self, build):
         self.list_build.remove(build)

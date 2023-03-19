@@ -16,10 +16,11 @@ class Building:
         self.angle = 0
         self.life = life
         self.kind = kind
-        self.load()
+        if name not in ("Muraille"):
+            self.load()
 
     def __repr__(self):
-        return f"{self.name} : (position : {self.pos}; taille : {self.size}; vie : {self.life})"
+        return f"{self.name} : (position : {self.pos}; taille : {self.size}; vie : {self.life}); angle : {self.angle}"
     
     def in_windows(self, x, y):
         return x-2 <=self.pos[0] <= cst("size_x")/int(cst("SIZE_CASE"))+x and y-2 <=self.pos[1] <= cst("size_y")/int(cst("SIZE_CASE"))+y
@@ -65,6 +66,26 @@ class Reserve(Building):
 class Muraille(Building):
     def __init__(self, x, y):
         super().__init__("Muraille", (1, 1), [x, y], 1, 400, "defense")
+        self.t = [0, 0, 0, 0]
+        self.load()
+    
+    
+    def load(self):
+        """
+        charge l'image du bâtiment
+        """
+        if sum(self.t) != 2:
+            name = self.name+str(sum(self.t))
+        else:
+            if self.t[0] == self.t[2] and self.t[1] == self.t[3]:
+                name = self.name+"2_0"
+            else:
+                name = self.name+"2_1"
+        self.img = t.load_img(f"./assets/buildings/{name}.png", int(cst("SIZE_CASE"))*self.size[0] , int(cst("SIZE_CASE"))*self.size[1])
+        self.img = pygame.transform.rotate(self.img, self.angle)
+    
+    def update_type(self):
+        pass
 
 class Tour(Building):
     def __init__(self, x, y):
@@ -104,4 +125,8 @@ class Caserne(Building):
 
     def former(self):
         pass
+
+class Foundry(Building):
+    def __init__(self, x, y):
+        super().__init__("", (), [], 1, 100, "")
 DICT_BUILDINGS = {"Caserne" : Caserne, "Fields" : Fields, "Grenier" : Grenier, "Tour" : Tour, "Muraille" : Muraille, "Reserve" : Reserve}

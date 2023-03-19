@@ -104,6 +104,8 @@ class Menu:
                         else:
                             color = cst("BLACK")
                         t.text(screen, res[0] + " : " + str(res[1]), color, (pos_menu[0] - pos_menu[2] + cst("MENU_EDIT_POS")[3] // 4, cst("MENU_EDIT_POS")[1] - len(cost) * (cst("MENU_EDIT_POS")[3]) + j * cst("MENU_EDIT_POS")[3] + cst("MENU_EDIT_POS")[3] // 4), 20)
+                if build == "Muraille":
+                    build += "2_0"
                 img = t.load_img("./assets/buildings/"+build+".png", cst("LONG_BLOCK_MENU_EDIT"), cst("LONG_BLOCK_MENU_EDIT")) #on charge l'image
                 pygame.draw.line(screen, cst("BLACK"), (cst("MENU_EDIT_POS")[0] - (i+1)*cst("MENU_EDIT_POS")[3], cst("MENU_EDIT_POS")[1]), (cst("MENU_EDIT_POS")[0] - (i+1)*cst("MENU_EDIT_POS")[3], cst("size_y"))) #on met une ligne entre les bâtiments
                 screen.blit(img, (cst("MENU_EDIT_POS")[0] - (i+1)*cst("MENU_EDIT_POS")[3] + cst("GAP_BLOCK_COL_MENU_EDIT"), cst("MENU_EDIT_POS")[1] + cst("GAP_BLOCK_COL_MENU_EDIT"))) #on affiche l'image
@@ -171,6 +173,25 @@ class Menu:
                             if ress[0] not in self.mem_tamp["ress"]:
                                 self.mem_tamp["ress"][ress[0]] = 0
                             self.mem_tamp["ress"][ress[0]] += ress[1]
+                        if build.name == "Muraille":
+                            builds_changing = []
+                            for b in self.mem_tamp["list_bat"]["add"]["bat"] +_map.list_build:
+                                if b.name == "Muraille" and ((abs(b.pos[0] - build.pos[0]) == 1 and abs(b.pos[1] - build.pos[1]) == 0) or (abs(b.pos[0] - build.pos[0]) == 0 and abs(b.pos[1] - build.pos[1]) == 1)):
+                                    if b.pos[0] == build.pos[0] and b.pos[1]  < build.pos[1]: #positionnement en bas d'une autre muraille
+                                        build.t[1] = 1
+                                        b.t[3] = 1
+                                    elif b.pos[0] == build.pos[0] and b.pos[1]  > build.pos[1]: #positionnement en haut d'une autre muraille
+                                        build.t[3] = 1
+                                        b.t[1] = 1
+                                    elif b.pos[0] > build.pos[0] and b.pos[1]  == build.pos[1]: #positionnement à gauche d'une autre muraille
+                                        build.t[0] = 1
+                                        b.t[2] = 1
+                                    elif b.pos[0] < build.pos[0] and b.pos[1]  == build.pos[1]: #positionnement à droite d'une autre muraille
+                                        build.t[2] = 1
+                                        b.t[0] = 1
+                                    builds_changing.append(b)
+                            builds_changing.append(build)
+                            t.rotate_wall(builds_changing)
                     elif place == 2: #annuler la construction d'un batiment
                         for b in self.mem_tamp["list_bat"]["add"]["bat"]:
                             for x in range(b.pos[0], b.pos[0]+b.size[0]):
@@ -178,6 +199,20 @@ class Menu:
                                     if (place_x, place_y) == (x, y):
                                         del build
                                         build = b
+                        if build.name == "Muraille":
+                            builds_changing = []
+                            for b in self.mem_tamp["list_bat"]["add"]["bat"] +_map.list_build:
+                                if b.name == "Muraille" and ((abs(b.pos[0] - build.pos[0]) == 1 and abs(b.pos[1] - build.pos[1]) == 0) or (abs(b.pos[0] - build.pos[0]) == 0 and abs(b.pos[1] - build.pos[1]) == 1)):
+                                    if b.pos[0] == build.pos[0] and b.pos[1]  < build.pos[1]: #positionnement en bas d'une autre muraille
+                                        b.t[3] = 0
+                                    elif b.pos[0] == build.pos[0] and b.pos[1]  > build.pos[1]: #positionnement en haut d'une autre muraille
+                                        b.t[1] = 0
+                                    elif b.pos[0] > build.pos[0] and b.pos[1]  == build.pos[1]: #positionnement à gauche d'une autre muraille
+                                        b.t[2] = 0
+                                    elif b.pos[0] < build.pos[0] and b.pos[1]  == build.pos[1]: #positionnement à droite d'une autre muraille
+                                        b.t[0] = 0
+                                    builds_changing.append(b)
+                            t.rotate_wall(builds_changing)
                         for ress in t.cost(build.name, 1).items():
                             self.mem_tamp["ress"][ress[0]] -= ress[1]
                             if self.mem_tamp["ress"][ress[0]] == 0:
@@ -207,10 +242,24 @@ class Menu:
             if button[1].collidepoint(pos):
                 if button[0] == "edit_validation":
                     if self.action.startswith("edit"):
-                        for b in self.mem_tamp["list_bat"]["add"]["bat"]:
-                            _map.add_build(b)
-                        for b in self.mem_tamp["list_bat"]["sup"]:
-                            _map.sup_build(b)
+                        for build in self.mem_tamp["list_bat"]["add"]["bat"]:
+                            _map.add_build(build)
+                        for build in self.mem_tamp["list_bat"]["sup"]:
+                            if build.name == "Muraille":
+                                builds_changing = []
+                                for b in _map.list_build:
+                                    if b.name == "Muraille" and ((abs(b.pos[0] - build.pos[0]) == 1 and abs(b.pos[1] - build.pos[1]) == 0) or (abs(b.pos[0] - build.pos[0]) == 0 and abs(b.pos[1] - build.pos[1]) == 1)):
+                                        if b.pos[0] == build.pos[0] and b.pos[1]  < build.pos[1]: #positionnement en bas d'une autre muraille
+                                            b.t[3] = 0
+                                        elif b.pos[0] == build.pos[0] and b.pos[1]  > build.pos[1]: #positionnement en haut d'une autre muraille
+                                            b.t[1] = 0
+                                        elif b.pos[0] > build.pos[0] and b.pos[1]  == build.pos[1]: #positionnement à gauche d'une autre muraille
+                                            b.t[2] = 0
+                                        elif b.pos[0] < build.pos[0] and b.pos[1]  == build.pos[1]: #positionnement à droite d'une autre muraille
+                                            b.t[0] = 0
+                                        builds_changing.append(b)
+                                t.rotate_wall(builds_changing)
+                            _map.sup_build(build)
                         for r in self.mem_tamp["ress"].items():
                             t.set_res(r[0], t.res(r[0])["stock"] - r[1])
                     self.set_action("edit")

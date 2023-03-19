@@ -132,6 +132,22 @@ class Tools:
                 return False
         return True
 
+    def rotate_wall(self, builds_changing):
+        for b in builds_changing:
+            if sum(b.t) == 1:
+                b.angle = b.t.index(1)*90
+            elif sum(b.t) == 3:
+                b.angle = b.t.index(0)*90
+            elif sum(b.t) == 2:
+                if b.t[0] == b.t[2] and b.t[1] == b.t[3]:
+                    b.angle = b.t.index(1) * 90
+                else:
+                    if b.t[0] == b.t[3] == 1:
+                        b.angle = 270
+                    else:
+                        b.angle = b.t.index(1)*90
+            b.load()
+
 t = Tools()
 for r in init_res.items():
     t.add_new_res(r[0], r[1]["max"], r[1]["stock"])

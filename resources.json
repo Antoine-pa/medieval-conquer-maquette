@@ -1,7 +1,7 @@
 {
     "bois": {
         "max": 100,
-        "stock": 66
+        "stock": 3
     },
     "fer": {
         "max": 200,

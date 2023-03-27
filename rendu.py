@@ -2,9 +2,13 @@ import bpy
 from math import tan
 
 bpy.context.view_layer.objects.active = bpy.data.objects["Camera"]
-bpy.context.scene.render.resolution_x = 3840
-bpy.context.scene.render.resolution_y = 2160
+bpy.context.scene.render.resolution_x = 1920
+bpy.context.scene.render.resolution_y = 1080
 bpy.context.scene.render.engine = "BLENDER_WORKBENCH"
+bpy.context.scene.render.use_freestyle = True
+bpy.context.scene.render.line_thickness_mode = 'ABSOLUTE'
+bpy.context.scene.render.line_thickness = 1.2
+
 l = 15
 deg = 0.698132
 droit = 1.5708

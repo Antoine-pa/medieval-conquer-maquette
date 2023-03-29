@@ -103,7 +103,7 @@ class Fields(Building):
         if self.start_production and time() - self.t >= prod["time"] and t.check_product(self):
             self.res["cereals"] += prod["prod"]["cereals"]
             self.t = time()
-            print(self.res)
+
 
 
 

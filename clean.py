@@ -1,7 +1,13 @@
 ﻿from PIL import Image
+import os
+
+if os.name == "nt":
+    paths = "U:/Images/rendus_blender_"
+else:
+    paths = "~/rendus_blender_"
 
 for i in range(1, 5):
-    img = Image.open(f"./bat{i}.png") #Ouverture de l'image initiale.
+    img = Image.open(paths + f"./bat_{i}.png") #Ouverture de l'image initiale.
 
     size_x = 1920
     size_y = 1080
@@ -15,11 +21,10 @@ for i in range(1, 5):
             else:
                 col = (255, 255, 255, 0)
             img2.putpixel((x,y),col)
-                
+
 
     img.close()
-    img2.save(f"bat_clean{i}.png", "png") # On enregistre l'image finale
-    img2.show()
+    img2.save(paths + f"bat_clean_{i}.png", "png") # On enregistre l'image finale
     img2.close()
 
 

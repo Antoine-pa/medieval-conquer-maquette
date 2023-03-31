@@ -1,0 +1,68 @@
+{
+    "BLACK": [
+        0,
+        0,
+        0
+    ],
+    "RED": [
+        150,
+        0,
+        0
+    ],
+    "GREEN": [
+        0,
+        150,
+        0
+    ],
+    "WHITE": [
+        255,
+        255,
+        255
+    ],
+    "GREY_WHITE": [
+        200,
+        200,
+        200
+    ],
+    "GREY": [
+        100,
+        100,
+        100
+    ],
+    "SENSIBILITY": 0.4,
+    "MENU_EDIT_POS": [
+        1350,
+        750,
+        150,
+        50
+    ],
+    "LONG_BLOCK_MENU_EDIT": 37,
+    "GAP_BLOCK_COL_MENU_EDIT": 6,
+    "POS_BUTTONS_MENU_EDIT": [
+        6,
+        757
+    ],
+    "LIST_BAT_MENU_EDIT": [
+        "Barrack",
+        "Field",
+        "Granary",
+        "Tower",
+        "Wall",
+        "Grange"
+    ],
+    "ZOOM": 1,
+    "SIZE_CASE": 50,
+    "SIZE_TEXT": 30,
+    "size_x": 1500,
+    "size_y": 800,
+    "GREY_YELLOW": [
+        232,
+        222,
+        100
+    ],
+    "RED_ORANGE": [
+        235,
+        50,
+        30
+    ]
+}

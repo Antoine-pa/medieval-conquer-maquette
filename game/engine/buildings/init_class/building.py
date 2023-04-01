@@ -6,15 +6,16 @@ class Building:
     class Building:
         class de base de tout les bâtiments
     """
-    def __init__(self, name, size, pos, lvl, life, kind):
+    def __init__(self, name, size, pos, angle, lvl, life, kind, stock):
         self.name = name
         self.img = None
         self.size = size
         self.pos = pos
         self.lvl = lvl
-        self.angle = 0
+        self.angle = angle
         self.life = life
         self.kind = kind
+        self.stock = stock
         if name not in ("Wall"):
             self.load()
 

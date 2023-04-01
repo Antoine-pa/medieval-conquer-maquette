@@ -161,7 +161,7 @@ class Menu:
                 place_x, place_y = t.get_case(pos, _map) #récupération des cases
                 if self.mem_tamp["bat"]["bat"] is not None: #si un bâtiment à construire est séléctionné
                     #construction bâtiment
-                    build = DICT_BUILDINGS[self.mem_tamp["bat"]["bat"]](place_x, place_y) #on instancie le bâtiment
+                    build = DICT_BUILDINGS[self.mem_tamp["bat"]["bat"]]([place_x, place_y]) #on instancie le bâtiment
                     build.rotate(self.mem_tamp["bat"]["angle"])
                     place = _map.check_pos(build, self.mem_tamp["list_bat"]["add"]["pos"])
                     if place == 0 and t.check_res(t.cost(build.name, 1), self.mem_tamp["ress"]) == True: #on vérifie que la place est libre et que les ressources sont suffisantes
@@ -176,7 +176,7 @@ class Menu:
                         if build.name == "Wall":
                             builds_changing = []
                             for b in self.mem_tamp["list_bat"]["add"]["bat"] +_map.list_build:
-                                if b.name == "Wall" and ((abs(b.pos[0] - build.pos[0]) == 1 and abs(b.pos[1] - build.pos[1]) == 0) or (abs(b.pos[0] - build.pos[0]) == 0 and abs(b.pos[1] - build.pos[1]) == 1)):
+                                if b.name == "Wall" and b != build and ((abs(b.pos[0] - build.pos[0]) == 1 and abs(b.pos[1] - build.pos[1]) == 0) or (abs(b.pos[0] - build.pos[0]) == 0 and abs(b.pos[1] - build.pos[1]) == 1)):
                                     if b.pos[0] == build.pos[0] and b.pos[1] < build.pos[1]: #positionnement en bas d'une autre muraille
                                         build.t[1] = 1
                                         b.t[3] = 1
@@ -262,6 +262,7 @@ class Menu:
                             _map.sup_build(build)
                         for r in self.mem_tamp["ress"].items():
                             t.set_res(r[0], t.res(r[0])["stock"] - r[1])
+                        t.save_map(_map)
                     self.set_action("edit")
                 if button[0] == "edit_annulation":
                     self.mem_tamp = None

@@ -3,9 +3,12 @@ from engine import t, cst
 import pygame
 
 class Wall(Building):
-    def __init__(self, x, y):
-        super().__init__("Wall", (1, 1), [x, y], 1, 400, "defense")
-        self.t = [0, 0, 0, 0]
+    def __init__(self, pos, angle=0, lvl=1, life=100, stock={}, t=None):
+        super().__init__("Wall", (1, 1), pos, angle, lvl, life, "defense", stock)
+        if t is not None:
+            self.t = t
+        else:
+            self.t = [0, 0, 0, 0]
         self.load()
 
     def load(self):
@@ -19,8 +22,7 @@ class Wall(Building):
                 name = self.name + "2_0"
             else:
                 name = self.name + "2_1"
-        self.img = t.load_img(f"buildings/{self.name}/{name}.png", int(cst("SIZE_CASE")) * self.size[0] - 1,
-                              int(cst("SIZE_CASE")) * self.size[1] - 1)
+        self.img = t.load_img(f"buildings/{self.name}/{name}.png", int(cst("SIZE_CASE")) * self.size[0] - 1, int(cst("SIZE_CASE")) * self.size[1] - 1)
         self.img = pygame.transform.rotate(self.img, self.angle)
 
     def update_type(self):

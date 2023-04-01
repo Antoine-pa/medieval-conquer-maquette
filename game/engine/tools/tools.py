@@ -3,7 +3,7 @@ import pygame
 from functools import lru_cache
 path_json = './engine/tools/json/'
 path_assets = './engine/assets/'
-init_res = {"bois" : {"max" : 100,"stock" : 75},"fer" : {"max" : 200,"stock" : 60},"eau" : {"max" : 100,"stock" : 60}, "acier" : {"max" : 200,"stock" : 30},"or" : {"max" : 60,"stock" : 12},"charbon" : {"max" : 120,"stock" : 79}}
+init_res = {"bois" : {"max" : 100,"stock" : 100},"fer" : {"max" : 200,"stock" : 60},"eau" : {"max" : 100,"stock" : 60}, "acier" : {"max" : 200,"stock" : 30},"or" : {"max" : 60,"stock" : 12},"charbon" : {"max" : 120,"stock" : 79}}
 
 class Tools:
     def __init__(self):
@@ -44,6 +44,15 @@ class Tools:
         with open(path_json+"production.json", "r") as f:
             data = json.load(f)
         return data
+    
+    def load_map(self, _map, DICT_BUILDINGS):
+        with open(path_json+"init_map.json", "r") as f:
+            list_build = json.load(f)
+        for b in list_build:
+            build = DICT_BUILDINGS[b["name"]](b["pos"], b["angle"], b["lvl"], b["life"], b["stock"])
+            if build.name == "Wall":
+                build.t = b["other"]["t"]
+            _map.add_build(build)
 
     @lru_cache(maxsize=None)
     def prod(self, name, lvl):
@@ -64,6 +73,20 @@ class Tools:
     def const(self, name):
         r = self.data[name]
         return r
+
+    def save_map(self, _map):
+        list_build = []
+        for b in _map.list_build:
+            other = {}
+            if b.kind != "production":
+                stock = None
+            else:
+                stock = b.res
+            if b.name == "Wall":
+                other["t"] = b.t
+            list_build.append({"name" : b.name, "pos" : b.pos, "angle" : b.angle, "lvl" : b.lvl, "life" : b.life, "stock" : stock, "other" : other})
+        with open(path_json+"map.json", "w") as f:
+            f.write(json.dumps(list_build, indent=4))
 
     def set_res(self, name, val):
         self.res.cache_clear()

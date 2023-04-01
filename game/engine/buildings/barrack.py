@@ -1,8 +1,8 @@
 from .init_class import Building
 
 class Barrack(Building):
-    def __init__(self, x, y):
-        super().__init__("Barrack", (2, 2), [x, y], 1, 100, "formation")
+    def __init__(self, pos, angle=0, lvl=1, life=100, stock={}):
+        super().__init__("Barrack", (2, 2), pos, angle, lvl, life, "formation", stock)
         self.list_unit = []
         self.max = 5
 

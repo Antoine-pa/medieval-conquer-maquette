@@ -9,6 +9,7 @@ class Game:
     def __init__(self):
         self._map = Map()
         self._menu = Menu()
+        self._menu.update_buttons()
 
     def __repr__(self):
         return f"Game :\n - {self._map}\n\n - {self._menu}"
@@ -17,15 +18,14 @@ class Game:
         """
         gère l'affichage du jeu
         """
-        if self._menu.action == "map" or self._menu.action.startswith("edit"):
+        if self._menu.action.startswith("map") or self._menu.action.startswith("edit"):
             self._map.display(screen)
-        self._menu.display(screen, self._map.pos)
+        self._menu.display(screen, self._map)
         pygame.display.update()
     
     def update_production(self):
-        for build in self._map.list_build:
-            if build.kind == "production":
-                build.update()
+        for build in self._map.dict_kind_build.get("production", []):
+            build.update()
 
     def deplacement(self, x, y):
         """

@@ -3,8 +3,8 @@ from engine import t, cst
 import pygame
 
 class Wall(Building):
-    def __init__(self, pos, angle=0, lvl=1, life=100, stock={}, t=None):
-        super().__init__("Wall", (1, 1), pos, angle, lvl, life, "defense", stock)
+    def __init__(self, pos, angle=0, lvl=1, life=100, stock={}, layer=0, t=None):
+        super().__init__("Wall", (1, 1), pos, angle, lvl, life, "defense", stock, layer)
         if t is not None:
             self.t = t
         else:

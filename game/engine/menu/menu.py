@@ -31,6 +31,7 @@ class Menu:
 
     def update_buttons(self):
         self.buttons = {}
+        self.buttons["change_layer"] = Button((50, 50, 150, 100), "layer", 1)
         if self.action == "edit-add":
             self.buttons["edit_angle"] = Button((cst("MENU_EDIT_POS")[0]+cst("POS_BUTTONS_MENU_EDIT")[0], cst("POS_BUTTONS_MENU_EDIT")[1], cst("MENU_EDIT_POS")[0]+cst("POS_BUTTONS_MENU_EDIT")[0]+cst("LONG_BLOCK_MENU_EDIT"), cst("POS_BUTTONS_MENU_EDIT")[1]+cst("LONG_BLOCK_MENU_EDIT")), str(int(4*self.mem_tamp["bat"]["angle"]/360)), 1)
             self.buttons["edit_annulation"] = Button((cst("MENU_EDIT_POS")[0]+cst("POS_BUTTONS_MENU_EDIT")[0]+cst("MENU_EDIT_POS")[3], cst("POS_BUTTONS_MENU_EDIT")[1], cst("MENU_EDIT_POS")[0]+cst("POS_BUTTONS_MENU_EDIT")[0]+cst("LONG_BLOCK_MENU_EDIT")+cst("MENU_EDIT_POS")[3], cst("POS_BUTTONS_MENU_EDIT")[1]+cst("LONG_BLOCK_MENU_EDIT")), "n", 1)
@@ -46,19 +47,19 @@ class Menu:
 
     def update_mem_tamp(self):
         if self.action.startswith("edit"):
-            self.mem_tamp = {"bat": {"bat": None, "angle": 0}, "list_bat": {"add": {"pos": [], "bat": []}, "sup": []}, "ress": {}}
+            self.mem_tamp = {"bat": {"bat": None, "angle": 0}, "list_bat": {0 : {"add": {"pos": [], "bat": []}, "sup": []}, -1 : {"add": {"pos": [], "bat": []}, "sup": []}}, "ress": {}}
         else:
             self.mem_tamp = None
 
 
-    def display(self, screen, pos_map: list):
+    def display(self, screen, _map):
         """
         fonction permettant d'afficher les zones des sections du menu
         """
         if self.action == "map":
             pass
         elif self.action.startswith("edit"):
-            self.display_edit(screen, pos_map)
+            self.display_edit(screen, _map)
         elif self.action == "settings":
             self.display_settings(screen)
         elif self.action == "ressources":
@@ -66,19 +67,19 @@ class Menu:
         for button in self.buttons.items():
             button[1].display(screen)
 
-    def display_edit(self, screen, pos_map: list):
+    def display_edit(self, screen, _map):
         """
         fonction permettant d'afficher le menu d'edition de la map
         """
         #display all buildings in mem tamp
-        for b in self.mem_tamp["list_bat"]["add"]["bat"]:
-            d = b.display(screen, *pos_map)
+        for b in self.mem_tamp["list_bat"][_map.layer]["add"]["bat"]:
+            d = b.display(screen, *_map.pos)
             if d: #si le bâtiment est affiché
-                pygame.draw.rect(screen, cst("GREY_YELLOW"), pygame.Rect((b.pos[0] - pos_map[0])*int(cst("SIZE_CASE")), (b.pos[1] - pos_map[1])*int(cst("SIZE_CASE")), int(cst("SIZE_CASE"))*b.size[0], int(cst("SIZE_CASE"))*b.size[1]), 3)
+                pygame.draw.rect(screen, cst("GREY_YELLOW"), pygame.Rect((b.pos[0] - _map.pos[0])*int(cst("SIZE_CASE")), (b.pos[1] - _map.pos[1])*int(cst("SIZE_CASE")), int(cst("SIZE_CASE"))*b.size[0], int(cst("SIZE_CASE"))*b.size[1]), 3)
 
-        for b in self.mem_tamp["list_bat"]["sup"]:
-            if b.in_windows(*pos_map):
-                pygame.draw.rect(screen, cst("RED_ORANGE"), pygame.Rect((b.pos[0] - pos_map[0])*int(cst("SIZE_CASE")), (b.pos[1] - pos_map[1])*int(cst("SIZE_CASE")), int(cst("SIZE_CASE"))*b.size[0], int(cst("SIZE_CASE"))*b.size[1]), 3)
+        for b in self.mem_tamp["list_bat"][_map.layer]["sup"]:
+            if b.in_windows(*_map.pos):
+                pygame.draw.rect(screen, cst("RED_ORANGE"), pygame.Rect((b.pos[0] - _map.pos[0])*int(cst("SIZE_CASE")), (b.pos[1] - _map.pos[1])*int(cst("SIZE_CASE")), int(cst("SIZE_CASE"))*b.size[0], int(cst("SIZE_CASE"))*b.size[1]), 3)
 
         pygame.draw.rect(screen, cst("GREY_WHITE"), pygame.Rect(*cst("MENU_EDIT_POS")), 0)
         if self.action == "edit-add":
@@ -163,19 +164,19 @@ class Menu:
                     #construction bâtiment
                     build = DICT_BUILDINGS[self.mem_tamp["bat"]["bat"]]([place_x, place_y]) #on instancie le bâtiment
                     build.rotate(self.mem_tamp["bat"]["angle"])
-                    place = _map.check_pos(build, self.mem_tamp["list_bat"]["add"]["pos"])
+                    place = _map.check_pos(build, self.mem_tamp["list_bat"][_map.layer]["add"]["pos"])
                     if place == 0 and t.check_res(t.cost(build.name, 1), self.mem_tamp["ress"]) == True: #on vérifie que la place est libre et que les ressources sont suffisantes
-                        self.mem_tamp["list_bat"]["add"]["bat"].append(build) #on ajoute le bâtiment dans la mémoire tampon
+                        self.mem_tamp["list_bat"][_map.layer]["add"]["bat"].append(build) #on ajoute le bâtiment dans la mémoire tampon
                         for x in range(build.pos[0], build.pos[0]+build.size[0]):
                             for y in range(build.pos[1], build.pos[1]+build.size[1]):
-                                self.mem_tamp["list_bat"]["add"]["pos"].append((x, y))
+                                self.mem_tamp["list_bat"][_map.layer]["add"]["pos"].append((x, y))
                         for ress in t.cost(build.name, 1).items():
                             if ress[0] not in self.mem_tamp["ress"]:
                                 self.mem_tamp["ress"][ress[0]] = 0
                             self.mem_tamp["ress"][ress[0]] += ress[1]
                         if build.name == "Wall":
                             builds_changing = []
-                            for b in self.mem_tamp["list_bat"]["add"]["bat"] +_map.list_build:
+                            for b in self.mem_tamp["list_bat"][_map.layer]["add"]["bat"] + _map.dict_name_build[_map.layer].get("Wall", []):
                                 if b.name == "Wall" and b != build and ((abs(b.pos[0] - build.pos[0]) == 1 and abs(b.pos[1] - build.pos[1]) == 0) or (abs(b.pos[0] - build.pos[0]) == 0 and abs(b.pos[1] - build.pos[1]) == 1)):
                                     if b.pos[0] == build.pos[0] and b.pos[1] < build.pos[1]: #positionnement en bas d'une autre muraille
                                         build.t[1] = 1
@@ -193,7 +194,7 @@ class Menu:
                             builds_changing.append(build)
                             t.rotate_wall(builds_changing)
                     elif place == 2: #annuler la construction d'un batiment
-                        for b in self.mem_tamp["list_bat"]["add"]["bat"]:
+                        for b in self.mem_tamp["list_bat"][_map.layer]["add"]["bat"]:
                             for x in range(b.pos[0], b.pos[0]+b.size[0]):
                                 for y in range(b.pos[1], b.pos[1]+b.size[1]):
                                     if (place_x, place_y) == (x, y):
@@ -201,7 +202,7 @@ class Menu:
                                         build = b
                         if build.name == "Wall":
                             builds_changing = []
-                            for b in self.mem_tamp["list_bat"]["add"]["bat"] +_map.list_build:
+                            for b in self.mem_tamp["list_bat"][_map.layer]["add"]["bat"] + _map.dict_name_build[_map.layer].get("Wall", []):
                                 if b.name == "Wall" and ((abs(b.pos[0] - build.pos[0]) == 1 and abs(b.pos[1] - build.pos[1]) == 0) or (abs(b.pos[0] - build.pos[0]) == 0 and abs(b.pos[1] - build.pos[1]) == 1)):
                                     if b.pos[0] == build.pos[0] and b.pos[1]  < build.pos[1]: #positionnement en bas d'une autre muraille
                                         b.t[3] = 0
@@ -219,35 +220,30 @@ class Menu:
                                 del self.mem_tamp["ress"][ress[0]]
                         for x in range(build.pos[0], build.pos[0]+build.size[0]):
                             for y in range(build.pos[1], build.pos[1]+build.size[1]):
-                                self.mem_tamp["list_bat"]["add"]["pos"].remove((x, y))
-                        self.mem_tamp["list_bat"]["add"]["bat"].remove(build)
+                                self.mem_tamp["list_bat"][_map.layer]["add"]["pos"].remove((x, y))
+                        self.mem_tamp["list_bat"][_map.layer]["add"]["bat"].remove(build)
                         del build
                     else:
                         del build
         elif self.action == "edit-sup":
             #destruction d'un bâtiment
             place_x, place_y = t.get_case(pos, _map) #récupération des cases
-            build = None
-            for b in _map.list_build:
-                for x in range(b.pos[0], b.pos[0]+b.size[0]):
-                    for y in range(b.pos[1], b.pos[1]+b.size[1]):
-                        if (place_x, place_y) == (x, y):
-                            build = b
+            build = _map.dict_pos_build[_map.layer].get((place_x, place_y))
             if build is not None:
-                if build in self.mem_tamp["list_bat"]["sup"]:
-                    self.mem_tamp["list_bat"]["sup"].remove(build)
+                if build in self.mem_tamp["list_bat"][_map.layer]["sup"]:
+                    self.mem_tamp["list_bat"][_map.layer]["sup"].remove(build)
                 else:
-                    self.mem_tamp["list_bat"]["sup"].append(build)
+                    self.mem_tamp["list_bat"][_map.layer]["sup"].append(build)
         for button in self.buttons.items():
             if button[1].collidepoint(pos):
                 if button[0] == "edit_validation":
                     if self.action.startswith("edit"):
-                        for build in self.mem_tamp["list_bat"]["add"]["bat"]:
+                        for build in self.mem_tamp["list_bat"][_map.layer]["add"]["bat"]:
                             _map.add_build(build)
-                        for build in self.mem_tamp["list_bat"]["sup"]:
+                        for build in self.mem_tamp["list_bat"][_map.layer]["sup"]:
                             if build.name == "Wall":
                                 builds_changing = []
-                                for b in _map.list_build:
+                                for b in _map.dict_name_build[_map.layer].get("Wall", []):
                                     if b.name == "Wall" and ((abs(b.pos[0] - build.pos[0]) == 1 and abs(b.pos[1] - build.pos[1]) == 0) or (abs(b.pos[0] - build.pos[0]) == 0 and abs(b.pos[1] - build.pos[1]) == 1)):
                                         if b.pos[0] == build.pos[0] and b.pos[1]  < build.pos[1]: #positionnement en bas d'une autre muraille
                                             b.t[3] = 0
@@ -264,10 +260,15 @@ class Menu:
                             t.set_res(r[0], t.res(r[0])["stock"] - r[1])
                         t.save_map(_map)
                     self.set_action("edit")
-                if button[0] == "edit_annulation":
+                if button[0] in ("edit_annulation", "change_layer"):
                     self.mem_tamp = None
                     self.set_action("edit")
                 if button[0] == "edit_construction":
                     self.set_action("edit-add")
                 if button[0] == "edit_destruction":
                     self.set_action("edit-sup")
+                if button[0] == "change_layer":
+                    if _map.layer == 0:
+                        _map.layer = -1
+                    else:
+                        _map.layer = 0

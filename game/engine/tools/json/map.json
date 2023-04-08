@@ -1,278 +1,434 @@
-[
-    {
-        "name": "Tower",
-        "pos": [
-            510,
-            505
-        ],
-        "angle": 0,
-        "lvl": 1,
-        "life": 100,
-        "stock": null,
-        "other": {}
-    },
-    {
-        "name": "Tower",
-        "pos": [
-            516,
-            505
-        ],
-        "angle": 0,
-        "lvl": 1,
-        "life": 100,
-        "stock": null,
-        "other": {}
-    },
-    {
-        "name": "Tower",
-        "pos": [
-            516,
-            511
-        ],
-        "angle": 0,
-        "lvl": 1,
-        "life": 100,
-        "stock": null,
-        "other": {}
-    },
-    {
-        "name": "Tower",
-        "pos": [
-            510,
-            511
-        ],
-        "angle": 0,
-        "lvl": 1,
-        "life": 100,
-        "stock": null,
-        "other": {}
-    },
-    {
-        "name": "Wall",
-        "pos": [
-            513,
-            506
-        ],
-        "angle": 0,
-        "lvl": 1,
-        "life": 100,
-        "stock": null,
-        "other": {
-            "t": [
-                1,
-                0,
-                0,
-                0
-            ]
+{
+    "0": [
+        {
+            "name": "Tower",
+            "pos": [
+                510,
+                505
+            ],
+            "angle": 0,
+            "lvl": 1,
+            "life": 100,
+            "stock": null,
+            "other": {}
+        },
+        {
+            "name": "Tower",
+            "pos": [
+                516,
+                505
+            ],
+            "angle": 0,
+            "lvl": 1,
+            "life": 100,
+            "stock": null,
+            "other": {}
+        },
+        {
+            "name": "Tower",
+            "pos": [
+                516,
+                511
+            ],
+            "angle": 0,
+            "lvl": 1,
+            "life": 100,
+            "stock": null,
+            "other": {}
+        },
+        {
+            "name": "Tower",
+            "pos": [
+                510,
+                511
+            ],
+            "angle": 0,
+            "lvl": 1,
+            "life": 100,
+            "stock": null,
+            "other": {}
+        },
+        {
+            "name": "Wall",
+            "pos": [
+                513,
+                506
+            ],
+            "angle": 0,
+            "lvl": 1,
+            "life": 100,
+            "stock": null,
+            "other": {
+                "t": [
+                    1,
+                    0,
+                    0,
+                    0
+                ]
+            }
+        },
+        {
+            "name": "Wall",
+            "pos": [
+                514,
+                506
+            ],
+            "angle": 0,
+            "lvl": 1,
+            "life": 100,
+            "stock": null,
+            "other": {
+                "t": [
+                    1,
+                    0,
+                    1,
+                    0
+                ]
+            }
+        },
+        {
+            "name": "Wall",
+            "pos": [
+                515,
+                506
+            ],
+            "angle": 180,
+            "lvl": 1,
+            "life": 100,
+            "stock": null,
+            "other": {
+                "t": [
+                    0,
+                    0,
+                    1,
+                    0
+                ]
+            }
+        },
+        {
+            "name": "Wall",
+            "pos": [
+                517,
+                508
+            ],
+            "angle": 270,
+            "lvl": 1,
+            "life": 100,
+            "stock": null,
+            "other": {
+                "t": [
+                    0,
+                    0,
+                    0,
+                    1
+                ]
+            }
+        },
+        {
+            "name": "Wall",
+            "pos": [
+                517,
+                509
+            ],
+            "angle": 90,
+            "lvl": 1,
+            "life": 100,
+            "stock": null,
+            "other": {
+                "t": [
+                    0,
+                    1,
+                    0,
+                    1
+                ]
+            }
+        },
+        {
+            "name": "Wall",
+            "pos": [
+                517,
+                510
+            ],
+            "angle": 90,
+            "lvl": 1,
+            "life": 100,
+            "stock": null,
+            "other": {
+                "t": [
+                    0,
+                    1,
+                    0,
+                    0
+                ]
+            }
+        },
+        {
+            "name": "Wall",
+            "pos": [
+                515,
+                512
+            ],
+            "angle": 180,
+            "lvl": 1,
+            "life": 100,
+            "stock": null,
+            "other": {
+                "t": [
+                    0,
+                    0,
+                    1,
+                    0
+                ]
+            }
+        },
+        {
+            "name": "Wall",
+            "pos": [
+                514,
+                512
+            ],
+            "angle": 0,
+            "lvl": 1,
+            "life": 100,
+            "stock": null,
+            "other": {
+                "t": [
+                    1,
+                    0,
+                    1,
+                    0
+                ]
+            }
+        },
+        {
+            "name": "Wall",
+            "pos": [
+                513,
+                512
+            ],
+            "angle": 0,
+            "lvl": 1,
+            "life": 100,
+            "stock": null,
+            "other": {
+                "t": [
+                    1,
+                    0,
+                    0,
+                    0
+                ]
+            }
+        },
+        {
+            "name": "Wall",
+            "pos": [
+                511,
+                510
+            ],
+            "angle": 90,
+            "lvl": 1,
+            "life": 100,
+            "stock": null,
+            "other": {
+                "t": [
+                    0,
+                    1,
+                    0,
+                    0
+                ]
+            }
+        },
+        {
+            "name": "Wall",
+            "pos": [
+                511,
+                509
+            ],
+            "angle": 90,
+            "lvl": 1,
+            "life": 100,
+            "stock": null,
+            "other": {
+                "t": [
+                    0,
+                    1,
+                    0,
+                    1
+                ]
+            }
+        },
+        {
+            "name": "Wall",
+            "pos": [
+                511,
+                508
+            ],
+            "angle": 270,
+            "lvl": 1,
+            "life": 100,
+            "stock": null,
+            "other": {
+                "t": [
+                    0,
+                    0,
+                    0,
+                    1
+                ]
+            }
+        },
+        {
+            "name": "Wall",
+            "pos": [
+                535,
+                500
+            ],
+            "angle": 0,
+            "lvl": 1,
+            "life": 100,
+            "stock": null,
+            "other": {
+                "t": [
+                    0,
+                    0,
+                    0,
+                    0
+                ]
+            }
+        },
+        {
+            "name": "Wall",
+            "pos": [
+                533,
+                502
+            ],
+            "angle": 90,
+            "lvl": 1,
+            "life": 100,
+            "stock": null,
+            "other": {
+                "t": [
+                    0,
+                    1,
+                    0,
+                    0
+                ]
+            }
+        },
+        {
+            "name": "Wall",
+            "pos": [
+                532,
+                501
+            ],
+            "angle": 0,
+            "lvl": 1,
+            "life": 100,
+            "stock": null,
+            "other": {
+                "t": [
+                    1,
+                    0,
+                    0,
+                    0
+                ]
+            }
+        },
+        {
+            "name": "Wall",
+            "pos": [
+                533,
+                501
+            ],
+            "angle": 180,
+            "lvl": 1,
+            "life": 100,
+            "stock": null,
+            "other": {
+                "t": [
+                    0,
+                    0,
+                    1,
+                    1
+                ]
+            }
         }
-    },
-    {
-        "name": "Wall",
-        "pos": [
-            514,
-            506
-        ],
-        "angle": 0,
-        "lvl": 1,
-        "life": 100,
-        "stock": null,
-        "other": {
-            "t": [
-                1,
-                0,
-                1,
-                0
-            ]
+    ],
+    "-1": [
+        {
+            "name": "Wall",
+            "pos": [
+                535,
+                500
+            ],
+            "angle": 180,
+            "lvl": 1,
+            "life": 100,
+            "stock": null,
+            "other": {
+                "t": [
+                    0,
+                    0,
+                    1,
+                    0
+                ]
+            }
+        },
+        {
+            "name": "Wall",
+            "pos": [
+                534,
+                500
+            ],
+            "angle": 270,
+            "lvl": 1,
+            "life": 100,
+            "stock": null,
+            "other": {
+                "t": [
+                    1,
+                    0,
+                    0,
+                    1
+                ]
+            }
+        },
+        {
+            "name": "Wall",
+            "pos": [
+                534,
+                501
+            ],
+            "angle": 90,
+            "lvl": 1,
+            "life": 100,
+            "stock": null,
+            "other": {
+                "t": [
+                    0,
+                    1,
+                    1,
+                    0
+                ]
+            }
+        },
+        {
+            "name": "Wall",
+            "pos": [
+                533,
+                501
+            ],
+            "angle": 0,
+            "lvl": 1,
+            "life": 100,
+            "stock": null,
+            "other": {
+                "t": [
+                    1,
+                    0,
+                    0,
+                    0
+                ]
+            }
         }
-    },
-    {
-        "name": "Wall",
-        "pos": [
-            515,
-            506
-        ],
-        "angle": 180,
-        "lvl": 1,
-        "life": 100,
-        "stock": null,
-        "other": {
-            "t": [
-                0,
-                0,
-                1,
-                0
-            ]
-        }
-    },
-    {
-        "name": "Wall",
-        "pos": [
-            517,
-            508
-        ],
-        "angle": 270,
-        "lvl": 1,
-        "life": 100,
-        "stock": null,
-        "other": {
-            "t": [
-                0,
-                0,
-                0,
-                1
-            ]
-        }
-    },
-    {
-        "name": "Wall",
-        "pos": [
-            517,
-            509
-        ],
-        "angle": 90,
-        "lvl": 1,
-        "life": 100,
-        "stock": null,
-        "other": {
-            "t": [
-                0,
-                1,
-                0,
-                1
-            ]
-        }
-    },
-    {
-        "name": "Wall",
-        "pos": [
-            517,
-            510
-        ],
-        "angle": 90,
-        "lvl": 1,
-        "life": 100,
-        "stock": null,
-        "other": {
-            "t": [
-                0,
-                1,
-                0,
-                0
-            ]
-        }
-    },
-    {
-        "name": "Wall",
-        "pos": [
-            515,
-            512
-        ],
-        "angle": 180,
-        "lvl": 1,
-        "life": 100,
-        "stock": null,
-        "other": {
-            "t": [
-                0,
-                0,
-                1,
-                0
-            ]
-        }
-    },
-    {
-        "name": "Wall",
-        "pos": [
-            514,
-            512
-        ],
-        "angle": 0,
-        "lvl": 1,
-        "life": 100,
-        "stock": null,
-        "other": {
-            "t": [
-                1,
-                0,
-                1,
-                0
-            ]
-        }
-    },
-    {
-        "name": "Wall",
-        "pos": [
-            513,
-            512
-        ],
-        "angle": 0,
-        "lvl": 1,
-        "life": 100,
-        "stock": null,
-        "other": {
-            "t": [
-                1,
-                0,
-                0,
-                0
-            ]
-        }
-    },
-    {
-        "name": "Wall",
-        "pos": [
-            511,
-            510
-        ],
-        "angle": 90,
-        "lvl": 1,
-        "life": 100,
-        "stock": null,
-        "other": {
-            "t": [
-                0,
-                1,
-                0,
-                0
-            ]
-        }
-    },
-    {
-        "name": "Wall",
-        "pos": [
-            511,
-            509
-        ],
-        "angle": 90,
-        "lvl": 1,
-        "life": 100,
-        "stock": null,
-        "other": {
-            "t": [
-                0,
-                1,
-                0,
-                1
-            ]
-        }
-    },
-    {
-        "name": "Wall",
-        "pos": [
-            511,
-            508
-        ],
-        "angle": 270,
-        "lvl": 1,
-        "life": 100,
-        "stock": null,
-        "other": {
-            "t": [
-                0,
-                0,
-                0,
-                1
-            ]
-        }
-    }
-]
+    ]
+}

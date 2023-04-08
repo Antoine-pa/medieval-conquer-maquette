@@ -48,11 +48,12 @@ class Tools:
     def load_map(self, _map, DICT_BUILDINGS):
         with open(path_json+"init_map.json", "r") as f:
             list_build = json.load(f)
-        for b in list_build:
-            build = DICT_BUILDINGS[b["name"]](b["pos"], b["angle"], b["lvl"], b["life"], b["stock"])
-            if build.name == "Wall":
-                build.t = b["other"]["t"]
-            _map.add_build(build)
+        for c in list_build.items():
+            for b in c[1]:
+                build = DICT_BUILDINGS[b["name"]](b["pos"], b["angle"], b["lvl"], b["life"], b["stock"], int(c[0]))
+                if build.name == "Wall":
+                    build.t = b["other"]["t"]
+                _map.add_build(build)
 
     @lru_cache(maxsize=None)
     def prod(self, name, lvl):
@@ -75,18 +76,19 @@ class Tools:
         return r
 
     def save_map(self, _map):
-        list_build = []
-        for b in _map.list_build:
-            other = {}
-            if b.kind != "production":
-                stock = None
-            else:
-                stock = b.res
-            if b.name == "Wall":
-                other["t"] = b.t
-            list_build.append({"name" : b.name, "pos" : b.pos, "angle" : b.angle, "lvl" : b.lvl, "life" : b.life, "stock" : stock, "other" : other})
+        builds = {"0":[], "-1":[]}
+        for c in _map.list_build.items():
+            for b in c[1]:
+                other = {}
+                if b.kind != "production":
+                    stock = None
+                else:
+                    stock = b.res
+                if b.name == "Wall":
+                    other["t"] = b.t
+                builds[str(c[0])].append({"name" : b.name, "pos" : b.pos, "angle" : b.angle, "lvl" : b.lvl, "life" : b.life, "stock" : stock, "other" : other})
         with open(path_json+"map.json", "w") as f:
-            f.write(json.dumps(list_build, indent=4))
+            f.write(json.dumps(builds, indent=4))
 
     def set_res(self, name, val):
         self.res.cache_clear()

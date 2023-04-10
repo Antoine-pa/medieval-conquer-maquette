@@ -73,14 +73,14 @@
                 514,
                 506
             ],
-            "angle": 0,
+            "angle": 270,
             "lvl": 1,
             "life": 100,
             "stock": null,
             "other": {
                 "t": [
                     1,
-                    0,
+                    1,
                     1,
                     0
                 ]
@@ -277,18 +277,23 @@
             }
         },
         {
-            "name": "Field",
+            "name": "Wall",
             "pos": [
-                519,
-                504
+                514,
+                505
             ],
-            "angle": 0,
+            "angle": 270,
             "lvl": 1,
             "life": 100,
-            "stock": {
-                "cereals": 0
-            },
-            "other": {}
+            "stock": null,
+            "other": {
+                "t": [
+                    0,
+                    0,
+                    0,
+                    1
+                ]
+            }
         }
     ],
     "-1": []

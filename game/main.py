@@ -12,7 +12,7 @@ class App:
         t.set_all_const(size_x, size_y)
         self.process = True
         self.game = Game()
-        t.load_map(self.game._map, DICT_BUILDINGS)
+        self.game._map.load_map(DICT_BUILDINGS)
 
     def main(self):
         while self.process:

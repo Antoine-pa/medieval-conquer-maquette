@@ -24,10 +24,10 @@ class Building:
     def __repr__(self):
         return f"{self.name} : (position : {self.pos}; taille : {self.size}; vie : {self.life}); angle : {self.angle}"
     
-    def in_windows(self, x, y):
+    def in_windows(self, x:int, y:int) -> bool:
         return x-2 <=self.pos[0] <= cst("size_x")/int(cst("SIZE_CASE"))+x and y-2 <=self.pos[1] <= cst("size_y")/int(cst("SIZE_CASE"))+y
 
-    def display(self, screen, x, y, alpha = False):
+    def display(self, screen:pygame.surface.Surface, x:int, y:int, alpha:bool = False) -> bool:
         """
         calcul si le bâtiment est affiché ou non et l'affiche
         """
@@ -40,16 +40,16 @@ class Building:
             return True
         return False
 
-    def load(self):
+    def load(self) -> None:
         """
         charge l'image du bâtiment
         """
         self.img = t.load_img(f"buildings/{self.name}/{self.name}.png", int(cst("SIZE_CASE"))*self.size[0]-1 , int(cst("SIZE_CASE"))*self.size[1]-1, 255)
         self.img = pygame.transform.rotate(self.img, self.angle)
-        self.img_alpha = t.load_img(f"buildings/{self.name}/{self.name}.png", int(cst("SIZE_CASE"))*self.size[0]-1 , int(cst("SIZE_CASE"))*self.size[1]-1, 64)
+        self.img_alpha = t.load_img(f"buildings/{self.name}/{self.name}.png", int(cst("SIZE_CASE"))*self.size[0]-1 , int(cst("SIZE_CASE"))*self.size[1]-1, 32)
         self.img_alpha = pygame.transform.rotate(self.img_alpha, self.angle)
     
-    def rotate(self, angle):
+    def rotate(self, angle:int) -> None:
         self.angle += angle
         self.angle %= 360
         self.load()

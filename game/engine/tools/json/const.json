@@ -69,5 +69,8 @@
         235,
         50,
         30
+    ],
+    "LIST_JUNCTION_BUILDING": [
+        "Wall"
     ]
 }

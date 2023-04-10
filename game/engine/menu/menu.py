@@ -18,7 +18,7 @@ class Menu:
     def __repr__(self):
         return f"Menu :\n - action : {self.action}\n - memoire tampon : {self.mem_tamp}\n - boutons : {self.buttons}"
 
-    def set_action(self, act : str):
+    def set_action(self, act : str, _map):
         """
         fonction permettant de changer de section du menu
         """
@@ -27,11 +27,13 @@ class Menu:
         else:
             self.action = "map"
         self.update_mem_tamp()
-        self.update_buttons()
+        self.update_buttons(_map)
 
-    def update_buttons(self):
+    def update_buttons(self, _map):
         self.buttons = {}
         self.buttons["change_layer"] = Button((50, 50, 150, 100), "layer", 1)
+        if _map.layer == -1:
+            self.buttons["change_transparency"] = Button((50, 150, 150, 200), "trans", 1)
         if self.action == "edit-add":
             self.buttons["edit_angle"] = Button((cst("MENU_EDIT_POS")[0]+cst("POS_BUTTONS_MENU_EDIT")[0], cst("POS_BUTTONS_MENU_EDIT")[1], cst("MENU_EDIT_POS")[0]+cst("POS_BUTTONS_MENU_EDIT")[0]+cst("LONG_BLOCK_MENU_EDIT"), cst("POS_BUTTONS_MENU_EDIT")[1]+cst("LONG_BLOCK_MENU_EDIT")), str(int(4*self.mem_tamp["bat"]["angle"]/360)), 1)
             self.buttons["edit_annulation"] = Button((cst("MENU_EDIT_POS")[0]+cst("POS_BUTTONS_MENU_EDIT")[0]+cst("MENU_EDIT_POS")[3], cst("POS_BUTTONS_MENU_EDIT")[1], cst("MENU_EDIT_POS")[0]+cst("POS_BUTTONS_MENU_EDIT")[0]+cst("LONG_BLOCK_MENU_EDIT")+cst("MENU_EDIT_POS")[3], cst("POS_BUTTONS_MENU_EDIT")[1]+cst("LONG_BLOCK_MENU_EDIT")), "n", 1)
@@ -64,8 +66,8 @@ class Menu:
             self.display_settings(screen)
         elif self.action == "ressources":
             self.display_ressources(screen)
-        for button in self.buttons.items():
-            button[1].display(screen)
+        for button in self.buttons.values():
+            button.display(screen)
 
     def display_edit(self, screen, _map):
         """
@@ -83,13 +85,13 @@ class Menu:
 
         pygame.draw.rect(screen, cst("GREY_WHITE"), pygame.Rect(*cst("MENU_EDIT_POS")), 0)
         if self.action == "edit-add":
-            pygame.draw.rect(screen, cst("GREY_WHITE"), pygame.Rect(max(0, cst("MENU_EDIT_POS")[0] - len(cst("LIST_BAT_MENU_EDIT"))*cst("MENU_EDIT_POS")[3]), cst("MENU_EDIT_POS")[1], cst("size_x")-cst("MENU_EDIT_POS")[2], cst("MENU_EDIT_POS")[3])) #rectangle des bâtiments suplémentaires
+            pygame.draw.rect(screen, cst("GREY_WHITE"), pygame.Rect(max(0, cst("MENU_EDIT_POS")[0] - len(cst("LIST_BAT_MENU_EDIT")[str(_map.layer)])*cst("MENU_EDIT_POS")[3]), cst("MENU_EDIT_POS")[1], cst("size_x")-cst("MENU_EDIT_POS")[2], cst("MENU_EDIT_POS")[3])) #rectangle des bâtiments suplémentaires
             pygame.draw.line(screen, cst("BLACK"), (cst("MENU_EDIT_POS")[:2]), (cst("MENU_EDIT_POS")[0], cst("size_y")), 3) #ligne entre les bouttons et les bâtiments
             ress = self.mem_tamp["ress"]
             pos_menu = (cst("size_x") - 4*cst("MENU_EDIT_POS")[3], cst("size_y") - (len(ress)+1)*cst("MENU_EDIT_POS")[3], 4*cst("MENU_EDIT_POS")[3], len(ress)*cst("MENU_EDIT_POS")[3])
             check = None
-            for i in range(len(cst("LIST_BAT_MENU_EDIT"))):
-                build = cst("LIST_BAT_MENU_EDIT")[i]
+            for i in range(len(cst("LIST_BAT_MENU_EDIT")[str(_map.layer)])):
+                build = cst("LIST_BAT_MENU_EDIT")[str(_map.layer)][i]
                 if self.mem_tamp["bat"]["bat"] == build:
                     pygame.draw.rect(screen, cst("GREY_YELLOW"), pygame.Rect((cst("MENU_EDIT_POS")[0] - (i+1)*(cst("MENU_EDIT_POS")[3]), cst("MENU_EDIT_POS")[1]), (cst("MENU_EDIT_POS")[3], cst("MENU_EDIT_POS")[3]))) #si le bâtiment est sélectionné, on color en jaune en dessous
                     cost = t.cost(build, 1)
@@ -147,15 +149,15 @@ class Menu:
 
     def click(self, pos, _map):
         if self.action == "edit-add": #si il ajoute des bâtiments
-            pos_menu = (max(0, cst("MENU_EDIT_POS")[0] - len(cst("LIST_BAT_MENU_EDIT"))*cst("MENU_EDIT_POS")[3]), cst("MENU_EDIT_POS")[1])
+            pos_menu = (max(0, cst("MENU_EDIT_POS")[0] - len(cst("LIST_BAT_MENU_EDIT")[str(_map.layer)])*cst("MENU_EDIT_POS")[3]), cst("MENU_EDIT_POS")[1])
             if pos_menu[0] < pos[0] and pos_menu[1] < pos[1]: #si le clic est dans le menu d'edition
                 if pos[0] < cst("MENU_EDIT_POS")[0]: #si il click dans les bâtiments et non dans les bouttons
                     #sélection bâtiment
                     pos[0], pos[1] = pos[0] - pos_menu[0], pos[1] - pos_menu[1]
                     coord_case = int(pos[0]/cst("MENU_EDIT_POS")[3]) #on calcul les coordonnées de la case
-                    index = len(cst("LIST_BAT_MENU_EDIT")) - coord_case - 1 #on calcul l'index de la case dans la liste des bâtiments
-                    if self.mem_tamp["bat"]["bat"] != cst("LIST_BAT_MENU_EDIT")[index]:
-                        self.mem_tamp["bat"]["bat"] = cst("LIST_BAT_MENU_EDIT")[index] #on ajoute le bâtiment à la mémoire tampon dans la section réservé au bâtiment séléctinné pour de la construction
+                    index = len(cst("LIST_BAT_MENU_EDIT")[str(_map.layer)]) - coord_case - 1 #on calcul l'index de la case dans la liste des bâtiments
+                    if self.mem_tamp["bat"]["bat"] != cst("LIST_BAT_MENU_EDIT")[str(_map.layer)][index]:
+                        self.mem_tamp["bat"]["bat"] = cst("LIST_BAT_MENU_EDIT")[str(_map.layer)][index] #on ajoute le bâtiment à la mémoire tampon dans la section réservé au bâtiment séléctinné pour de la construction
                     else:
                         self.mem_tamp["bat"]["bat"] = None
             else: #si le clic est sur la map
@@ -259,16 +261,19 @@ class Menu:
                         for r in self.mem_tamp["ress"].items():
                             t.set_res(r[0], t.res(r[0])["stock"] - r[1])
                         t.save_map(_map)
-                    self.set_action("edit")
+                    self.set_action("edit", _map)
                 if button[0] in ("edit_annulation", "change_layer"):
                     self.mem_tamp = None
-                    self.set_action("edit")
+                    self.set_action("edit", _map)
                 if button[0] == "edit_construction":
-                    self.set_action("edit-add")
+                    self.set_action("edit-add", _map)
                 if button[0] == "edit_destruction":
-                    self.set_action("edit-sup")
+                    self.set_action("edit-sup", _map)
                 if button[0] == "change_layer":
                     if _map.layer == 0:
                         _map.layer = -1
                     else:
                         _map.layer = 0
+                    self.update_buttons(_map)
+                if button[0] == "change_transparency":
+                    _map.alpha = not _map.alpha

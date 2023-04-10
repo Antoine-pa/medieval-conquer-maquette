@@ -9,12 +9,13 @@ class Game:
     def __init__(self):
         self._map = Map()
         self._menu = Menu()
-        self._menu.update_buttons()
+        self._menu.update_buttons(self._map)
+        self.reload_images()
 
     def __repr__(self):
         return f"Game :\n - {self._map}\n\n - {self._menu}"
 
-    def display(self, screen):
+    def display(self, screen : pygame.surface.Surface) -> None:
         """
         gère l'affichage du jeu
         """
@@ -23,22 +24,24 @@ class Game:
         self._menu.display(screen, self._map)
         pygame.display.update()
     
-    def update_production(self):
-        for build in self._map.dict_kind_build.get("production", []):
-            build.update()
+    def update_production(self) -> None:
+        for c in self._map.dict_kind_build.items():
+            for build in c[1].get("production", []):
+                build.update()
 
-    def deplacement(self, x, y):
+    def deplacement(self, x : int, y : int) -> None:
         """
         gère les déplacement dans la map
         """
         self._map.pos[0] += x
         self._map.pos[1] += y
     
-    def reload_images(self):
+    def reload_images(self) -> None:
         """
         lance le rechargement des images
         """
         self._map.reload_images()
         if self._menu.mem_tamp is not None:
-            for b in self._menu.mem_tamp["list_bat"]["add"]["bat"]:
-                b.load()
+            for c in self._menu.mem_tamp["list_bat"].items():
+                for b in c[1]["add"]["bat"]:
+                    b.load()

@@ -11,6 +11,7 @@ class Map:
         self.dict_kind_build = {0:{}, -1:{}}
         self.dict_pos_build = {0:{}, -1:{}}
         self.layer = 0
+        self.alpha = False
 
     def __repr__(self):
         return f"Map :\n - taille : {self.x}x{self.y}\n - position : {self.pos}\n - bâtiments : {self.list_build}"
@@ -33,16 +34,23 @@ class Map:
                 pygame.draw.line(screen, color2, (0, y-self.pos[1]%1*int(cst("SIZE_CASE"))), (cst("size_x"), y-self.pos[1]%1*int(cst("SIZE_CASE"))))
         for y in range(int(self.pos[1])-10, int(self.pos[1]+cst("size_y")//cst("SIZE_CASE"))+2):
             for x in range(int(self.pos[0])-10, int(self.pos[0]+cst("size_x")//cst("SIZE_CASE"))+2):
+                if self.alpha and self.layer == -1:
+                    b = self.dict_pos_build[0].get((x, y))
+                    if b is not None:
+                        b.display(screen, *self.pos, True)
+        for y in range(int(self.pos[1])-10, int(self.pos[1]+cst("size_y")//cst("SIZE_CASE"))+2):
+            for x in range(int(self.pos[0])-10, int(self.pos[0]+cst("size_x")//cst("SIZE_CASE"))+2):
                 b = self.dict_pos_build[self.layer].get((x, y))
                 if b is not None:
-                    d = b.display(screen, *self.pos)
-        for b in self.dict_kind_build[self.layer].get("production", []):
-            if b.start_production:
-                if t.check_product(b):
-                    color = cst("GREEN")
-                else:
-                    color = cst("RED")
-                pygame.draw.rect(screen, color, pygame.Rect((b.pos[0]-self.pos[0])*int(cst("SIZE_CASE"))+cst("SIZE_CASE")//6, (b.pos[1]-self.pos[1])*int(cst("SIZE_CASE"))+cst("SIZE_CASE")//6, cst("SIZE_CASE")//6, cst("SIZE_CASE")//6), 0)
+                    b.display(screen, *self.pos)
+        for c in self.dict_kind_build.items():
+            for b in c[1].get("production", []):
+                if b.start_production:
+                    if b.check_product():
+                        color = cst("GREEN")
+                    else:
+                        color = cst("RED")
+                    pygame.draw.rect(screen, color, pygame.Rect((b.pos[0]-self.pos[0])*int(cst("SIZE_CASE"))+cst("SIZE_CASE")//6, (b.pos[1]-self.pos[1])*int(cst("SIZE_CASE"))+cst("SIZE_CASE")//6, cst("SIZE_CASE")//6, cst("SIZE_CASE")//6), 0)
                 
     def add_build(self, build):
         """

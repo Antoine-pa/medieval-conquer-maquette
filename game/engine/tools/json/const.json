@@ -31,30 +31,35 @@
     ],
     "SENSIBILITY": 0.4,
     "MENU_EDIT_POS": [
-        1637,
-        918,
-        183,
-        61
+        1141,
+        626,
+        125,
+        41
     ],
-    "LONG_BLOCK_MENU_EDIT": 45,
-    "GAP_BLOCK_COL_MENU_EDIT": 7,
+    "LONG_BLOCK_MENU_EDIT": 30,
+    "GAP_BLOCK_COL_MENU_EDIT": 5,
     "POS_BUTTONS_MENU_EDIT": [
-        8,
-        927
+        5,
+        632
     ],
-    "LIST_BAT_MENU_EDIT": [
-        "Barrack",
-        "Field",
-        "Granary",
-        "Tower",
-        "Wall",
-        "Grange"
-    ],
+    "LIST_BAT_MENU_EDIT": {
+        "0": [
+            "Barrack",
+            "Field",
+            "Granary",
+            "Tower",
+            "Wall",
+            "Grange"
+        ],
+        "-1": [
+            "Gallery"
+        ]
+    },
     "ZOOM": 1,
     "SIZE_CASE": 50,
     "SIZE_TEXT": 30,
-    "size_x": 1820,
-    "size_y": 980,
+    "size_x": 1266,
+    "size_y": 668,
     "GREY_YELLOW": [
         232,
         222,

@@ -22,8 +22,10 @@ class Wall(Building):
                 name = self.name + "2_0"
             else:
                 name = self.name + "2_1"
-        self.img = t.load_img(f"buildings/{self.name}/{name}.png", int(cst("SIZE_CASE")) * self.size[0] - 1, int(cst("SIZE_CASE")) * self.size[1] - 1)
+        self.img = t.load_img(f"buildings/{self.name}/{name}.png", int(cst("SIZE_CASE")) * self.size[0] - 1, int(cst("SIZE_CASE")) * self.size[1] - 1, 255)
         self.img = pygame.transform.rotate(self.img, self.angle)
+        self.img_alpha = t.load_img(f"buildings/{self.name}/{name}.png", int(cst("SIZE_CASE"))*self.size[0]-1 , int(cst("SIZE_CASE"))*self.size[1]-1, 64)
+        self.img_alpha = pygame.transform.rotate(self.img_alpha, self.angle)
 
     def update_type(self):
         pass

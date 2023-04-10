@@ -16,7 +16,7 @@ class Button:
     def __repr__(self):
         return f"coords : {self.coords}, text : {self.text}, thickness : {self.thickness}"
 
-    def collidepoint(self, pos) -> bool:
+    def collidepoint(self, pos : list) -> bool:
         """
         check si le click est sur le boutton
         """
@@ -28,7 +28,7 @@ class Button:
         """
         return (self.coords[0]+self.thickness+3, self.coords[3]-self.thickness-1.25*cst("SIZE_TEXT"))
     
-    def display(self, screen):
+    def display(self, screen : pygame.surface.Surface) -> None:
         """
         affiche le boutton
         """

@@ -44,11 +44,11 @@ class App:
                     self.game._menu.click(pos, self.game._map)
                 elif event.type == pygame.KEYUP: #lors de l'appui d'une touche
                     if k[pygame.K_F1]:
-                        self.game._menu.set_action("settings")
+                        self.game._menu.set_action("settings", self.game._map)
                     if k[pygame.K_r]:
-                        self.game._menu.set_action("ressources")
+                        self.game._menu.set_action("ressources", self.game._map)
                     if k[pygame.K_e]:
-                        self.game._menu.set_action("edit")
+                        self.game._menu.set_action("edit", self.game._map)
                     if self.game._menu.mem_tamp is not None and self.game._menu.mem_tamp["bat"] is not None:
                         if k[pygame.K_UP]:
                             self.game._menu.mem_tamp["bat"]["angle"] = 90

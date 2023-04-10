@@ -98,7 +98,7 @@ class Menu:
                     pygame.draw.rect(screen, cst("GREY_WHITE"), pygame.Rect(pos_menu[0] - pos_menu[2], cst("MENU_EDIT_POS")[1] - len(cost) * (cst("MENU_EDIT_POS")[3]), pos_menu[2], len(cost) * (cst("MENU_EDIT_POS")[3])))
                     cost = list(cost.items())
                     pygame.draw.line(screen, cst("BLACK"), (pos_menu[0]-1, cst("MENU_EDIT_POS")[1] - len(cost) * (cst("MENU_EDIT_POS")[3])), (pos_menu[0]-1, cst("MENU_EDIT_POS")[1]), 1)
-                    check = t.check_res(t.cost(build, 1), self.mem_tamp["ress"])
+                    check = t.check_stock(t.cost(build, 1), self.mem_tamp["ress"])
                     for j in range(len(cost)):
                         res = cost[j]
                         if check == res[0]:
@@ -167,7 +167,7 @@ class Menu:
                     build = DICT_BUILDINGS[self.mem_tamp["bat"]["bat"]]([place_x, place_y]) #on instancie le bâtiment
                     build.rotate(self.mem_tamp["bat"]["angle"])
                     place = _map.check_pos(build, self.mem_tamp["list_bat"][_map.layer]["add"]["pos"])
-                    if place == 0 and t.check_res(t.cost(build.name, 1), self.mem_tamp["ress"]) == True: #on vérifie que la place est libre et que les ressources sont suffisantes
+                    if place == 0 and t.check_stock(t.cost(build.name, 1), self.mem_tamp["ress"]) == True: #on vérifie que la place est libre et que les ressources sont suffisantes
                         self.mem_tamp["list_bat"][_map.layer]["add"]["bat"].append(build) #on ajoute le bâtiment dans la mémoire tampon
                         for x in range(build.pos[0], build.pos[0]+build.size[0]):
                             for y in range(build.pos[1], build.pos[1]+build.size[1]):

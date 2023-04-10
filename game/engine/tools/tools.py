@@ -20,7 +20,7 @@ class Tools:
         img.set_alpha(alpha)
         return img
     
-    def check_res(self, resources : dict, resources2 : dict = {}) -> bool or dict:
+    def check_stock(self, resources : dict, resources2 : dict = {}) -> bool or dict:
         for r in resources.items():
             if r[1]+resources2.get(r[0], 0) > self.res(r[0])["stock"]:
                 return r[0]

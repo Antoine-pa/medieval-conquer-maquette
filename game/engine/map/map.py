@@ -45,14 +45,13 @@ class Map:
                 b = self.dict_pos_build[self.layer].get((x, y))
                 if b is not None:
                     b.display(screen, *self.pos)
-        for c in self.dict_kind_build.items():
-            for b in c[1].get("production", []):
-                if b.start_production:
-                    if b.check_product():
-                        color = cst("GREEN")
-                    else:
-                        color = cst("RED")
-                    pygame.draw.rect(screen, color, pygame.Rect((b.pos[0]-self.pos[0])*int(cst("SIZE_CASE"))+cst("SIZE_CASE")//6, (b.pos[1]-self.pos[1])*int(cst("SIZE_CASE"))+cst("SIZE_CASE")//6, cst("SIZE_CASE")//6, cst("SIZE_CASE")//6), 0)
+        for b in self.dict_kind_build[self.layer].get("production", []):
+            if b.start_production:
+                if b.check_product():
+                    color = cst("GREEN")
+                else:
+                    color = cst("RED")
+                pygame.draw.rect(screen, color, pygame.Rect((b.pos[0]-self.pos[0])*int(cst("SIZE_CASE"))+cst("SIZE_CASE")//6, (b.pos[1]-self.pos[1])*int(cst("SIZE_CASE"))+cst("SIZE_CASE")//6, cst("SIZE_CASE")//6, cst("SIZE_CASE")//6), 0)
                 
     def add_build(self, build:Building) -> None:
         """

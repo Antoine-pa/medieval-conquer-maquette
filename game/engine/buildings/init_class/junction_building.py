@@ -11,7 +11,7 @@ class JunctionBuilding(Building):
             self.t = t
         self.load()
 
-    def del_junction(self, list_build):
+    def del_junction(self, list_build:list) -> None:
         builds_changing = []
         for b in list_build:
             if b != self and ((abs(b.pos[0] - self.pos[0]) == 1 and abs(b.pos[1] - self.pos[1]) == 0) or (abs(b.pos[0] - self.pos[0]) == 0 and abs(b.pos[1] - self.pos[1]) == 1)):
@@ -27,7 +27,7 @@ class JunctionBuilding(Building):
         t.rotate_wall(builds_changing)
 
     
-    def add_junction(self, list_build):
+    def add_junction(self, list_build:list) -> None:
         builds_changing = []
         for b in list_build:
             if b != self and ((abs(b.pos[0] - self.pos[0]) == 1 and abs(b.pos[1] - self.pos[1]) == 0) or (abs(b.pos[0] - self.pos[0]) == 0 and abs(b.pos[1] - self.pos[1]) == 1)):

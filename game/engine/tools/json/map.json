@@ -275,21 +275,996 @@
                     1
                 ]
             }
+        }
+    ],
+    "-1": [
+        {
+            "name": "Gallery",
+            "pos": [
+                510,
+                502
+            ],
+            "angle": 270,
+            "lvl": 1,
+            "life": 100,
+            "stock": null,
+            "other": {
+                "t": [
+                    1,
+                    0,
+                    0,
+                    1
+                ]
+            }
         },
         {
-            "name": "Field",
+            "name": "Gallery",
             "pos": [
-                522,
+                511,
+                502
+            ],
+            "angle": 0,
+            "lvl": 1,
+            "life": 100,
+            "stock": null,
+            "other": {
+                "t": [
+                    1,
+                    0,
+                    1,
+                    0
+                ]
+            }
+        },
+        {
+            "name": "Gallery",
+            "pos": [
+                512,
+                502
+            ],
+            "angle": 0,
+            "lvl": 1,
+            "life": 100,
+            "stock": null,
+            "other": {
+                "t": [
+                    1,
+                    0,
+                    1,
+                    0
+                ]
+            }
+        },
+        {
+            "name": "Gallery",
+            "pos": [
+                513,
+                502
+            ],
+            "angle": 180,
+            "lvl": 1,
+            "life": 100,
+            "stock": null,
+            "other": {
+                "t": [
+                    0,
+                    0,
+                    1,
+                    1
+                ]
+            }
+        },
+        {
+            "name": "Gallery",
+            "pos": [
+                513,
+                503
+            ],
+            "angle": 90,
+            "lvl": 1,
+            "life": 100,
+            "stock": null,
+            "other": {
+                "t": [
+                    0,
+                    1,
+                    0,
+                    1
+                ]
+            }
+        },
+        {
+            "name": "Gallery",
+            "pos": [
+                513,
+                504
+            ],
+            "angle": 90,
+            "lvl": 1,
+            "life": 100,
+            "stock": null,
+            "other": {
+                "t": [
+                    0,
+                    1,
+                    0,
+                    1
+                ]
+            }
+        },
+        {
+            "name": "Gallery",
+            "pos": [
+                513,
                 505
             ],
             "angle": 0,
             "lvl": 1,
             "life": 100,
-            "stock": {
-                "cereals": 0
-            },
-            "other": {}
+            "stock": null,
+            "other": {
+                "t": [
+                    1,
+                    1,
+                    1,
+                    1
+                ]
+            }
+        },
+        {
+            "name": "Gallery",
+            "pos": [
+                512,
+                505
+            ],
+            "angle": 0,
+            "lvl": 1,
+            "life": 100,
+            "stock": null,
+            "other": {
+                "t": [
+                    1,
+                    0,
+                    1,
+                    0
+                ]
+            }
+        },
+        {
+            "name": "Gallery",
+            "pos": [
+                511,
+                505
+            ],
+            "angle": 0,
+            "lvl": 1,
+            "life": 100,
+            "stock": null,
+            "other": {
+                "t": [
+                    1,
+                    0,
+                    1,
+                    0
+                ]
+            }
+        },
+        {
+            "name": "Gallery",
+            "pos": [
+                510,
+                505
+            ],
+            "angle": 0,
+            "lvl": 1,
+            "life": 100,
+            "stock": null,
+            "other": {
+                "t": [
+                    1,
+                    1,
+                    0,
+                    0
+                ]
+            }
+        },
+        {
+            "name": "Gallery",
+            "pos": [
+                510,
+                504
+            ],
+            "angle": 90,
+            "lvl": 1,
+            "life": 100,
+            "stock": null,
+            "other": {
+                "t": [
+                    0,
+                    1,
+                    0,
+                    1
+                ]
+            }
+        },
+        {
+            "name": "Gallery",
+            "pos": [
+                510,
+                503
+            ],
+            "angle": 90,
+            "lvl": 1,
+            "life": 100,
+            "stock": null,
+            "other": {
+                "t": [
+                    0,
+                    1,
+                    0,
+                    1
+                ]
+            }
+        },
+        {
+            "name": "Gallery",
+            "pos": [
+                517,
+                505
+            ],
+            "angle": 0,
+            "lvl": 1,
+            "life": 100,
+            "stock": null,
+            "other": {
+                "t": [
+                    1,
+                    0,
+                    1,
+                    0
+                ]
+            }
+        },
+        {
+            "name": "Gallery",
+            "pos": [
+                518,
+                505
+            ],
+            "angle": 90,
+            "lvl": 1,
+            "life": 100,
+            "stock": null,
+            "other": {
+                "t": [
+                    0,
+                    1,
+                    1,
+                    0
+                ]
+            }
+        },
+        {
+            "name": "Gallery",
+            "pos": [
+                518,
+                502
+            ],
+            "angle": 180,
+            "lvl": 1,
+            "life": 100,
+            "stock": null,
+            "other": {
+                "t": [
+                    0,
+                    0,
+                    1,
+                    1
+                ]
+            }
+        },
+        {
+            "name": "Gallery",
+            "pos": [
+                517,
+                502
+            ],
+            "angle": 0,
+            "lvl": 1,
+            "life": 100,
+            "stock": null,
+            "other": {
+                "t": [
+                    1,
+                    0,
+                    1,
+                    0
+                ]
+            }
+        },
+        {
+            "name": "Gallery",
+            "pos": [
+                513,
+                506
+            ],
+            "angle": 90,
+            "lvl": 1,
+            "life": 100,
+            "stock": null,
+            "other": {
+                "t": [
+                    0,
+                    1,
+                    0,
+                    1
+                ]
+            }
+        },
+        {
+            "name": "Gallery",
+            "pos": [
+                513,
+                507
+            ],
+            "angle": 90,
+            "lvl": 1,
+            "life": 100,
+            "stock": null,
+            "other": {
+                "t": [
+                    0,
+                    1,
+                    0,
+                    1
+                ]
+            }
+        },
+        {
+            "name": "Gallery",
+            "pos": [
+                513,
+                508
+            ],
+            "angle": 90,
+            "lvl": 1,
+            "life": 100,
+            "stock": null,
+            "other": {
+                "t": [
+                    0,
+                    1,
+                    0,
+                    1
+                ]
+            }
+        },
+        {
+            "name": "Gallery",
+            "pos": [
+                513,
+                509
+            ],
+            "angle": 90,
+            "lvl": 1,
+            "life": 100,
+            "stock": null,
+            "other": {
+                "t": [
+                    0,
+                    1,
+                    0,
+                    1
+                ]
+            }
+        },
+        {
+            "name": "Gallery",
+            "pos": [
+                515,
+                506
+            ],
+            "angle": 90,
+            "lvl": 1,
+            "life": 100,
+            "stock": null,
+            "other": {
+                "t": [
+                    0,
+                    1,
+                    0,
+                    1
+                ]
+            }
+        },
+        {
+            "name": "Gallery",
+            "pos": [
+                515,
+                507
+            ],
+            "angle": 90,
+            "lvl": 1,
+            "life": 100,
+            "stock": null,
+            "other": {
+                "t": [
+                    0,
+                    1,
+                    0,
+                    1
+                ]
+            }
+        },
+        {
+            "name": "Gallery",
+            "pos": [
+                515,
+                508
+            ],
+            "angle": 90,
+            "lvl": 1,
+            "life": 100,
+            "stock": null,
+            "other": {
+                "t": [
+                    0,
+                    1,
+                    0,
+                    1
+                ]
+            }
+        },
+        {
+            "name": "Gallery",
+            "pos": [
+                515,
+                509
+            ],
+            "angle": 90,
+            "lvl": 1,
+            "life": 100,
+            "stock": null,
+            "other": {
+                "t": [
+                    0,
+                    1,
+                    0,
+                    1
+                ]
+            }
+        },
+        {
+            "name": "Gallery",
+            "pos": [
+                515,
+                505
+            ],
+            "angle": 180,
+            "lvl": 1,
+            "life": 100,
+            "stock": null,
+            "other": {
+                "t": [
+                    1,
+                    1,
+                    1,
+                    1
+                ]
+            }
+        },
+        {
+            "name": "Gallery",
+            "pos": [
+                516,
+                505
+            ],
+            "angle": 0,
+            "lvl": 1,
+            "life": 100,
+            "stock": null,
+            "other": {
+                "t": [
+                    1,
+                    0,
+                    1,
+                    0
+                ]
+            }
+        },
+        {
+            "name": "Gallery",
+            "pos": [
+                518,
+                504
+            ],
+            "angle": 90,
+            "lvl": 1,
+            "life": 100,
+            "stock": null,
+            "other": {
+                "t": [
+                    0,
+                    1,
+                    0,
+                    1
+                ]
+            }
+        },
+        {
+            "name": "Gallery",
+            "pos": [
+                518,
+                503
+            ],
+            "angle": 90,
+            "lvl": 1,
+            "life": 100,
+            "stock": null,
+            "other": {
+                "t": [
+                    0,
+                    1,
+                    0,
+                    1
+                ]
+            }
+        },
+        {
+            "name": "Gallery",
+            "pos": [
+                516,
+                502
+            ],
+            "angle": 0,
+            "lvl": 1,
+            "life": 100,
+            "stock": null,
+            "other": {
+                "t": [
+                    1,
+                    0,
+                    1,
+                    0
+                ]
+            }
+        },
+        {
+            "name": "Gallery",
+            "pos": [
+                515,
+                502
+            ],
+            "angle": 270,
+            "lvl": 1,
+            "life": 100,
+            "stock": null,
+            "other": {
+                "t": [
+                    1,
+                    0,
+                    0,
+                    1
+                ]
+            }
+        },
+        {
+            "name": "Gallery",
+            "pos": [
+                515,
+                503
+            ],
+            "angle": 90,
+            "lvl": 1,
+            "life": 100,
+            "stock": null,
+            "other": {
+                "t": [
+                    0,
+                    1,
+                    0,
+                    1
+                ]
+            }
+        },
+        {
+            "name": "Gallery",
+            "pos": [
+                515,
+                504
+            ],
+            "angle": 90,
+            "lvl": 1,
+            "life": 100,
+            "stock": null,
+            "other": {
+                "t": [
+                    0,
+                    1,
+                    0,
+                    1
+                ]
+            }
+        },
+        {
+            "name": "Gallery",
+            "pos": [
+                514,
+                505
+            ],
+            "angle": 0,
+            "lvl": 1,
+            "life": 100,
+            "stock": null,
+            "other": {
+                "t": [
+                    1,
+                    0,
+                    1,
+                    0
+                ]
+            }
+        },
+        {
+            "name": "Gallery",
+            "pos": [
+                513,
+                510
+            ],
+            "angle": 90,
+            "lvl": 1,
+            "life": 100,
+            "stock": null,
+            "other": {
+                "t": [
+                    0,
+                    1,
+                    0,
+                    1
+                ]
+            }
+        },
+        {
+            "name": "Gallery",
+            "pos": [
+                513,
+                511
+            ],
+            "angle": 90,
+            "lvl": 1,
+            "life": 100,
+            "stock": null,
+            "other": {
+                "t": [
+                    0,
+                    1,
+                    0,
+                    1
+                ]
+            }
+        },
+        {
+            "name": "Gallery",
+            "pos": [
+                513,
+                512
+            ],
+            "angle": 90,
+            "lvl": 1,
+            "life": 100,
+            "stock": null,
+            "other": {
+                "t": [
+                    0,
+                    1,
+                    0,
+                    1
+                ]
+            }
+        },
+        {
+            "name": "Gallery",
+            "pos": [
+                513,
+                513
+            ],
+            "angle": 90,
+            "lvl": 1,
+            "life": 100,
+            "stock": null,
+            "other": {
+                "t": [
+                    0,
+                    1,
+                    1,
+                    0
+                ]
+            }
+        },
+        {
+            "name": "Gallery",
+            "pos": [
+                512,
+                513
+            ],
+            "angle": 270,
+            "lvl": 1,
+            "life": 100,
+            "stock": null,
+            "other": {
+                "t": [
+                    1,
+                    0,
+                    0,
+                    1
+                ]
+            }
+        },
+        {
+            "name": "Gallery",
+            "pos": [
+                512,
+                514
+            ],
+            "angle": 90,
+            "lvl": 1,
+            "life": 100,
+            "stock": null,
+            "other": {
+                "t": [
+                    0,
+                    1,
+                    0,
+                    1
+                ]
+            }
+        },
+        {
+            "name": "Gallery",
+            "pos": [
+                512,
+                515
+            ],
+            "angle": 0,
+            "lvl": 1,
+            "life": 100,
+            "stock": null,
+            "other": {
+                "t": [
+                    1,
+                    1,
+                    0,
+                    0
+                ]
+            }
+        },
+        {
+            "name": "Gallery",
+            "pos": [
+                513,
+                515
+            ],
+            "angle": 180,
+            "lvl": 1,
+            "life": 100,
+            "stock": null,
+            "other": {
+                "t": [
+                    0,
+                    0,
+                    1,
+                    1
+                ]
+            }
+        },
+        {
+            "name": "Gallery",
+            "pos": [
+                513,
+                516
+            ],
+            "angle": 0,
+            "lvl": 1,
+            "life": 100,
+            "stock": null,
+            "other": {
+                "t": [
+                    1,
+                    1,
+                    0,
+                    0
+                ]
+            }
+        },
+        {
+            "name": "Gallery",
+            "pos": [
+                514,
+                516
+            ],
+            "angle": 0,
+            "lvl": 1,
+            "life": 100,
+            "stock": null,
+            "other": {
+                "t": [
+                    1,
+                    0,
+                    1,
+                    0
+                ]
+            }
+        },
+        {
+            "name": "Gallery",
+            "pos": [
+                515,
+                516
+            ],
+            "angle": 90,
+            "lvl": 1,
+            "life": 100,
+            "stock": null,
+            "other": {
+                "t": [
+                    0,
+                    1,
+                    1,
+                    0
+                ]
+            }
+        },
+        {
+            "name": "Gallery",
+            "pos": [
+                515,
+                515
+            ],
+            "angle": 270,
+            "lvl": 1,
+            "life": 100,
+            "stock": null,
+            "other": {
+                "t": [
+                    1,
+                    0,
+                    0,
+                    1
+                ]
+            }
+        },
+        {
+            "name": "Gallery",
+            "pos": [
+                516,
+                515
+            ],
+            "angle": 90,
+            "lvl": 1,
+            "life": 100,
+            "stock": null,
+            "other": {
+                "t": [
+                    0,
+                    1,
+                    1,
+                    0
+                ]
+            }
+        },
+        {
+            "name": "Gallery",
+            "pos": [
+                516,
+                514
+            ],
+            "angle": 90,
+            "lvl": 1,
+            "life": 100,
+            "stock": null,
+            "other": {
+                "t": [
+                    0,
+                    1,
+                    0,
+                    1
+                ]
+            }
+        },
+        {
+            "name": "Gallery",
+            "pos": [
+                516,
+                513
+            ],
+            "angle": 180,
+            "lvl": 1,
+            "life": 100,
+            "stock": null,
+            "other": {
+                "t": [
+                    0,
+                    0,
+                    1,
+                    1
+                ]
+            }
+        },
+        {
+            "name": "Gallery",
+            "pos": [
+                515,
+                513
+            ],
+            "angle": 0,
+            "lvl": 1,
+            "life": 100,
+            "stock": null,
+            "other": {
+                "t": [
+                    1,
+                    1,
+                    0,
+                    0
+                ]
+            }
+        },
+        {
+            "name": "Gallery",
+            "pos": [
+                515,
+                512
+            ],
+            "angle": 90,
+            "lvl": 1,
+            "life": 100,
+            "stock": null,
+            "other": {
+                "t": [
+                    0,
+                    1,
+                    0,
+                    1
+                ]
+            }
+        },
+        {
+            "name": "Gallery",
+            "pos": [
+                515,
+                510
+            ],
+            "angle": 90,
+            "lvl": 1,
+            "life": 100,
+            "stock": null,
+            "other": {
+                "t": [
+                    0,
+                    1,
+                    0,
+                    1
+                ]
+            }
+        },
+        {
+            "name": "Gallery",
+            "pos": [
+                515,
+                511
+            ],
+            "angle": 90,
+            "lvl": 1,
+            "life": 100,
+            "stock": null,
+            "other": {
+                "t": [
+                    0,
+                    1,
+                    0,
+                    1
+                ]
+            }
         }
-    ],
-    "-1": []
+    ]
 }

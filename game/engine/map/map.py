@@ -105,7 +105,7 @@ class Map:
                 b.load()
     
     def zoom(self, z:int) -> bool:
-        if z < 0 and cst("ZOOM") >= 1.1 or z > 0 and cst("ZOOM") <= 1.9:
+        if (z < 0 and cst("ZOOM") >= 0.2) or (z > 0 and cst("ZOOM") <= 1.9):
             old_zoom = cst("ZOOM")
             t.set_const("ZOOM", round(cst("ZOOM") + z/10, 1))
             t.set_const("SIZE_CASE", 1/cst("ZOOM")*cst("SIZE_CASE")/(1/old_zoom))

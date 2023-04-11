@@ -18,7 +18,7 @@ class Building:
         self.kind = kind
         self.stock = stock
         self.layer = layer
-        if name not in ("Wall"):
+        if name not in cst("LIST_JUNCTION_BUILDING"):
             self.load()
 
     def __repr__(self):

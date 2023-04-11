@@ -24,7 +24,8 @@ class JunctionBuilding(Building):
                 elif b.pos[0] < self.pos[0] and b.pos[1]  == self.pos[1]: #positionnement à droite d'une autre muraille
                     b.t[0] = 0
                 builds_changing.append(b)
-        t.rotate_wall(builds_changing)
+        for b in builds_changing:
+            b.rotate_junction()
 
     
     def add_junction(self, list_build:list) -> None:

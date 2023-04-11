@@ -106,7 +106,7 @@ class Tools:
         self.set_const("ZOOM", 1)
         self.set_const("SIZE_CASE", 50)
         self.set_const("SIZE_TEXT", 30)
-        self.set_const("LIST_JUNCTION_BUILDING", ["Wall"])
+        self.set_const("LIST_JUNCTION_BUILDING", ["Wall", "Gallery"])
 
     def text(self, screen:pygame.surface.Surface, text:str, color:tuple, pos:tuple, size:int) -> None:
         """

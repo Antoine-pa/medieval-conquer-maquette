@@ -188,9 +188,10 @@ class Menu:
                         if isinstance(build, JunctionBuilding):
                             build.del_junction(self.mem_tamp["list_bat"][_map.layer]["add"]["bat"] + _map.dict_name_build[_map.layer].get(build.name, []))
                         for ress in t.cost(build.name, 1).items():
-                            self.mem_tamp["ress"][ress[0]] -= ress[1]
-                            if self.mem_tamp["ress"][ress[0]] == 0:
-                                del self.mem_tamp["ress"][ress[0]]
+                            if self.mem_tamp["ress"].get(ress[0]) is not None:
+                                self.mem_tamp["ress"][ress[0]] -= ress[1]
+                                if self.mem_tamp["ress"][ress[0]] == 0:
+                                    del self.mem_tamp["ress"][ress[0]]
                         for x in range(build.pos[0], build.pos[0]+build.size[0]):
                             for y in range(build.pos[1], build.pos[1]+build.size[1]):
                                 self.mem_tamp["list_bat"][_map.layer]["add"]["pos"].remove((x, y))

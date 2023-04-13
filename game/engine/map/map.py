@@ -84,16 +84,14 @@ class Map:
             for y in range(build.pos[1], build.pos[1]+build.size[1]):
                 del self.dict_pos_build[self.layer][(x, y)]
     
-    def check_pos(self, build:Building, cases_mem_tamp:dict) -> int: #0 = libre, 1 = un batiment construit donc pas libre, 2 = un batiment posé, en memoire tampon donc pas libre
+    def check_pos(self, build:Building, mem_tamp:dict) -> int: #0 = libre, 1 = un batiment construit donc pas libre, 2 = un batiment posé, en memoire tampon donc pas libre
         """
         vérifie que la case est libre pour le bâtiment build
         """
-        if tuple(build.pos) in cases_mem_tamp:
+        if tuple(build.pos) in mem_tamp["list_build"][self.layer]["add"]:
             return 2
-        for x in range(build.pos[0], build.pos[0]+build.size[0]):
-            for y in range(build.pos[1], build.pos[1]+build.size[1]):
-                if (x, y) in list(self.dict_pos_build[self.layer].keys())+cases_mem_tamp:
-                    return 1
+        if tuple(build.pos) in self.dict_pos_build:
+            return 1
         return 0
 
     def reload_images(self) -> None:

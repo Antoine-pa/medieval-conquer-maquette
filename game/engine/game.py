@@ -42,6 +42,9 @@ class Game:
         """
         self._map.reload_images()
         if self._menu.mem_tamp is not None:
-            for c in self._menu.mem_tamp["list_bat"].items():
-                for b in c[1]["add"]["bat"]:
-                    b.load()
+            for c in self._menu.mem_tamp["list_build"].items():
+                builds = []
+                for b in c[1]["add"].values():
+                    if b not in builds:
+                        b.load()
+                        builds.append(b)

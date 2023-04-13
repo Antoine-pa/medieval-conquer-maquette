@@ -49,15 +49,15 @@ class App:
                         self.game._menu.set_action("ressources", self.game._map)
                     if k[pygame.K_e]:
                         self.game._menu.set_action("edit", self.game._map)
-                    if self.game._menu.mem_tamp is not None and self.game._menu.mem_tamp["bat"] is not None:
+                    if self.game._menu.mem_tamp is not None and self.game._menu.mem_tamp["build"] is not None:
                         if k[pygame.K_UP]:
-                            self.game._menu.mem_tamp["bat"]["angle"] = 90
+                            self.game._menu.mem_tamp["build"]["angle"] = 90
                         if k[pygame.K_RIGHT]:
-                            self.game._menu.mem_tamp["bat"]["angle"] = 0
+                            self.game._menu.mem_tamp["build"]["angle"] = 0
                         if k[pygame.K_DOWN]:
-                            self.game._menu.mem_tamp["bat"]["angle"] = 270
+                            self.game._menu.mem_tamp["build"]["angle"] = 270
                         if k[pygame.K_LEFT]:
-                            self.game._menu.mem_tamp["bat"]["angle"] = 180
+                            self.game._menu.mem_tamp["build"]["angle"] = 180
                     if event.key == pygame.K_ESCAPE:
                         pygame.quit()
                         self.process = False

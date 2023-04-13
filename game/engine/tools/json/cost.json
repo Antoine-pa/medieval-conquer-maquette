@@ -37,5 +37,15 @@
     "1" : {
       "bois" : 0
     }
+  },
+  "ExitGallery" : {
+    "1" : {
+      "bois" : 0
+    }
+  },
+  "EntranceGallery" : {
+    "1" : {
+      "bois" : 0
+    }
   }
 }

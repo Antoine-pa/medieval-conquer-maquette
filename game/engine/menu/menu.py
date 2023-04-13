@@ -35,7 +35,7 @@ class Menu:
         if _map.layer == -1:
             self.buttons["change_transparency"] = Button((50, 150, 150, 200), "trans", 1)
         if self.action == "edit-add":
-            self.buttons["edit_angle"] = Button((cst("MENU_EDIT_POS")[0]+cst("POS_BUTTONS_MENU_EDIT")[0], cst("POS_BUTTONS_MENU_EDIT")[1], cst("MENU_EDIT_POS")[0]+cst("POS_BUTTONS_MENU_EDIT")[0]+cst("LONG_BLOCK_MENU_EDIT"), cst("POS_BUTTONS_MENU_EDIT")[1]+cst("LONG_BLOCK_MENU_EDIT")), str(int(4*self.mem_tamp["bat"]["angle"]/360)), 1)
+            self.buttons["edit_angle"] = Button((cst("MENU_EDIT_POS")[0]+cst("POS_BUTTONS_MENU_EDIT")[0], cst("POS_BUTTONS_MENU_EDIT")[1], cst("MENU_EDIT_POS")[0]+cst("POS_BUTTONS_MENU_EDIT")[0]+cst("LONG_BLOCK_MENU_EDIT"), cst("POS_BUTTONS_MENU_EDIT")[1]+cst("LONG_BLOCK_MENU_EDIT")), str(int(4*self.mem_tamp["build"]["angle"]/360)), 1)
             self.buttons["edit_annulation"] = Button((cst("MENU_EDIT_POS")[0]+cst("POS_BUTTONS_MENU_EDIT")[0]+cst("MENU_EDIT_POS")[3], cst("POS_BUTTONS_MENU_EDIT")[1], cst("MENU_EDIT_POS")[0]+cst("POS_BUTTONS_MENU_EDIT")[0]+cst("LONG_BLOCK_MENU_EDIT")+cst("MENU_EDIT_POS")[3], cst("POS_BUTTONS_MENU_EDIT")[1]+cst("LONG_BLOCK_MENU_EDIT")), "n", 1)
             self.buttons["edit_validation"] = Button((cst("MENU_EDIT_POS")[0]+cst("POS_BUTTONS_MENU_EDIT")[0]+2*cst("MENU_EDIT_POS")[3], cst("POS_BUTTONS_MENU_EDIT")[1], cst("MENU_EDIT_POS")[0]+cst("POS_BUTTONS_MENU_EDIT")[0]+cst("LONG_BLOCK_MENU_EDIT")+2*cst("MENU_EDIT_POS")[3], cst("POS_BUTTONS_MENU_EDIT")[1]+cst("LONG_BLOCK_MENU_EDIT")), "y", 1)
         elif self.action == "edit":
@@ -49,7 +49,7 @@ class Menu:
 
     def update_mem_tamp(self) -> None:
         if self.action.startswith("edit"):
-            self.mem_tamp = {"bat": {"bat": None, "angle": 0}, "list_bat": {0 : {"add": {"pos": [], "bat": []}, "sup": []}, -1 : {"add": {"pos": [], "bat": []}, "sup": []}}, "ress": {}}
+            self.mem_tamp = {"build": {"build": None, "angle": 0}, "list_build": {0 : {"add": {}, "sup": []}, -1 : {"add": {}, "sup": []}}, "ress": {}}
         else:
             self.mem_tamp = None
 
@@ -74,12 +74,15 @@ class Menu:
         fonction permettant d'afficher le menu d'edition de la map
         """
         #display all buildings in mem tamp
-        for b in self.mem_tamp["list_bat"][_map.layer]["add"]["bat"]:
-            d = b.display(screen, *_map.pos)
-            if d: #si le bâtiment est affiché
-                pygame.draw.rect(screen, cst("GREY_YELLOW"), pygame.Rect((b.pos[0] - _map.pos[0])*int(cst("SIZE_CASE")), (b.pos[1] - _map.pos[1])*int(cst("SIZE_CASE")), int(cst("SIZE_CASE"))*b.size[0], int(cst("SIZE_CASE"))*b.size[1]), 3)
-
-        for b in self.mem_tamp["list_bat"][_map.layer]["sup"]:
+        builds = []
+        for b in self.mem_tamp["list_build"][_map.layer]["add"].values():
+            if b not in builds:
+                builds.append(b)
+                d = b.display(screen, *_map.pos)
+                if d: #si le bâtiment est affiché
+                    pygame.draw.rect(screen, cst("GREY_YELLOW"), pygame.Rect((b.pos[0] - _map.pos[0])*int(cst("SIZE_CASE")), (b.pos[1] - _map.pos[1])*int(cst("SIZE_CASE")), int(cst("SIZE_CASE"))*b.size[0], int(cst("SIZE_CASE"))*b.size[1]), 3)
+        del builds
+        for b in self.mem_tamp["list_build"][_map.layer]["sup"]:
             if b.in_windows(*_map.pos):
                 pygame.draw.rect(screen, cst("RED_ORANGE"), pygame.Rect((b.pos[0] - _map.pos[0])*int(cst("SIZE_CASE")), (b.pos[1] - _map.pos[1])*int(cst("SIZE_CASE")), int(cst("SIZE_CASE"))*b.size[0], int(cst("SIZE_CASE"))*b.size[1]), 3)
 
@@ -92,7 +95,7 @@ class Menu:
             check = None
             for i in range(len(cst("LIST_BAT_MENU_EDIT")[str(_map.layer)])):
                 build = cst("LIST_BAT_MENU_EDIT")[str(_map.layer)][i]
-                if self.mem_tamp["bat"]["bat"] == build:
+                if self.mem_tamp["build"]["build"] == build:
                     pygame.draw.rect(screen, cst("GREY_YELLOW"), pygame.Rect((cst("MENU_EDIT_POS")[0] - (i+1)*(cst("MENU_EDIT_POS")[3]), cst("MENU_EDIT_POS")[1]), (cst("MENU_EDIT_POS")[3], cst("MENU_EDIT_POS")[3]))) #si le bâtiment est sélectionné, on color en jaune en dessous
                     cost = t.cost(build, 1)
                     pygame.draw.rect(screen, cst("GREY_WHITE"), pygame.Rect(pos_menu[0] - pos_menu[2], cst("MENU_EDIT_POS")[1] - len(cost) * (cst("MENU_EDIT_POS")[3]), pos_menu[2], len(cost) * (cst("MENU_EDIT_POS")[3])))
@@ -156,37 +159,40 @@ class Menu:
                     pos[0], pos[1] = pos[0] - pos_menu[0], pos[1] - pos_menu[1]
                     coord_case = int(pos[0]/cst("MENU_EDIT_POS")[3]) #on calcul les coordonnées de la case
                     index = len(cst("LIST_BAT_MENU_EDIT")[str(_map.layer)]) - coord_case - 1 #on calcul l'index de la case dans la liste des bâtiments
-                    if self.mem_tamp["bat"]["bat"] != cst("LIST_BAT_MENU_EDIT")[str(_map.layer)][index]:
-                        self.mem_tamp["bat"]["bat"] = cst("LIST_BAT_MENU_EDIT")[str(_map.layer)][index] #on ajoute le bâtiment à la mémoire tampon dans la section réservé au bâtiment séléctinné pour de la construction
+                    if self.mem_tamp["build"]["build"] != cst("LIST_BAT_MENU_EDIT")[str(_map.layer)][index]:
+                        self.mem_tamp["build"]["build"] = cst("LIST_BAT_MENU_EDIT")[str(_map.layer)][index] #on ajoute le bâtiment à la mémoire tampon dans la section réservé au bâtiment séléctinné pour de la construction
                     else:
-                        self.mem_tamp["bat"]["bat"] = None
+                        self.mem_tamp["build"]["build"] = None
             else: #si le clic est sur la map
                 place_x, place_y = _map.get_case(pos) #récupération des cases
-                if self.mem_tamp["bat"]["bat"] is not None: #si un bâtiment à construire est séléctionné
+                if self.mem_tamp["build"]["build"] is not None: #si un bâtiment à construire est séléctionné
                     #construction bâtiment
-                    build = DICT_BUILDINGS[self.mem_tamp["bat"]["bat"]]([place_x, place_y]) #on instancie le bâtiment
-                    build.rotate(self.mem_tamp["bat"]["angle"])
-                    place = _map.check_pos(build, self.mem_tamp["list_bat"][_map.layer]["add"]["pos"])
+                    build = DICT_BUILDINGS[self.mem_tamp["build"]["build"]]([place_x, place_y]) #on instancie le bâtiment
+                    build.rotate(self.mem_tamp["build"]["angle"])
+                    place = _map.check_pos(build, self.mem_tamp)
                     if place == 0 and t.check_stock(t.cost(build.name, 1), self.mem_tamp["ress"]) == True: #on vérifie que la place est libre et que les ressources sont suffisantes
-                        self.mem_tamp["list_bat"][_map.layer]["add"]["bat"].append(build) #on ajoute le bâtiment dans la mémoire tampon
                         for x in range(build.pos[0], build.pos[0]+build.size[0]):
                             for y in range(build.pos[1], build.pos[1]+build.size[1]):
-                                self.mem_tamp["list_bat"][_map.layer]["add"]["pos"].append((x, y))
+                                self.mem_tamp["list_build"][_map.layer]["add"][(x, y)] = build #on ajoute le bâtiment dans la mémoire tampon
                         for ress in t.cost(build.name, 1).items():
                             if ress[0] not in self.mem_tamp["ress"]:
                                 self.mem_tamp["ress"][ress[0]] = 0
                             self.mem_tamp["ress"][ress[0]] += ress[1]
                         if isinstance(build, JunctionBuilding):
-                            build.add_junction(self.mem_tamp["list_bat"][_map.layer]["add"]["bat"] + _map.dict_name_build[_map.layer].get(build.name, []))
+                            build.add_junction([_map.dict_pos_build[_map.layer], self.mem_tamp["list_build"][_map.layer]["add"]])
                     elif place == 2: #annuler la construction d'un batiment
-                        for b in self.mem_tamp["list_bat"][_map.layer]["add"]["bat"]:
-                            for x in range(b.pos[0], b.pos[0]+b.size[0]):
-                                for y in range(b.pos[1], b.pos[1]+b.size[1]):
-                                    if (place_x, place_y) == (x, y):
-                                        del build
-                                        build = b
+                        builds = []
+                        for b in self.mem_tamp["list_build"][_map.layer]["add"].values():
+                            if b not in builds:
+                                builds.append(b)
+                                for x in range(b.pos[0], b.pos[0]+b.size[0]):
+                                    for y in range(b.pos[1], b.pos[1]+b.size[1]):
+                                        if (place_x, place_y) == (x, y):
+                                            del build
+                                            build = b
+                        del builds
                         if isinstance(build, JunctionBuilding):
-                            build.del_junction(self.mem_tamp["list_bat"][_map.layer]["add"]["bat"] + _map.dict_name_build[_map.layer].get(build.name, []))
+                            build.del_junction([_map.dict_pos_build[_map.layer], self.mem_tamp["list_build"][_map.layer]["add"]])
                         for ress in t.cost(build.name, 1).items():
                             if self.mem_tamp["ress"].get(ress[0]) is not None:
                                 self.mem_tamp["ress"][ress[0]] -= ress[1]
@@ -194,8 +200,7 @@ class Menu:
                                     del self.mem_tamp["ress"][ress[0]]
                         for x in range(build.pos[0], build.pos[0]+build.size[0]):
                             for y in range(build.pos[1], build.pos[1]+build.size[1]):
-                                self.mem_tamp["list_bat"][_map.layer]["add"]["pos"].remove((x, y))
-                        self.mem_tamp["list_bat"][_map.layer]["add"]["bat"].remove(build)
+                                del self.mem_tamp["list_build"][_map.layer]["add"][(x, y)]
                         del build
                     else:
                         del build
@@ -204,19 +209,23 @@ class Menu:
             place_x, place_y = _map.get_case(pos) #récupération des cases
             build = _map.dict_pos_build[_map.layer].get((place_x, place_y))
             if build is not None:
-                if build in self.mem_tamp["list_bat"][_map.layer]["sup"]:
-                    self.mem_tamp["list_bat"][_map.layer]["sup"].remove(build)
+                if build in self.mem_tamp["list_build"][_map.layer]["sup"]:
+                    self.mem_tamp["list_build"][_map.layer]["sup"].remove(build)
                 else:
-                    self.mem_tamp["list_bat"][_map.layer]["sup"].append(build)
+                    self.mem_tamp["list_build"][_map.layer]["sup"].append(build)
         for button in self.buttons.items():
             if button[1].collidepoint(pos):
                 if button[0] == "edit_validation":
                     if self.action.startswith("edit"):
-                        for build in self.mem_tamp["list_bat"][_map.layer]["add"]["bat"]:
-                            _map.add_build(build)
-                        for build in self.mem_tamp["list_bat"][_map.layer]["sup"]:
+                        builds = []
+                        for b in self.mem_tamp["list_build"][_map.layer]["add"].values():
+                            if b not in builds:
+                                _map.add_build(b)
+                                builds.append(b)
+                        del builds
+                        for build in self.mem_tamp["list_build"][_map.layer]["sup"]:
                             if isinstance(build, JunctionBuilding):
-                                build.update_junction(_map.dict_name_build[_map.layer].get(build.name, []))                            
+                                build.del_junction([_map.dict_pos_build[_map.layer], self.mem_tamp["list_build"][_map.layer]["add"]])                            
                             _map.sup_build(build)
                         for r in self.mem_tamp["ress"].items():
                             t.set_res(r[0], t.res(r[0])["stock"] - r[1])

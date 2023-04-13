@@ -10,11 +10,25 @@ class JunctionBuilding(Building):
         else:
             self.t = t
         self.load()
+    
+    def get_bat_adj(self, list_dict_pos_build) -> list:
+        pos = []
+        for x in range(2):
+            pos.append((self.pos[0] -1+x*(2), self.pos[1]))
+            pos.append((self.pos[0], self.pos[1] -1+x*(2)))
+        list_build = []
+        for p in pos:
+            for dict_pos_build in list_dict_pos_build:
+                b = dict_pos_build.get(p)
+                if b is not None and b.name in cst("DICT_JUNCTIONS")[self.name]:
+                    list_build.append(b)
+        return list_build
 
-    def del_junction(self, list_build:list) -> None:
-        builds_changing = []
+
+    def del_junction(self, list_dict_pos_build) -> None:
+        list_build = self.get_bat_adj(list_dict_pos_build)
         for b in list_build:
-            if b != self and ((abs(b.pos[0] - self.pos[0]) == 1 and abs(b.pos[1] - self.pos[1]) == 0) or (abs(b.pos[0] - self.pos[0]) == 0 and abs(b.pos[1] - self.pos[1]) == 1)):
+            if isinstance(b, JunctionBuilding):
                 if b.pos[0] == self.pos[0] and b.pos[1]  < self.pos[1]: #positionnement en bas d'une autre muraille
                     b.t[3] = 0
                 elif b.pos[0] == self.pos[0] and b.pos[1]  > self.pos[1]: #positionnement en haut d'une autre muraille
@@ -23,31 +37,36 @@ class JunctionBuilding(Building):
                     b.t[2] = 0
                 elif b.pos[0] < self.pos[0] and b.pos[1]  == self.pos[1]: #positionnement à droite d'une autre muraille
                     b.t[0] = 0
-                builds_changing.append(b)
-        for b in builds_changing:
-            b.rotate_junction()
+        for b in list_build:
+            if isinstance(b, JunctionBuilding):
+                b.rotate_junction()
 
     
-    def add_junction(self, list_build:list) -> None:
-        builds_changing = []
+    def add_junction(self, list_dict_pos_build) -> None:
+        list_build = self.get_bat_adj(list_dict_pos_build)
         for b in list_build:
-            if b != self and ((abs(b.pos[0] - self.pos[0]) == 1 and abs(b.pos[1] - self.pos[1]) == 0) or (abs(b.pos[0] - self.pos[0]) == 0 and abs(b.pos[1] - self.pos[1]) == 1)):
-                if b.pos[0] == self.pos[0] and b.pos[1] < self.pos[1]: #positionnement en bas d'une autre muraille
+            if b.pos[0] <= self.pos[0] < b.pos[0] + b.size[0]:
+                if b.pos[1] < self.pos[1]: #positionnement en bas d'une autre muraille
                     self.t[1] = 1
-                    b.t[3] = 1
-                elif b.pos[0] == self.pos[0] and b.pos[1] > self.pos[1]: #positionnement en haut d'une autre muraille
+                    if isinstance(b, JunctionBuilding):
+                        b.t[3] = 1
+                elif b.pos[1] > self.pos[1]: #positionnement en haut d'une autre muraille
                     self.t[3] = 1
-                    b.t[1] = 1
-                elif b.pos[0] > self.pos[0] and b.pos[1] == self.pos[1]: #positionnement à gauche d'une autre muraille
+                    if isinstance(b, JunctionBuilding):
+                        b.t[1] = 1
+            elif b.pos[1] <= self.pos[1] < b.pos[1] + b.size[1]:
+                if b.pos[0] > self.pos[0]: #positionnement à gauche d'une autre muraille
                     self.t[0] = 1
-                    b.t[2] = 1
-                elif b.pos[0] < self.pos[0] and b.pos[1]  == self.pos[1]: #positionnement à droite d'une autre muraille
+                    if isinstance(b, JunctionBuilding):
+                        b.t[2] = 1
+                elif b.pos[0] < self.pos[0]: #positionnement à droite d'une autre muraille
                     self.t[2] = 1
-                    b.t[0] = 1
-                builds_changing.append(b)
-        builds_changing.append(self)
-        for b in builds_changing:
-            b.rotate_junction()
+                    if isinstance(b, JunctionBuilding):
+                        b.t[0] = 1
+        list_build.append(self)
+        for b in list_build:
+            if isinstance(b, JunctionBuilding):
+                b.rotate_junction()
 
     def rotate_junction(self) -> None:
         if sum(self.t) == 1:
@@ -68,14 +87,18 @@ class JunctionBuilding(Building):
         """
         charge l'image du bâtiment
         """
+        name = self.name + self.get_suffix()
+        self.img = t.load_img(f"buildings/{self.name}/{name}.png", int(cst("SIZE_CASE")) * self.size[0], int(cst("SIZE_CASE")) * self.size[1], 255)
+        self.img = pygame.transform.rotate(self.img, self.angle)
+        self.img_alpha = t.load_img(f"buildings/{self.name}/{name}.png", int(cst("SIZE_CASE"))*self.size[0] , int(cst("SIZE_CASE"))*self.size[1], 32)
+        self.img_alpha = pygame.transform.rotate(self.img_alpha, self.angle)
+    
+    def get_suffix(self):
         if sum(self.t) != 2:
-            name = self.name + str(sum(self.t))
+            suffix = str(sum(self.t))
         else:
             if self.t[0] == self.t[2] and self.t[1] == self.t[3]:
-                name = self.name + "2_0"
+                suffix = "2_0"
             else:
-                name = self.name + "2_1"
-        self.img = t.load_img(f"buildings/{self.name}/{name}.png", int(cst("SIZE_CASE")) * self.size[0] - 1, int(cst("SIZE_CASE")) * self.size[1] - 1, 255)
-        self.img = pygame.transform.rotate(self.img, self.angle)
-        self.img_alpha = t.load_img(f"buildings/{self.name}/{name}.png", int(cst("SIZE_CASE"))*self.size[0]-1 , int(cst("SIZE_CASE"))*self.size[1]-1, 32)
-        self.img_alpha = pygame.transform.rotate(self.img_alpha, self.angle)
+                suffix = "2_1"
+        return suffix

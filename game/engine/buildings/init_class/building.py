@@ -36,7 +36,7 @@ class Building:
                 img = self.img_alpha
             else:
                 img = self.img
-            screen.blit(img, ((self.pos[0]-x)*int(cst("SIZE_CASE"))+1, (self.pos[1]-y)*int(cst("SIZE_CASE"))+1))
+            screen.blit(img, ((self.pos[0]-x)*int(cst("SIZE_CASE")), (self.pos[1]-y)*int(cst("SIZE_CASE"))))
             return True
         return False
 
@@ -44,9 +44,9 @@ class Building:
         """
         charge l'image du bâtiment
         """
-        self.img = t.load_img(f"buildings/{self.name}/{self.name}.png", int(cst("SIZE_CASE"))*self.size[0]-1 , int(cst("SIZE_CASE"))*self.size[1]-1, 255)
+        self.img = t.load_img(f"buildings/{self.name}/{self.name}.png", int(cst("SIZE_CASE"))*self.size[0] , int(cst("SIZE_CASE"))*self.size[1], 255)
         self.img = pygame.transform.rotate(self.img, self.angle)
-        self.img_alpha = t.load_img(f"buildings/{self.name}/{self.name}.png", int(cst("SIZE_CASE"))*self.size[0]-1 , int(cst("SIZE_CASE"))*self.size[1]-1, 32)
+        self.img_alpha = t.load_img(f"buildings/{self.name}/{self.name}.png", int(cst("SIZE_CASE"))*self.size[0] , int(cst("SIZE_CASE"))*self.size[1], 32)
         self.img_alpha = pygame.transform.rotate(self.img_alpha, self.angle)
     
     def rotate(self, angle:int) -> None:

@@ -5,6 +5,8 @@ from .wall import Wall
 from .granary import Granary
 from .grange import Grange
 from .gallery import Gallery
+from .entrance_gallery import EntranceGallery
+from .exit_gallery import ExitGallery
 from .init_class import *
 
 DICT_BUILDINGS = {"Barrack": Barrack,
@@ -13,4 +15,6 @@ DICT_BUILDINGS = {"Barrack": Barrack,
                   "Tower": Tower,
                   "Wall": Wall,
                   "Grange": Grange,
-                  "Gallery" : Gallery}
+                  "Gallery" : Gallery,
+                  "EntranceGallery" : EntranceGallery,
+                  "ExitGallery" : ExitGallery}

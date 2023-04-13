@@ -102,11 +102,16 @@ class Tools:
         self.set_const("LONG_BLOCK_MENU_EDIT", 3*self.cst("MENU_EDIT_POS")[3]//4) #longueur du contenu d'une case du menu d'edit
         self.set_const("GAP_BLOCK_COL_MENU_EDIT", self.cst("MENU_EDIT_POS")[3]//8) #espace entre le contenu et le bord d'une case du menu d'eedit
         self.set_const("POS_BUTTONS_MENU_EDIT", (((self.cst("MENU_EDIT_POS")[3])-self.cst("LONG_BLOCK_MENU_EDIT"))//2, (self.cst("MENU_EDIT_POS")[1])+(size_y-(self.cst("MENU_EDIT_POS"))[1])//2-self.cst("LONG_BLOCK_MENU_EDIT")//2)) #
-        self.set_const("LIST_BAT_MENU_EDIT",{"0" : ["Barrack", "Field", "Granary", "Tower", "Wall", "Grange"], "-1" : ["Gallery"]})
+        self.set_const("LIST_BAT_MENU_EDIT",{"0" : ["Barrack", "Field", "Granary", "Tower", "Wall", "Grange"], "-1" : ["Gallery", "ExitGallery", "EntranceGallery"]})
+        self.set_const("LIST_JUNCTION_BUILDING", ["Wall", "Gallery", "ExitGallery", "EntranceGallery"])
+        self.set_const("DICT_JUNCTIONS", {
+                        "Gallery" : ["Gallery", "ExitGallery", "EntranceGallery"],
+                        "ExitGallery" : ["ExitGallery", "Gallery", "EntranceGallery"],
+                        "EntranceGallery" : ["EntranceGallery, ""ExitGallery", "Gallery"],
+                        "Wall" : ["Wall", "Tower"]})
         self.set_const("ZOOM", 1)
         self.set_const("SIZE_CASE", 50)
         self.set_const("SIZE_TEXT", 30)
-        self.set_const("LIST_JUNCTION_BUILDING", ["Wall", "Gallery"])
 
     def text(self, screen:pygame.surface.Surface, text:str, color:tuple, pos:tuple, size:int) -> None:
         """

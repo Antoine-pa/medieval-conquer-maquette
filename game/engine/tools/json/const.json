@@ -52,11 +52,13 @@
             "Grange"
         ],
         "-1": [
-            "Gallery"
+            "Gallery",
+            "ExitGallery",
+            "EntranceGallery"
         ]
     },
-    "ZOOM": 1,
-    "SIZE_CASE": 50,
+    "ZOOM": 0.6,
+    "SIZE_CASE": 83.33333333333331,
     "SIZE_TEXT": 30,
     "size_x": 1820,
     "size_y": 980,
@@ -72,6 +74,28 @@
     ],
     "LIST_JUNCTION_BUILDING": [
         "Wall",
-        "Gallery"
-    ]
+        "Gallery",
+        "ExitGallery",
+        "EntranceGallery"
+    ],
+    "DICT_JUNCTIONS": {
+        "Gallery": [
+            "Gallery",
+            "ExitGallery",
+            "EntranceGallery"
+        ],
+        "ExitGallery": [
+            "ExitGallery",
+            "Gallery",
+            "EntranceGallery"
+        ],
+        "EntranceGallery": [
+            "EntranceGallery, ExitGallery",
+            "Gallery"
+        ],
+        "Wall": [
+            "Wall",
+            "Tower"
+        ]
+    }
 }

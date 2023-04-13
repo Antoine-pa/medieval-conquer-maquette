@@ -57,8 +57,8 @@
             "EntranceGallery"
         ]
     },
-    "ZOOM": 0.6,
-    "SIZE_CASE": 83.33333333333331,
+    "ZOOM": 1,
+    "SIZE_CASE": 50,
     "SIZE_TEXT": 30,
     "size_x": 1820,
     "size_y": 980,

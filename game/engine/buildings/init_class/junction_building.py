@@ -11,7 +11,7 @@ class JunctionBuilding(Building):
             self.t = t
         self.load()
     
-    def get_bat_adj(self, list_dict_pos_build) -> list:
+    def get_bat_adj(self, list_dict_pos_build:list) -> list:
         pos = []
         for x in range(2):
             pos.append((self.pos[0] -1+x*(2), self.pos[1]))
@@ -25,7 +25,7 @@ class JunctionBuilding(Building):
         return list_build
 
 
-    def del_junction(self, list_dict_pos_build) -> None:
+    def del_junction(self, list_dict_pos_build:list) -> None:
         list_build = self.get_bat_adj(list_dict_pos_build)
         for b in list_build:
             if isinstance(b, JunctionBuilding):
@@ -42,7 +42,7 @@ class JunctionBuilding(Building):
                 b.rotate_junction()
 
     
-    def add_junction(self, list_dict_pos_build) -> None:
+    def add_junction(self, list_dict_pos_build:list) -> None:
         list_build = self.get_bat_adj(list_dict_pos_build)
         for b in list_build:
             if b.pos[0] <= self.pos[0] < b.pos[0] + b.size[0]:
@@ -93,7 +93,7 @@ class JunctionBuilding(Building):
         self.img_alpha = t.load_img(f"buildings/{self.name}/{name}.png", int(cst("SIZE_CASE"))*self.size[0] , int(cst("SIZE_CASE"))*self.size[1], 32)
         self.img_alpha = pygame.transform.rotate(self.img_alpha, self.angle)
     
-    def get_suffix(self):
+    def get_suffix(self) -> str:
         if sum(self.t) != 2:
             suffix = str(sum(self.t))
         else:

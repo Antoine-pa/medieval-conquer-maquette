@@ -22,12 +22,6 @@ class Button:
         """
         return self.coords[0] <= pos[0] <= self.coords[2] and self.coords[1] <= pos[1] <= self.coords[3]
 
-    def pos_text(self) -> tuple: #à modifier, marche pas vraiment
-        """
-        retourne la position du texte à afficher
-        """
-        return (self.coords[0]+self.thickness+3, self.coords[3]-self.thickness-1.25*cst("SIZE_TEXT"))
-    
     def display(self, screen : pygame.surface.Surface) -> None:
         """
         affiche le boutton
@@ -35,3 +29,10 @@ class Button:
         pygame.draw.rect(screen, self.background_color, (self.coords[0], self.coords[1], self.coords[2] - self.coords[0], self.coords[3] - self.coords[1]), 0)
         pygame.draw.rect(screen, self.font_color, (self.coords[0], self.coords[1], self.coords[2] - self.coords[0], self.coords[3] - self.coords[1]), self.thickness)
         t.text(screen, self.text, self.font_color, self.pos_text(), cst("SIZE_TEXT"))
+        
+    def pos_text(self) -> tuple: #à modifier, marche pas vraiment
+        """
+        retourne la position du texte à afficher
+        """
+        return (self.coords[0]+self.thickness+3, self.coords[3]-self.thickness-1.25*cst("SIZE_TEXT"))
+    

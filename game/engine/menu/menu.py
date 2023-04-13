@@ -127,8 +127,8 @@ class Menu:
                         color = cst("BLACK")
                     t.text(screen, res[0]+" : "+str(res[1])+"/"+str(t.res(res[0])["stock"]), color, (pos_menu[0]+cst("MENU_EDIT_POS")[3]//4, pos_menu[1]+i*cst("MENU_EDIT_POS")[3]+cst("MENU_EDIT_POS")[3]//4), 20) #on ajoute la ligne de ressource
 
-
-    def display_ressources(self, screen:pygame.surface.Surface) -> None: #à faire : créer les constantes au début pour éviter les calculs
+    @staticmethod
+    def display_ressources(screen:pygame.surface.Surface) -> None: #à faire : créer les constantes au début pour éviter les calculs
         """
         fonction permettant d'afficher les ressources
         """
@@ -143,7 +143,8 @@ class Menu:
             t.text(screen, res[0], cst("BLACK"), (cst("size_x")/4+cst("size_x")/16, cst("size_y")/4+cst("size_y")/(6*len(resources))+i*cst("size_y")/(2*len(resources))), int(cst("size_y")/(6*len(resources))))
             t.text(screen, str(res[1]["stock"])+"/"+str(res[1]["max"])+" ("+str(round(ratio*100, 2))+"%)", cst("BLACK"), (cst("size_x")/2+cst("size_x")/8, cst("size_y")/4+cst("size_y")/(6*len(resources))+i*cst("size_y")/(2*len(resources))), int(cst("size_y")/(6*len(resources))))
 
-    def display_settings(self, screen:pygame.surface.Surface) -> None:
+    @staticmethod
+    def display_settings(screen:pygame.surface.Surface) -> None:
         """
         fonction permettant d'afficher les paramètres du jeu
         """
@@ -229,6 +230,7 @@ class Menu:
                             _map.sup_build(build)
                         for r in self.mem_tamp["ress"].items():
                             t.set_res(r[0], t.res(r[0])["stock"] - r[1])
+                        _map.update_galleries_links()
                         _map.save_map()
                     self.set_action("edit", _map)
                 if button[0] in ("edit_annulation", "change_layer"):

@@ -22,7 +22,7 @@ class Building:
             self.load()
 
     def __repr__(self):
-        return f"{self.name} : (position : {self.pos}; taille : {self.size}; vie : {self.life}); angle : {self.angle}"
+        return f"{self.name} : (position : {self.pos}; taille : {self.size}; vie : {self.life}); angle : {self.angle}; stock : {self.stock}"
     
     def in_windows(self, x:int, y:int) -> bool:
         return x-2 <=self.pos[0] <= cst("size_x")/int(cst("SIZE_CASE"))+x and y-2 <=self.pos[1] <= cst("size_y")/int(cst("SIZE_CASE"))+y
@@ -73,4 +73,4 @@ class UsineArmeSiege(Building):
 
 class Foundry(Building):
     def __init__(self, x, y):
-        super().__init__("", (), [], 1, 100, "")
+        super().__init__("Foundry", (), [], 1, 100, "production")

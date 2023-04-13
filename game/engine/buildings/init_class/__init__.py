@@ -1,3 +1,4 @@
 from .building import Building
 from .production_building import ProductionBuilding
 from .junction_building import JunctionBuilding
+from .resource_transportation import ResourceTransportation

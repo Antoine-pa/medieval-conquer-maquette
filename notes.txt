@@ -1,0 +1,6 @@
+list input = []
+list transport build = []
+pour chaque input dans list input faire
+    get build (gallery et output) adjacents
+    pour chacun de ces bâtiments je met dir transport de la bonne direction à 1 (input) et celle de l'input à 2 (output)
+    pour chacun de ces bâtiments je recup les build adjacents dans les dirs à 0 et je recommence

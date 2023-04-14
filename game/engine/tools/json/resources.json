@@ -1,7 +1,7 @@
 {
     "bois": {
         "max": 100,
-        "stock": 83
+        "stock": 100
     },
     "fer": {
         "max": 200,
@@ -22,5 +22,9 @@
     "charbon": {
         "max": 120,
         "stock": 79
+    },
+    "acier": {
+        "max": 200,
+        "stock": 30
     }
 }

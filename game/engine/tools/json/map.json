@@ -275,6 +275,32 @@
                     0
                 ]
             }
+        },
+        {
+            "name": "Field",
+            "pos": [
+                520,
+                504
+            ],
+            "angle": 0,
+            "lvl": 1,
+            "life": 100,
+            "stock": {
+                "cereals": 35
+            },
+            "other": {}
+        },
+        {
+            "name": "Granary",
+            "pos": [
+                521,
+                508
+            ],
+            "angle": 0,
+            "lvl": 1,
+            "life": 100,
+            "stock": null,
+            "other": {}
         }
     ],
     "-1": [
@@ -282,7 +308,64 @@
             "name": "EntranceGallery",
             "pos": [
                 520,
-                509
+                505
+            ],
+            "angle": 180,
+            "lvl": 1,
+            "life": 100,
+            "stock": null,
+            "other": {
+                "t": [
+                    0,
+                    0,
+                    1,
+                    0
+                ]
+            }
+        },
+        {
+            "name": "EntranceGallery",
+            "pos": [
+                521,
+                505
+            ],
+            "angle": 270,
+            "lvl": 1,
+            "life": 100,
+            "stock": null,
+            "other": {
+                "t": [
+                    0,
+                    0,
+                    0,
+                    1
+                ]
+            }
+        },
+        {
+            "name": "EntranceGallery",
+            "pos": [
+                521,
+                504
+            ],
+            "angle": 0,
+            "lvl": 1,
+            "life": 100,
+            "stock": null,
+            "other": {
+                "t": [
+                    1,
+                    0,
+                    0,
+                    0
+                ]
+            }
+        },
+        {
+            "name": "Gallery",
+            "pos": [
+                519,
+                505
             ],
             "angle": 270,
             "lvl": 1,
@@ -298,48 +381,10 @@
             }
         },
         {
-            "name": "ExitGallery",
+            "name": "Gallery",
             "pos": [
-                523,
-                508
-            ],
-            "angle": 180,
-            "lvl": 1,
-            "life": 100,
-            "stock": null,
-            "other": {
-                "t": [
-                    0,
-                    0,
-                    1,
-                    0
-                ]
-            }
-        },
-        {
-            "name": "ExitGallery",
-            "pos": [
-                523,
-                511
-            ],
-            "angle": 180,
-            "lvl": 1,
-            "life": 100,
-            "stock": null,
-            "other": {
-                "t": [
-                    0,
-                    0,
-                    1,
-                    0
-                ]
-            }
-        },
-        {
-            "name": "ExitGallery",
-            "pos": [
-                520,
-                511
+                519,
+                506
             ],
             "angle": 90,
             "lvl": 1,
@@ -350,6 +395,63 @@
                     0,
                     1,
                     0,
+                    1
+                ]
+            }
+        },
+        {
+            "name": "Gallery",
+            "pos": [
+                519,
+                507
+            ],
+            "angle": 90,
+            "lvl": 1,
+            "life": 100,
+            "stock": null,
+            "other": {
+                "t": [
+                    0,
+                    1,
+                    0,
+                    1
+                ]
+            }
+        },
+        {
+            "name": "Gallery",
+            "pos": [
+                519,
+                508
+            ],
+            "angle": 0,
+            "lvl": 1,
+            "life": 100,
+            "stock": null,
+            "other": {
+                "t": [
+                    1,
+                    1,
+                    0,
+                    0
+                ]
+            }
+        },
+        {
+            "name": "Gallery",
+            "pos": [
+                520,
+                508
+            ],
+            "angle": 0,
+            "lvl": 1,
+            "life": 100,
+            "stock": null,
+            "other": {
+                "t": [
+                    1,
+                    0,
+                    1,
                     0
                 ]
             }
@@ -358,7 +460,64 @@
             "name": "Gallery",
             "pos": [
                 521,
-                509
+                506
+            ],
+            "angle": 0,
+            "lvl": 1,
+            "life": 100,
+            "stock": null,
+            "other": {
+                "t": [
+                    1,
+                    1,
+                    0,
+                    0
+                ]
+            }
+        },
+        {
+            "name": "Gallery",
+            "pos": [
+                522,
+                506
+            ],
+            "angle": 180,
+            "lvl": 1,
+            "life": 100,
+            "stock": null,
+            "other": {
+                "t": [
+                    0,
+                    0,
+                    1,
+                    1
+                ]
+            }
+        },
+        {
+            "name": "Gallery",
+            "pos": [
+                522,
+                507
+            ],
+            "angle": 90,
+            "lvl": 1,
+            "life": 100,
+            "stock": null,
+            "other": {
+                "t": [
+                    0,
+                    1,
+                    0,
+                    1
+                ]
+            }
+        },
+        {
+            "name": "Gallery",
+            "pos": [
+                522,
+                504
             ],
             "angle": 0,
             "lvl": 1,
@@ -376,8 +535,8 @@
         {
             "name": "Gallery",
             "pos": [
-                522,
-                509
+                523,
+                504
             ],
             "angle": 0,
             "lvl": 1,
@@ -385,8 +544,27 @@
             "stock": null,
             "other": {
                 "t": [
+                    1,
                     0,
                     1,
+                    0
+                ]
+            }
+        },
+        {
+            "name": "Gallery",
+            "pos": [
+                524,
+                504
+            ],
+            "angle": 180,
+            "lvl": 1,
+            "life": 100,
+            "stock": null,
+            "other": {
+                "t": [
+                    0,
+                    0,
                     1,
                     1
                 ]
@@ -395,8 +573,217 @@
         {
             "name": "Gallery",
             "pos": [
+                524,
+                505
+            ],
+            "angle": 90,
+            "lvl": 1,
+            "life": 100,
+            "stock": null,
+            "other": {
+                "t": [
+                    0,
+                    1,
+                    0,
+                    1
+                ]
+            }
+        },
+        {
+            "name": "Gallery",
+            "pos": [
+                524,
+                506
+            ],
+            "angle": 90,
+            "lvl": 1,
+            "life": 100,
+            "stock": null,
+            "other": {
+                "t": [
+                    0,
+                    1,
+                    0,
+                    1
+                ]
+            }
+        },
+        {
+            "name": "Gallery",
+            "pos": [
+                524,
+                507
+            ],
+            "angle": 90,
+            "lvl": 1,
+            "life": 100,
+            "stock": null,
+            "other": {
+                "t": [
+                    0,
+                    1,
+                    0,
+                    1
+                ]
+            }
+        },
+        {
+            "name": "Gallery",
+            "pos": [
+                524,
+                508
+            ],
+            "angle": 90,
+            "lvl": 1,
+            "life": 100,
+            "stock": null,
+            "other": {
+                "t": [
+                    0,
+                    1,
+                    1,
+                    0
+                ]
+            }
+        },
+        {
+            "name": "ExitGallery",
+            "pos": [
+                521,
+                508
+            ],
+            "angle": 180,
+            "lvl": 1,
+            "life": 100,
+            "stock": null,
+            "other": {
+                "t": [
+                    0,
+                    0,
+                    1,
+                    0
+                ]
+            }
+        },
+        {
+            "name": "ExitGallery",
+            "pos": [
                 522,
                 508
+            ],
+            "angle": 90,
+            "lvl": 1,
+            "life": 100,
+            "stock": null,
+            "other": {
+                "t": [
+                    0,
+                    1,
+                    0,
+                    0
+                ]
+            }
+        },
+        {
+            "name": "ExitGallery",
+            "pos": [
+                523,
+                508
+            ],
+            "angle": 0,
+            "lvl": 1,
+            "life": 100,
+            "stock": null,
+            "other": {
+                "t": [
+                    1,
+                    0,
+                    0,
+                    0
+                ]
+            }
+        },
+        {
+            "name": "EntranceGallery",
+            "pos": [
+                520,
+                504
+            ],
+            "angle": 90,
+            "lvl": 1,
+            "life": 100,
+            "stock": null,
+            "other": {
+                "t": [
+                    0,
+                    1,
+                    0,
+                    0
+                ]
+            }
+        },
+        {
+            "name": "Gallery",
+            "pos": [
+                520,
+                503
+            ],
+            "angle": 180,
+            "lvl": 1,
+            "life": 100,
+            "stock": null,
+            "other": {
+                "t": [
+                    0,
+                    0,
+                    1,
+                    1
+                ]
+            }
+        },
+        {
+            "name": "Gallery",
+            "pos": [
+                519,
+                503
+            ],
+            "angle": 0,
+            "lvl": 1,
+            "life": 100,
+            "stock": null,
+            "other": {
+                "t": [
+                    1,
+                    0,
+                    1,
+                    0
+                ]
+            }
+        },
+        {
+            "name": "Gallery",
+            "pos": [
+                518,
+                503
+            ],
+            "angle": 0,
+            "lvl": 1,
+            "life": 100,
+            "stock": null,
+            "other": {
+                "t": [
+                    1,
+                    0,
+                    1,
+                    0
+                ]
+            }
+        },
+        {
+            "name": "Gallery",
+            "pos": [
+                517,
+                503
             ],
             "angle": 270,
             "lvl": 1,
@@ -414,8 +801,8 @@
         {
             "name": "Gallery",
             "pos": [
-                522,
-                510
+                517,
+                504
             ],
             "angle": 90,
             "lvl": 1,
@@ -433,8 +820,103 @@
         {
             "name": "Gallery",
             "pos": [
-                522,
-                511
+                517,
+                505
+            ],
+            "angle": 90,
+            "lvl": 1,
+            "life": 100,
+            "stock": null,
+            "other": {
+                "t": [
+                    0,
+                    1,
+                    0,
+                    1
+                ]
+            }
+        },
+        {
+            "name": "Gallery",
+            "pos": [
+                517,
+                506
+            ],
+            "angle": 90,
+            "lvl": 1,
+            "life": 100,
+            "stock": null,
+            "other": {
+                "t": [
+                    0,
+                    1,
+                    0,
+                    1
+                ]
+            }
+        },
+        {
+            "name": "Gallery",
+            "pos": [
+                517,
+                507
+            ],
+            "angle": 90,
+            "lvl": 1,
+            "life": 100,
+            "stock": null,
+            "other": {
+                "t": [
+                    0,
+                    1,
+                    0,
+                    1
+                ]
+            }
+        },
+        {
+            "name": "Gallery",
+            "pos": [
+                517,
+                508
+            ],
+            "angle": 90,
+            "lvl": 1,
+            "life": 100,
+            "stock": null,
+            "other": {
+                "t": [
+                    0,
+                    1,
+                    0,
+                    1
+                ]
+            }
+        },
+        {
+            "name": "Gallery",
+            "pos": [
+                517,
+                509
+            ],
+            "angle": 90,
+            "lvl": 1,
+            "life": 100,
+            "stock": null,
+            "other": {
+                "t": [
+                    0,
+                    1,
+                    0,
+                    1
+                ]
+            }
+        },
+        {
+            "name": "Gallery",
+            "pos": [
+                517,
+                510
             ],
             "angle": 0,
             "lvl": 1,
@@ -452,19 +934,76 @@
         {
             "name": "Gallery",
             "pos": [
+                518,
+                510
+            ],
+            "angle": 0,
+            "lvl": 1,
+            "life": 100,
+            "stock": null,
+            "other": {
+                "t": [
+                    1,
+                    0,
+                    1,
+                    0
+                ]
+            }
+        },
+        {
+            "name": "Gallery",
+            "pos": [
+                519,
+                510
+            ],
+            "angle": 0,
+            "lvl": 1,
+            "life": 100,
+            "stock": null,
+            "other": {
+                "t": [
+                    1,
+                    0,
+                    1,
+                    0
+                ]
+            }
+        },
+        {
+            "name": "Gallery",
+            "pos": [
                 520,
                 510
             ],
-            "angle": 90,
+            "angle": 0,
+            "lvl": 1,
+            "life": 100,
+            "stock": null,
+            "other": {
+                "t": [
+                    1,
+                    0,
+                    1,
+                    0
+                ]
+            }
+        },
+        {
+            "name": "ExitGallery",
+            "pos": [
+                521,
+                510
+            ],
+            "angle": 180,
             "lvl": 1,
             "life": 100,
             "stock": null,
             "other": {
                 "t": [
                     0,
-                    1,
                     0,
-                    1
+                    1,
+                    0
                 ]
             }
         }

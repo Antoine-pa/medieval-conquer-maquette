@@ -22,8 +22,8 @@ class ResourceTransportation(JunctionBuilding):
         self.last_transport = t
         pos = []
         for x in range(2):
-            pos.append((self.pos[0] -1+x*(2), self.pos[1]))
-            pos.append((self.pos[0], self.pos[1] -1+x*(2)))
+            pos.append((self.pos[0] - 1 + x * 2, self.pos[1]))
+            pos.append((self.pos[0], self.pos[1] - 1 + x * 2))
         list_build = []
         for p in pos:
             b = _map.dict_pos_build[self.layer].get(p)
@@ -68,16 +68,29 @@ class ResourceTransportation(JunctionBuilding):
                 b.stock[r] += 1
         for b in list_build_transport:
             b.transport(_map)
-        if ress:
-            print(ress)
+        if ress and self.name == "ExitGallery":
+            self.exit(_map, ress)
+        if self.name == "EntranceGallery":
+            b = _map.dict_pos_build[0].get(tuple(self.pos))
+            if b is not None:
+                for i in range(min(self.capacity_transport, sum(list(b.stock.values())))):
+                    r = random.choice(list(b.stock.keys()))
+                    if r not in self.stock:
+                        self.stock[r] = 0
+                    self.stock[r] += 1
+                    b.stock[r] -= 1
+                    if b.stock[r] == 0:
+                        del b.stock[r]
+                if b.stock:
+                    print(b)
+        del pos
         del ress
         del list_build
         del list_build_transport
     
-    def update_links(self, _map, b_update:list) -> list:
+    def update_links(self, _map, b_update: list) -> list:
         list_build = [b for b in self.get_bat_adj([_map.dict_pos_build[self.layer]]) if (b not in b_update and b.name != "EntranceGallery")]
         for b in list_build:
-            junc = False
             if isinstance(b, ResourceTransportation):
                 if b.pos[0] <= self.pos[0] < b.pos[0] + b.size[0]:
                     if b.pos[1] < self.pos[1]: #positionnement en bas d'une autre muraille
@@ -96,6 +109,7 @@ class ResourceTransportation(JunctionBuilding):
                 b_update.append(self)
                 if b.name != "ExitGallery":
                     b.update_links(_map, b_update)
+        del list_build
         return b_update
 
 

@@ -99,10 +99,10 @@ class Tools:
         self.set_const("LIST_BAT_MENU_EDIT",{"0" : ["Barrack", "Field", "Granary", "Tower", "Wall", "Grange"], "-1" : ["Gallery", "ExitGallery", "EntranceGallery"]})
         self.set_const("LIST_JUNCTION_BUILDING", ["Wall", "Gallery", "ExitGallery", "EntranceGallery"])
         self.set_const("DICT_JUNCTIONS", {
-                        "Gallery" : ["Gallery", "ExitGallery", "EntranceGallery"],
-                        "ExitGallery" : ["ExitGallery", "Gallery", "EntranceGallery"],
-                        "EntranceGallery" : ["EntranceGallery, ""ExitGallery", "Gallery"],
-                        "Wall" : ["Wall", "Tower"]})
+                        "Gallery": ["Gallery", "ExitGallery", "EntranceGallery"],
+                        "ExitGallery": ["Gallery", "EntranceGallery"],
+                        "EntranceGallery": ["ExitGallery", "Gallery"],
+                        "Wall": ["Wall", "Tower"]})
         self.set_const("ZOOM", 1)
         self.set_const("SIZE_CASE", 50)
         self.set_const("SIZE_TEXT", 30)

@@ -5,5 +5,12 @@
             "prod" : {"cereals" : 10},
             "max" : {"cereals" : 100}
         }
+    },
+    "Foundry" : {
+        "1" : {
+            "time" : 2,
+            "prod" : {"iron" : 10},
+            "max" : {"iron" : 100}
+        }
     }
 }

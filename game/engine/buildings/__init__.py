@@ -7,6 +7,9 @@ from .grange import Grange
 from .gallery import Gallery
 from .entrance_gallery import EntranceGallery
 from .exit_gallery import ExitGallery
+from .cannon import Cannon
+from .factory_weapon_headquarters import FactoryWeaponHeadquarters
+from .foundry import Foundry
 from .init_class import *
 
 DICT_BUILDINGS = {"Barrack": Barrack,
@@ -17,4 +20,7 @@ DICT_BUILDINGS = {"Barrack": Barrack,
                   "Grange": Grange,
                   "Gallery" : Gallery,
                   "EntranceGallery" : EntranceGallery,
-                  "ExitGallery" : ExitGallery}
+                  "ExitGallery" : ExitGallery,
+                  "Cannon" : Cannon,
+                  "FactoryWeaponHeadquarters" : FactoryWeaponHeadquarters,
+                  "Foundry" : Foundry}

@@ -15,14 +15,14 @@ class Game:
     def __repr__(self):
         return f"Game :\n - {self._map}\n\n - {self._menu}"
 
-    def deplacement(self, x : int, y : int) -> None:
+    def deplacement(self, x: int, y: int) -> None:
         """
         gère les déplacement dans la map
         """
         self._map.pos[0] += x
         self._map.pos[1] += y
 
-    def display(self, screen : pygame.surface.Surface) -> None:
+    def display(self, screen: pygame.surface.Surface) -> None:
         """
         gère l'affichage du jeu
         """

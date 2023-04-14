@@ -89,7 +89,7 @@ class ResourceTransportation(JunctionBuilding):
         del list_build_transport
     
     def update_links(self, _map, b_update: list) -> list:
-        list_build = [b for b in self.get_bat_adj([_map.dict_pos_build[self.layer]]) if (b not in b_update and b.name != "EntranceGallery")]
+        list_build = [b for b in self.get_build_adj([_map.dict_pos_build[self.layer]]) if (b not in b_update and b.name != "EntranceGallery")]
         for b in list_build:
             if isinstance(b, ResourceTransportation):
                 if b.pos[0] <= self.pos[0] < b.pos[0] + b.size[0]:
@@ -111,5 +111,3 @@ class ResourceTransportation(JunctionBuilding):
                     b.update_links(_map, b_update)
         del list_build
         return b_update
-
-

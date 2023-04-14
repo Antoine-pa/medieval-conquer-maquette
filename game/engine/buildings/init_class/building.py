@@ -26,9 +26,6 @@ class Building:
 
     def __repr__(self):
         return f"{self.name} : (position : {self.pos}; taille : {self.size}; vie : {self.life}); angle : {self.angle}; stock : {self.stock}"
-    
-    def in_windows(self, x: int, y: int) -> bool:
-        return x-2 <= self.pos[0] <= cst("size_x")/int(cst("SIZE_CASE"))+x and y-2 <= self.pos[1] <= cst("size_y")/int(cst("SIZE_CASE"))+y
 
     def display(self, screen:pygame.surface.Surface, x: int, y: int, alpha: bool = False) -> bool:
         """
@@ -43,6 +40,9 @@ class Building:
             return True
         return False
 
+    def in_windows(self, x: int, y: int) -> bool:
+        return x-2 <= self.pos[0] <= cst("size_x")/int(cst("SIZE_CASE"))+x and y-2 <= self.pos[1] <= cst("size_y")/int(cst("SIZE_CASE"))+y
+
     def load(self) -> None:
         """
         charge l'image du bâtiment
@@ -56,24 +56,3 @@ class Building:
         self.angle += angle
         self.angle %= 360
         self.load()
-
-
-class Canon(Building):
-    def __init__(self, x, y):
-        super().__init__("Canon", (3, 3), [x, y], 1, 100, "defense")
-        self.type = ""
-        self.deg = 0
-
-class UsineArmeSiege(Building):
-    def __init__(self, x, y):
-        super().__init__("UsineArmeSiege", (2, 2), [x, y], 1, 100, "formation")
-        self.list_bat = []
-        self.max = 2
-
-    def construire(self):
-        pass
-
-
-class Foundry(Building):
-    def __init__(self, x, y):
-        super().__init__("Foundry", (), [], 1, 100, "production")

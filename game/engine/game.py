@@ -15,13 +15,6 @@ class Game:
     def __repr__(self):
         return f"Game :\n - {self._map}\n\n - {self._menu}"
 
-    def deplacement(self, x: int, y: int) -> None:
-        """
-        gère les déplacement dans la map
-        """
-        self._map.pos[0] += x
-        self._map.pos[1] += y
-
     def display(self, screen: pygame.surface.Surface) -> None:
         """
         gère l'affichage du jeu
@@ -43,6 +36,13 @@ class Game:
                     if b not in builds:
                         b.load()
                         builds.append(b)
+
+    def shifting(self, x: int, y: int) -> None:
+        """
+        gère les déplacement dans la map
+        """
+        self._map.pos[0] += x
+        self._map.pos[1] += y
                         
     def update_production(self) -> None:
         for c in self._map.dict_kind_build.items():

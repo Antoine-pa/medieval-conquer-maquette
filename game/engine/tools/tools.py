@@ -5,8 +5,8 @@ init_res = {"bois" : {"max" : 100,"stock" : 100},"fer" : {"max" : 200,"stock" : 
 
 class Tools:
     def __init__(self):
-        self.path_json = './engine/tools/json/'
-        self.path_assets = './engine/assets/'
+        self.path_json = './game/engine/tools/json/'
+        self.path_assets = './game/engine/assets/'
         self.data = self.reload_data()
         self.data_cost = self.load_cost()
         self.data_res = self.load_res()

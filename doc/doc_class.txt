@@ -1,0 +1,190 @@
+Main :
+    size : 12
+    attributes :
+        - DICT_BUILDINGS
+        - Info
+        - _map
+        - current_h
+        - current_w
+        - display
+        - game
+        - init
+        - load_map
+        - process
+        - pygame
+        - screen
+        - set_all_const
+        - set_mode
+        - t
+    methods :
+        - main
+
+Game :
+    size : 25
+    attributes :
+        - _map
+        - _menu
+    methods :
+        - display
+        - reload_images
+        - shifting
+        - update_production
+
+Map :
+    size : 84
+    attributes :
+        - alpha
+        - dict_kind_build
+        - dict_name_build
+        - dict_pos_build
+        - layer
+        - list_build
+        - pos
+        - x
+        - y
+    methods :
+        - add_build
+        - check_pos
+        - display
+        - get_case
+        - load_map
+        - reload_images
+        - save_map
+        - sup_build
+        - update_galleries_links
+        - zoom
+
+Menu :
+    size : 72
+    attributes :
+        - action
+        - buttons
+        - mem_tamp
+    methods :
+        - click
+        - display
+        - display_edit
+        - display_ressources
+        - display_settings
+        - set_action
+        - update_buttons
+        - update_mem_tamp
+
+Tools :
+    size : 96
+    attributes :
+        - data
+        - data_cost
+        - data_prod
+        - data_res
+        - path_assets
+        - path_json
+    methods :
+        - add_new_res
+        - barre
+        - check_stock
+        - const
+        - cost
+        - load_cost
+        - load_img
+        - load_production
+        - load_res
+        - prod
+        - reload_data
+        - res
+        - set_all_const
+        - set_const
+        - set_res
+        - text
+
+Button :
+    size : 26
+    attributes :
+        - background_color
+        - coords
+        - font_color
+        - text
+        - thickness
+    methods :
+        - collidepoint
+        - display
+        - pos_text
+
+Building :
+    size : 37
+    attributes :
+        - angle
+        - img
+        - img_alpha
+        - kind
+        - layer
+        - life
+        - lvl
+        - name
+        - pos
+        - size
+        - stock
+    methods :
+        - display
+        - in_windows
+        - load
+        - rotate
+
+JunctionBuilding :
+    size : 67
+    attributes :
+        - t
+    methods :
+        - add_junction
+        - del_junction
+        - display
+        - get_build_adj
+        - get_suffix
+        - in_windows
+        - load
+        - rotate
+        - rotate_junction
+
+ProductionBuilding :
+    size : 57
+    attributes :
+        - start_production
+        - t
+    methods :
+        - check_product
+        - display
+        - in_windows
+        - load
+        - rotate
+        - update
+
+ResourceTransportation :
+    size : 80
+    attributes :
+        - capacity_transport
+        - dir_transport
+        - last_transport
+        - speed_transport
+    methods :
+        - add_junction
+        - del_junction
+        - display
+        - get_build_adj
+        - get_suffix
+        - in_windows
+        - load
+        - rotate
+        - rotate_junction
+        - transport
+        - update_links
+
+Doc :
+    size : 26
+    attributes :
+        - class_not_attribut
+        - list_class
+        - not_attribut
+    methods :
+        - get_attributes_methods_size
+        - rendu
+

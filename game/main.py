@@ -2,7 +2,7 @@ import pygame
 from engine import Game, t, cst, DICT_BUILDINGS
 
 
-class App:
+class Main:
     def __init__(self):
         pygame.init()
         screen_info = pygame.display.Info()
@@ -64,5 +64,3 @@ class App:
                 elif event.type == pygame.QUIT:
                     pygame.quit()
                     self.process = False
-
-App().main()
